@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Programming: Lesson 8 - Reading Files</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7; /* Slightly more line height for readability */
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
+            background-color: #F8FAFC; /* Light background matching other lessons */
+            color: #1F2937; /* Dark text matching other lessons */
+        }
+        .container {
+            max-width: 1080px; /* Wider container matching other lessons */
+            margin-left: auto;
+            margin-right: auto;
+            padding: 2.5rem 3rem; /* Adjusted padding */
+            background-color: #FFFFFF;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08); /* Stronger shadow matching other lessons */
+            border-radius: 1rem;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+        /* Header */
+        header {
+            background-color: #FFFFFF; /* White header background */
+            color: #1F2937; /* Dark text for header */
+            padding: 0.8rem 1.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column; /* Stack logo/title and nav buttons */
+            align-items: center; /* Center horizontally */
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 3px solid #E5E7EB; /* Subtle light gray border at bottom of header */
+        }
+        header .header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-shrink: 0;
+            margin-bottom: 0.5rem; /* Space below header-left block */
+            width: 100%; /* Occupy full width for centering */
+            justify-content: center; /* Center content within header-left */
+        }
+        header img {
+            width: 48px;
+            height: 48px;
+            border-radius: 9999px; /* Tailwind's rounded-full */
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Subtle shadow */
+            flex-shrink: 0;
+        }
+        header .header-text-block {
+            text-align: center; /* Center title text */
+            line-height: 1.2;
+            flex-grow: 1;
+        }
+        header .institute-name {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #0A2463; /* Dark blue for institute name */
+            margin-bottom: 0.05rem;
+            letter-spacing: 0.07em;
+        }
+        header .course-lesson-title {
+            font-size: 0.8rem;
+            color: #374151; /* Darker gray for course title */
+            line-height: 1.2;
+        }
+        header .author-name {
+            font-size: 0.75rem;
+            color: #6B7280; /* Medium gray for author name */
+            margin-top: 0.1rem;
+            display: block;
+        }
+
+        /* Main Navigation Bar */
+        .main-nav-bar {
+            background-color: #FDFDFD;
+            padding: 0.8rem 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem; /* Spacing between main nav items */
+            width: 100%; /* Occupy full width within header */
+            border-top: 1px solid #E5E7EB; /* Separator from header-left */
+            padding-top: 1rem; /* Add padding above buttons */
+        }
+        .main-nav-item {
+            background-color: transparent;
+            color: #3E92CC; /* Bright Teal for default text */
+            padding: 0.4rem 1rem;
+            border: 1px solid #93C5FD; /* Lighter blue border for pill shape */
+            border-radius: 9999px; /* Pill shape */
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease-in-out;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer; /* Indicate it's clickable */
+        }
+        .main-nav-item:hover, .main-nav-item.active { /* 'active' for scroll spy */
+            background-color: #DBEAFE; /* Lighter blue background on hover/active */
+            color: #0A2463; /* Dark blue text on hover/active */
+            transform: translateY(-2px);
+            box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+        }
+        /* No Font Awesome icon styling as icons are removed from HTML */
+
+
+        /* Side TOC is removed */
+        .toc-container {
+            display: none !important;
+        }
+
+        /* Headings - No collapsible functionality here */
+        h2, h3, h4 {
+            cursor: default; /* No pointer cursor for non-collapsible */
+            display: block !important; /* Re-add for safety, though default is block */
+        }
+        h2:hover, h3:hover, h4:hover {
+            color: inherit; /* No color change on hover */
+        }
+
+        /* Title Styles - Enhanced to look like prominent titles */
+        h2 {
+            font-size: 2.5rem; /* Larger for main titles */
+            font-weight: 800; /* Extra bold */
+            color: #0A2463; /* Deep blue */
+            margin-top: 3.5rem; /* More space above */
+            margin-bottom: 1.5rem; /* More space below */
+            padding-bottom: 0.75rem; /* More padding below for border */
+            border-bottom: 3px solid #3E92CC; /* Thicker, brighter blue border */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05); /* Subtle shadow for depth */
+        }
+        h3 {
+            font-size: 2rem; /* Larger for sub-titles */
+            font-weight: 700; /* Bold */
+            color: #3E92CC; /* Bright Teal */
+            margin-top: 2.5rem; /* More space above */
+            margin-bottom: 1rem; /* More space below */
+        }
+        h4 {
+            font-size: 1.5rem; /* Larger for sub-sub-titles */
+            font-weight: 600; /* Semi-bold */
+            color: #0A2463; /* Dark blue */
+            margin-top: 2rem; /* More space above */
+            margin-bottom: 0.75rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+        ul, ol {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+        ol {
+            list-style-type: decimal;
+        }
+        strong {
+            font-weight: bold;
+            color: #1F2937;
+        }
+
+        /* Jupyter-style code blocks (static for examples) */
+        .jupyter-cell {
+            background-color: #F8FAFC;
+            border-radius: 0.5rem;
+            border: 1px solid #E2E8F0;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+            margin: 1.5rem 0;
+            overflow: hidden;
+        }
+        .jupyter-input-wrapper { /* For In[] block content */
+            background-color: #FFFFFF;
+            padding: 1rem;
+            border-bottom: 1px solid #E2E8F0;
+            position: relative;
+            padding-left: 3.5rem;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: #0A2463;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .jupyter-input-wrapper::before {
+            content: 'In [ ] :';
+            position: absolute;
+            left: 0.75rem;
+            top: 1rem;
+            font-size: 0.8rem;
+            color: #6B7280;
+            font-family: sans-serif;
+            font-weight: bold;
+        }
+        .jupyter-output { /* For Out[] block content */
+            background-color: #F0F9FF;
+            padding: 1rem;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: #3E92CC;
+            font-weight: normal; /* Normal weight for output */
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            padding-left: 1rem; /* Adjust to align with main content, removing indent */
+            position: relative; /* Needed for pseudo-element positioning */
+        }
+        .jupyter-output pre {
+            margin-left: 2.5rem; /* Push the actual content after the Out[]: prefix */
+            white-space: pre-wrap; /* Ensure text wraps */
+        }
+
+
+        .jupyter-input .keyword {
+            color: #0A2463;
+            font-weight: bold;
+        }
+        .jupyter-input .comment { color: #6B7280; font-style: italic; }
+
+        /* No interactive code elements, copy buttons */
+        .copy-button, .code-actions, #reveal-solutions-button {
+            display: none !important;
+        }
+        
+        footer {
+            background-color: #1F2937;
+            color: white; /* Ensure text is white for readability */
+            padding: 1.5rem 0;
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: 2rem;
+        }
+
+        /* Quiz Specific Styling - purely static questions */
+        .quiz-section .question-card {
+            background-color: #FFFFFF;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #93C5FD;
+        }
+        .quiz-section .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #0A2463;
+            margin-bottom: 1rem;
+        }
+        /* Hide entire code-setup-block from quiz section */
+        .quiz-section .code-setup-block {
+            display: none !important;
+        }
+
+        /* Remove all solution-related divs and their children */
+        .code-solution-box,
+        #reveal-solutions-button
+        {
+            display: none !important;
+        }
+
+        /* Table styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+            color: #374151;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-radius: 0.5rem;
+            overflow: hidden; /* Ensures rounded corners apply to content */
+        }
+        table thead th {
+            background-color: #0A2463; /* Dark blue */
+            color: #FFFFFF;
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #3E92CC;
+        }
+        table tbody td {
+            background-color: #FDFDFD;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #E5E7EB;
+        }
+        table tbody tr:nth-child(odd) td {
+            background-color: #F5F7FA; /* Slightly darker for odd rows */
+        }
+        table tbody tr:hover td {
+            background-color: #EBF8FF; /* Light blue on hover */
+        }
+        table code {
+            background-color: #E0F2FE; /* Light blue for inline code */
+            padding: 0.2em 0.4em;
+            border-radius: 0.25rem;
+            font-size: 0.8em;
+            color: #0A2463;
+        }
+
+        /* Flowchart styling (copied from previous lesson for general style) */
+        .flowchart-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .flowchart-box {
+            background-color: #DBEAFE; /* Light blue */
+            border: 1px solid #93C5FD; /* Lighter blue border */
+            padding: 0.8rem 1.2rem;
+            border-radius: 0.5rem;
+            margin: 0.5rem 0;
+            font-weight: 500;
+            color: #0A2463; /* Dark blue text */
+            text-align: center;
+            width: fit-content;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .flowchart-diamond {
+            background-color: #DBEAFE; /* Light blue */
+            border: 1px solid #93C5FD; /* Lighter blue border */
+            width: 120px; /* Increased size to better fit text */
+            height: 80px; /* Increased size */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: rotate(45deg);
+            margin: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .flowchart-diamond p {
+            transform: rotate(-45deg); /* Counter-rotate text */
+            margin: 0;
+            font-size: 0.8em; /* Slightly smaller font for longer text */
+            white-space: normal;
+            line-height: 1.2;
+            color: #0A2463; /* Dark blue text */
+        }
+        /* Vertical arrow for direct flow */
+        .flowchart-arrow {
+            font-size: 2rem; /* Larger arrow for visual flow */
+            color: #3E92CC; /* Teal color for arrows */
+            height: 20px; /* Space for vertical arrow */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1; /* Adjust line height to prevent extra space */
+            margin: 0; /* Remove default margins */
+            padding: 0; /* Remove default padding */
+            position: relative; /* For arrowhead positioning */
+            width: 0; /* Collapse width */
+            border: none; /* No border for the arrow container itself */
+        }
+        .flowchart-arrow::after {
+            content: '↓'; /* Downward arrow */
+        }
+        /* Horizontal split arrows (for decision branches) */
+        .flowchart-decision-line {
+            display: flex;
+            justify-content: space-between;
+            width: 100%; /* Spans the width of the main flow */
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            position: relative; /* For positioning arrows and labels */
+            height: 40px; /* Provide space for arrows to draw */
+        }
+        .flowchart-decision-line .arrow-label {
+            font-size: 0.85rem;
+            color: #374151;
+            position: absolute;
+            top: -1.5rem; /* Position label above the arrow line */
+            font-weight: 500;
+        }
+        .flowchart-decision-line .arrow-left-line,
+        .flowchart-decision-line .arrow-right-line {
+            position: absolute;
+            border-bottom: 2px solid #3E92CC;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .flowchart-decision-line .arrow-left-line {
+            left: 0;
+            width: calc(50% - 70px); /* Adjusted width to leave space for label */
+        }
+        .flowchart-decision-line .arrow-left-line::before {
+            content: '';
+            position: absolute;
+            right: -6px; /* Position at the end of the line */
+            top: -5px; /* Half of border-width to center it vertically */
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+            border-left: 6px solid #3E92CC; /* Points right (towards next box) */
+            transform: rotate(180deg); /* Rotate to point left (towards End Loop) */
+            transform-origin: center; /* Ensure rotation is correct */
+        }
+        .flowchart-decision-line .arrow-right-line {
+            right: 0;
+            width: calc(50% - 70px); /* Adjusted width */
+        }
+        .flowchart-decision-line .arrow-right-line::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: -5px; /* Half of border-width to center it vertically */
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+            border-right: 6px solid #3E92CC; /* Points right (towards next box) */
+        }
+
+        /* Vertical line for looping back - specific adjustments for visual flow */
+        .flowchart-loop-back {
+            position: relative; /* Container for the loop-back line */
+            width: 100%; /* Spans width to allow line to go up */
+            height: 50px; /* Space for the loop back */
+            margin-top: 10px; /* Space from previous box */
+        }
+        .flowchart-loop-back::before {
+            content: ''; /* Vertical line segment */
+            position: absolute;
+            left: 50%;
+            top: 0;
+            height: 100%;
+            border-left: 2px solid #3E92CC; /* Vertical line */
+            transform: translateX(-50%);
+        }
+        .flowchart-loop-back::after {
+            content: '↑'; /* Upward arrow */
+            position: absolute;
+            bottom: -5px; /* Position at the bottom of the line */
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            color: #3E92CC;
+            line-height: 1;
+        }
+
+        .flowchart-text {
+            font-size: 0.85rem;
+            color: #6B7280;
+            text-align: center;
+            margin-top: 0.5rem;
+        }
+
+        @media print {
+            body {
+                background-color: #FFFFFF !important;
+                color: #000000 !important;
+                margin: 0;
+                padding: 0;
+                font-size: 9pt;
+            }
+            .container {
+                box-shadow: none !important;
+                margin: 0;
+                padding: 1cm;
+                border-radius: 0;
+                width: 100%;
+            }
+            header, footer {
+                background-color: #FFFFFF !important;
+                color: #000000 !important;
+                box-shadow: none !important;
+                padding: 0.5cm 0;
+                text-align: center;
+                border-bottom: none !important;
+            }
+            header .header-left {
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                justify-content: center !important;
+                width: 100% !important;
+                gap: 0.5cm !important;
+            }
+            header img {
+                width: 50px !important;
+                height: 50px !important;
+                margin-bottom: 0 !important;
+            }
+            header .institute-name, header .course-lesson-title, header .author-name {
+                color: #000000 !important;
+                font-size: 10pt !important;
+                margin: 0 !important;
+            }
+            header .institute-name { font-weight: bold !important; letter-spacing: normal !important; }
+            header .course-lesson-title { font-size: 8pt !important; }
+            header .author-name { font-size: 8pt !important; }
+            .main-nav-bar { display: none !important; } /* Hide main nav in print */
+
+            h2, h3, h4 {
+                color: #000000 !important;
+                border-bottom-color: #AAAAAA !important;
+                cursor: auto !important;
+                page-break-after: avoid;
+                margin-top: 1.5cm;
+            }
+            h2:hover, h3:hover, h4:hover { color: #000000 !important; }
+            p, ul, ol, pre {
+                page-break-inside: avoid;
+                margin-bottom: 0.8rem;
+            }
+            .jupyter-cell {
+                border: 1px solid #DDDDDD !important;
+                box-shadow: none !important;
+                background-color: #F9F9F9 !important;
+                margin: 1rem 0;
+                page-break-inside: avoid;
+            }
+            .jupyter-input-wrapper {
+                background-color: #FDFDFD !important;
+                color: #000000 !important;
+                border-bottom-color: #E0E0E0 !important;
+            }
+            .jupyter-input-textarea { /* Should not exist */
+                display: none !important;
+            }
+            .jupyter-input .keyword {
+                color: #333333 !important;
+                font-weight: bold;
+            }
+            .jupyter-input::before, .jupyter-output::before {
+                color: #777777 !important;
+            }
+            .jupyter-output {
+                background-color: #F0F0F0 !important;
+                color: #444444 !important;
+                font-weight: normal;
+                display: block !important;
+            }
+            .jupyter-output pre {
+                margin-left: 0 !important; /* Remove margin from pre for print */
+            }
+            strong {
+                color: #000000 !important;
+            }
+            .copy-button, .code-actions { display: none !important; }
+            .collapsible-content > div {
+                 min-height: auto !important;
+                 overflow: visible !important;
+            }
+            .toggle-icon { display: none !important; }
+            .toc-container { display: none !important; }
+            .main-layout { flex-direction: column !important; }
+            .property-box { background-color: #F9F9F9 !important; border-color: #E0E0E0 !important; }
+            .property-title { color: #000000 !important; }
+            .property-example { background-color: #F0F0F0 !important; }
+
+            /* Quiz section specific print styles */
+            .quiz-section .question-card {
+                border-color: #E0E0E0 !important;
+            }
+            .quiz-section .expected-code-label, .quiz-section .expected-output-label, .quiz-section .explanation-label {
+                color: #000000 !important;
+            }
+            .quiz-section .expected-code-snippet {
+                background-color: #F9F9F9 !important;
+                border-color: #E0E0E0 !important;
+                color: #000000 !important;
+            }
+            .quiz-section .expected-output-content {
+                background-color: #F0F0F0 !important;
+                border-color: #E0E0E0 !important;
+                color: #000000 !important;
+            }
+            .quiz-section .explanation-text {
+                color: #333333 !important;
+            }
+            .quiz-section .code-solution-box .code-input-display {
+                border-bottom: none !important;
+                margin-bottom: 0 !important;
+                padding-bottom: 0.5rem !important;
+            }
+            .quiz-section .code-solution-box .code-output-display {
+                display: none !important; /* Explicitly hide outputs in print */
+            }
+            .quiz-section .solution-container {
+                display: none !important; /* Hide solution containers for print */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <img src="logotsi.jpeg" alt="Tech Savvy Institute Logo" onerror="this.onerror=null;this.src='https://placehold.co/48x48/0A2463/FFFFFF?text=TSI'; this.alt='Logo Placeholder';">
+            <div class="header-text-block">
+                <p class="institute-name">TECH SAVVY INSTITUTE</p>
+                <p class="course-lesson-title">Python Programming Fundamentals - Lesson 8: Reading Files</p>
+                <span class="author-name">by Maurice Otieno</span>
+            </div>
+        </div>
+    </header>
+
+    <nav class="main-nav-bar">
+        <a href="#introduction-file-handling" class="main-nav-item">Introduction</a>
+        <a href="#creating-text-file" class="main-nav-item">Create Text File</a>
+        <a href="#reading-methods" class="main-nav-item">Reading Methods</a>
+        <a href="#file-modes" class="main-nav-item">File Modes</a>
+        <a href="#handling-errors" class="main-nav-item">Error Handling</a>
+        <a href="#creating-csv-file" class="main-nav-item">Create CSV File</a>
+        <a href="#working-with-csv" class="main-nav-item">Working with CSV</a>
+        <a href="#practice-questions" class="main-nav-item">Practice Questions</a>
+        <a href="#overall-conclusion" class="main-nav-item">Conclusion</a>
+    </nav>
+
+    <div class="container">
+        <main class="main-content w-full">
+
+            <section id="introduction-file-handling">
+                <h2>Introduction: File Handling in Python</h2>
+                <div>
+                    <p>In real-world programming, data often resides in external files rather than being hardcoded directly into scripts. Python provides robust built-in capabilities to interact with the file system, allowing you to read data from files and write data to them. This lesson will focus specifically on how to read information from various types of files, with a particular emphasis on plain text files and CSV (Comma Separated Values) files, which are common formats for structured data.</p>
+                    <p>Mastering file input/output (I/O) is crucial for data processing, analysis, and many applications that need to persist or consume data from external sources.</p>
+                </div>
+            </section>
+
+            <section id="creating-text-file">
+                <h2>1. Creating Your First Text File (`my_first_file.txt`)</h2>
+                <div>
+                    <p>Before writing Python code to read a file, it's essential to understand how to create one outside of Python. For plain text data, a simple text editor is sufficient.</p>
+                    <h3>Instructions to Create `my_first_file.txt`:</h3>
+                    <ol>
+                        <li><strong>Open a Text Editor:</strong> Open Notepad (Windows), TextEdit (macOS - ensure you save as plain text), VS Code, Sublime Text, or any other plain text editor.</li>
+                        <li><strong>Enter Content:</strong> Type the following three lines of text exactly as shown:
+                            <pre class="bg-gray-100 p-3 rounded-md border border-gray-300 text-gray-800 text-sm">
+This is the first line of my Python file.
+The second line continues the story.
+And here's the final line.
+                            </pre>
+                        </li>
+                        <li><strong>Save the File:</strong> Save the file with the name `my_first_file.txt`.
+                            <ul>
+                                <li><strong>Important for Python:</strong> For simplicity in this lesson, save `my_first_file.txt` in the **same folder where your Python script (`.py` file) or Jupyter Notebook/Google Colab notebook is located.** This allows Python to find the file using just its name without needing a full path.</li>
+                                <li>Alternatively, you can save it anywhere and provide the <a href="https://www.dummies.com/programming/python/how-to-specify-a-path-to-a-file-in-python/" target="_blank" class="text-blue-600 hover:underline">full path to the file</a> in your Python code (e.g., `"C:/Users/YourUser/Documents/my_first_file.txt"`).</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    <h3>Example: Opening and Reading Your Text File</h3>
+                    <p>Now that you've created `my_first_file.txt`, you can use Python to open and read its content. The `with` statement is the recommended way to handle files, as it ensures the file is automatically closed, even if errors occur.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Open and read the file you created
+with open("my_first_file.txt", "r") as file:
+    content = file.read()
+    print(f"Content of my_first_file.txt:\n{content}")
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Content of my_first_file.txt:
+This is the first line of my Python file.
+The second line continues the story.
+And here's the final line.</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="reading-methods">
+                <h2>2. Reading Methods</h2>
+                <div>
+                    <p>Once a file is open for reading, you can use several methods to extract its content.</p>
+
+                    <h3>2.1. `read()`</h3>
+                    <p>Reads the entire content of the file as a single string. You can optionally pass an integer argument to read only a specified number of characters.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Ensure 'my_first_file.txt' exists from previous step
+# Read entire file
+with open("my_first_file.txt", "r") as file:
+    all_content = file.read()
+    print(f"Read entire file:\n{all_content}")
+
+# Read specified number of characters (re-open to reset file pointer)
+with open("my_first_file.txt", "r") as file:
+    first_10_chars = file.read(10)
+    print(f"First 10 characters: {first_10_chars}")
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Read entire file:
+This is the first line of my Python file.
+The second line continues the story.
+And here's the final line.
+First 10 characters: This is th</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>2.2. `readline()`</h3>
+                    <p>Reads a single line from the file, including the newline character (`\n`) at the end. Subsequent calls read successive lines.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Re-using my_first_file.txt
+with open("my_first_file.txt", "r") as file:
+    line1 = file.readline()
+    line2 = file.readline()
+    print(f"Line 1: {line1.strip()}") # .strip() to remove trailing newline
+    print(f"Line 2: {line2.strip()}")
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Line 1: This is the first line of my Python file.
+Line 2: The second line continues the story.</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>2.3. `readlines()`</h3>
+                    <p>Reads all lines from the file and returns them as a list of strings, where each string represents a line (including the newline character).</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Re-using my_first_file.txt
+with open("my_first_file.txt", "r") as file:
+    all_lines = file.readlines()
+    print(f"All lines as list: {all_lines}")
+    # Iterate and print each line cleanly
+    for line in all_lines:
+        print(f"Line (stripped): {line.strip()}")
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">All lines as list: ['This is the first line of my Python file.\n', 'The second line continues the story.\n', 'And here\'s the final line.']
+Line (stripped): This is the first line of my Python file.
+Line (stripped): The second line continues the story.
+Line (stripped): And here's the final line.</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>2.4. Iterating Directly Over a File Object (Most Pythonic)</h3>
+                    <p>The most memory-efficient and Pythonic way to read files line by line is to iterate directly over the file object in a `for` loop. This reads lines one at a time, making it suitable for very large files that might not fit entirely into memory.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Re-using my_first_file.txt
+print("Reading line by line using for loop:")
+with open("my_first_file.txt", "r") as file:
+    for line_num, line in enumerate(file, 1):
+        print(f"Line {line_num}: {line.strip()}")
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Reading line by line using for loop:
+Line 1: This is the first line of my Python file.
+Line 2: The second line continues the story.
+Line 3: And here's the final line.</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="file-modes">
+                <h2>3. File Modes</h2>
+                <div>
+                    <p>When opening a file, you specify a "mode" which dictates how the file will be accessed. The most common modes are:</p>
+                    <ul>
+                        <li>`"r"`: (Read) Default mode. Opens for reading. The file pointer is at the beginning of the file. Raises `FileNotFoundError` if the file does not exist.</li>
+                        <li>`"w"`: (Write) Opens for writing. Creates a new file if it does not exist or truncates (empties) the file if it exists. Be careful, as this overwrites existing content!</li>
+                        <li>`"a"`: (Append) Opens for writing. Creates a new file if it does not exist. If the file exists, data is written to the end of the file.</li>
+                        <li>`"x"`: (Exclusive Creation) Opens for exclusive creation, failing if the file already exists.</li>
+                        <li>`"b"`: (Binary) Used to open files in binary mode (e.g., for images, executables). This is often combined with other modes, e.g., `"rb"`, `"wb"`.</li>
+                        <li>`"t"`: (Text) Default mode. Opens in text mode.</li>
+                        <li>`"+"`: (Update) Opens a file for updating (reading and writing). Can be combined with other modes, e.g., `"r+"` (read and write, pointer at start), `"w+"` (write and read, truncates first).</li>
+                    </ul>
+                    <h3>Example: Writing to a File</h3>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Writing to a new file (or overwriting existing)
+with open("output_file.txt", "w") as file:
+    file.write("Hello from the new file!\n")
+    file.write("This is a second line.")
+print("Content written to output_file.txt in 'w' mode.")
+
+# Appending to the file
+with open("output_file.txt", "a") as file:
+    file.write("\nAppended new content.")
+print("Content appended to output_file.txt in 'a' mode.")
+
+# Read to verify
+with open("output_file.txt", "r") as file:
+    content = file.read()
+    print(f"\nFinal content of output_file.txt:\n{content}")
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Content written to output_file.txt in 'w' mode.
+Content appended to output_file.txt in 'a' mode.
+
+Final content of output_file.txt:
+Hello from the new file!
+This is a second line.
+Appended new content.</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="handling-errors">
+                <h2>4. Handling `FileNotFoundError`</h2>
+                <div>
+                    <p>Attempting to open a file that does not exist in `"r"` mode will raise a `FileNotFoundError`. It's crucial to handle such exceptions gracefully to prevent your program from crashing.</p>
+                    <p>The `try-except` block is the standard Python mechanism for handling errors.</p>
+                    <h3>Syntax</h3>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Syntax for handling FileNotFoundError
+# try:
+#     with open('non_existent_file.txt', 'r') as file:
+#         content = file.read()
+#         print(f"File content: {content}")
+# except FileNotFoundError:
+#     print("Error: The file was not found.")
+# except Exception as e: # Catch any other unexpected errors
+#     print(f"An unexpected error occurred: {e}")
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python"># Output: This is a static example of syntax.</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Example: Handling Missing File</h3>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+try:
+    with open("definitely_missing_file.txt", "r") as file: # Assuming this file does not exist
+        content = file.read()
+        print(f"File content: {content}")
+except FileNotFoundError:
+    print("Error: The file 'definitely_missing_file.txt' was not found.")
+except Exception as e:
+    print(f"An unexpected error occurred: {e}")
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Error: The file 'definitely_missing_file.txt' was not found.</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="working-with-csv">
+                <h2>5. Working with CSV Files (`csv` module)</h2>
+                <div>
+                    <p>CSV (Comma Separated Values) is a common plain-text format for tabular data. Python's built-in `csv` module provides specialized functions to easily read from and write to CSV files, handling quoting rules and delimiters automatically.</p>
+                    
+                    <h3>5.1. Creating Your First CSV File (`students.csv`)</h3>
+                    <p>You can create a CSV file using a spreadsheet program like Microsoft Excel, Google Sheets, LibreOffice Calc, or even a plain text editor.</p>
+                    <ol>
+                        <li><strong>Open a Spreadsheet Program:</strong> Open Excel, Google Sheets, or any similar program.</li>
+                        <li><strong>Enter Data:</strong> Enter the following data into cells starting from A1:
+                            <pre class="bg-gray-100 p-3 rounded-md border border-gray-300 text-gray-800 text-sm">
+Name,Age,Grade
+Alice,15,90
+Bob,16,85
+Charlie,15,92
+Diana,17,88
+                            </pre>
+                        </li>
+                        <li><strong>Save as CSV:</strong> Go to "File" > "Save As". In the "Save as type" or "Format" dropdown, select "CSV (Comma delimited)" or "Comma Separated Values". Save the file as `students.csv`.
+                            <ul>
+                                <li><strong>Important for Python:</strong> Similar to text files, save `students.csv` in the **same folder where your Python script or notebook is located** for easy access.</li>
+                            </ul>
+                        </li>
+                        <li><strong>(Optional) Using a Text Editor:</strong> If you prefer a text editor, simply type the data above exactly as shown, with commas separating values and each record on a new line. Save it as `students.csv`.</li>
+                    </ol>
+
+                    <h3>5.2. Reading CSV Files with `csv.reader`</h3>
+                    <p>The `csv.reader` object allows you to iterate over lines in the CSV file, treating each line as a list of strings. This is useful when you primarily care about the order of columns or if your CSV doesn't have a header row.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+import csv
+
+# Ensure 'students.csv' exists from previous step
+with open("students.csv", "r", newline='') as csvfile:
+    csv_reader = csv.reader(csvfile)
+    print("Reading CSV row by row:")
+    for row in csv_reader:
+        print(f"Row: {row}")
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Reading CSV row by row:
+Row: ['Name', 'Age', 'Grade']
+Row: ['Alice', '15', '90']
+Row: ['Bob', '16', '85']
+Row: ['Charlie', '15', '92']
+Row: ['Diana', '17', '88']</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>5.3. Reading CSV Files with `csv.DictReader` (Highly Recommended for Headers)</h3>
+                    <p>For CSV files with headers, `csv.DictReader` is often preferred. It automatically uses the values from the first row as keys, reading each subsequent row as a dictionary. This makes data access more intuitive and robust as you can refer to columns by name instead of by index.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+import csv
+
+# Ensure 'students.csv' exists from previous step
+with open("students.csv", "r", newline='') as csvfile:
+    dict_reader = csv.DictReader(csvfile)
+    print("Reading CSV as dictionaries:")
+    for row in dict_reader:
+        print(f"Student: {row['Name']}, Age: {row['Age']}, Grade: {row['Grade']}")
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Reading CSV as dictionaries:
+Student: Alice, Age: 15, Grade: 90
+Student: Bob, Age: 16, Grade: 85
+Student: Charlie, Age: 15, Grade: 92
+Student: Diana, Age: 17, Grade: 88</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="practice-questions">
+                <h2>Practice Questions</h2>
+                <div>
+                    <p class="text-lg text-blue-800 mb-4">Test your understanding of File Reading in Python with these practice questions:</p>
+                    
+                    <div class="quiz-section">
+                        <div class="question-card">
+                            <p class="question-text">1. Explain the main advantage of using the `with` statement when opening files in Python.</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">2. Describe the difference between the `.read()`, `.readline()`, and `.readlines()` methods when reading from a text file.</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">3. What happens if you try to open a non-existent file in "r" (read) mode without any error handling? How can you prevent your program from crashing in such a scenario?</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">4. Imagine you have a text file named `grocery_list.txt` containing one item per line. Write Python code using the most Pythonic approach to read this file and print each item, stripped of any leading/trailing whitespace and newline characters.</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">5. You have a CSV file named `sales_data.csv` with columns: `Date`, `Product`, `Quantity`, `Price`. Write Python code to read this file using `csv.DictReader` and print the `Product` and `Quantity` for each row.</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">6. Explain the purpose of `newline=''` when opening CSV files in Python's `open()` function.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="overall-conclusion">
+                <h2>Overall Conclusion</h2>
+                <div>
+                    <p>You've successfully completed Lesson 8 on File Reading in Python! You now have the essential skills to open, read, and process data from various file formats, including text and CSV. This foundational knowledge is critical for working with real-world datasets and building more sophisticated applications. Keep practicing and exploring different file manipulation techniques!</p>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <footer class="bg-blue-900 text-white py-6 text-center">
+        <p class="text-white">&copy; 2024 Tech Savvy Institute. All rights reserved. Content adapted from Lesson 8 notes by Maurice Otieno.</p>
+        <p class="text-white">Python is a trademark of the Python Software Foundation</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scrolling for main navigation
+            const navItems = document.querySelectorAll('.main-nav-bar .main-nav-item');
+            const headerElement = document.querySelector('header');
+            const mainNavBarElement = document.querySelector('.main-nav-bar');
+
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault(); // Prevent default anchor link behavior
+
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+
+                    if (targetElement) {
+                        // Calculate total offset from the top
+                        const headerHeight = headerElement ? headerElement.offsetHeight : 0;
+                        const navBarHeight = mainNavBarElement ? mainNavBarElement.offsetHeight : 0;
+                        const totalOffset = headerHeight + navBarHeight + 5; // Add a small buffer
+
+                        const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                        const offsetPosition = elementPosition - totalOffset;
+
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: "smooth"
+                        });
+                    }
+                });
+            });
+
+            // Scroll-spy functionality for active state
+            const sections = document.querySelectorAll('section[id]');
+            const observerOptions = {
+                root: null, // viewport
+                rootMargin: `-80px 0px -50% 0px`, /* Adjust top margin for fixed header/nav and bottom for earlier activation */
+                threshold: 0 /* Trigger as soon as target crosses rootMargin */
+            };
+
+            const observerCallback = (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const currentSectionId = '#' + entry.target.id;
+                        
+                        // Remove 'active' class from all nav items
+                        navItems.forEach(item => {
+                            item.classList.remove('active');
+                        });
+
+                        // Add 'active' class to the corresponding nav item
+                        const correspondingNavItem = document.querySelector(`.main-nav-item[href="${currentSectionId}"]`);
+                        if (correspondingNavItem) {
+                            correspondingNavItem.classList.add('active');
+                        }
+                    }
+                });
+            };
+
+            const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+            // Observe each section
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+
+            // Set initial active state on page load
+            const initialActiveSection = Array.from(sections).find(section => {
+                const rect = section.getBoundingClientRect();
+                return rect.top >= 0 && rect.top <= window.innerHeight / 2;
+            }) || sections[0]; // Fallback to first section if none are sufficiently in view
+
+            if (initialActiveSection) {
+                const initialActiveNavItem = document.querySelector(`.main-nav-item[href="#${initialActiveSection.id}"]`);
+                if (initialActiveNavItem) {
+                    initialActiveNavItem.classList.add('active');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

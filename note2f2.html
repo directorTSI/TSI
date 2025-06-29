@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Programming: Lesson 2 - Python Data Types</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
+            background-color: #F8FAFC; /* Light background */
+            color: #1F2937; /* Dark text */
+        }
+        .container {
+            max-width: 1080px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 2.5rem 3rem;
+            background-color: #FFFFFF;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            border-radius: 1rem;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+        /* Header */
+        header {
+            background-color: #FFFFFF; /* White header background */
+            color: #1F2937; /* Dark text for header */
+            padding: 0.8rem 1.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column; /* Stack logo/title and nav buttons */
+            align-items: center; /* Center horizontally */
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 3px solid #E5E7EB; /* Subtle light gray border at bottom of header */
+        }
+        header .header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-shrink: 0;
+            margin-bottom: 0.5rem; /* Space below header-left block */
+            width: 100%; /* Occupy full width for centering */
+            justify-content: center; /* Center content within header-left */
+        }
+        header img {
+            width: 48px;
+            height: 48px;
+            border-radius: 9999px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+        }
+        header .header-text-block {
+            text-align: center; /* Center title text */
+            line-height: 1.2;
+            flex-grow: 1;
+        }
+        header .institute-name {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #0A2463; /* Dark blue for institute name */
+            margin-bottom: 0.05rem;
+            letter-spacing: 0.07em;
+        }
+        header .course-lesson-title {
+            font-size: 0.8rem;
+            color: #374151; /* Darker gray for course title */
+            line-height: 1.2;
+        }
+        header .author-name {
+            font-size: 0.75rem;
+            color: #6B7280; /* Medium gray for author name */
+            margin-top: 0.1rem;
+            display: block;
+        }
+
+        /* Main Navigation Bar */
+        .main-nav-bar {
+            background-color: #FDFDFD;
+            padding: 0.8rem 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem; /* Spacing between main nav items */
+            width: 100%; /* Occupy full width within header */
+            border-top: 1px solid #E5E7EB; /* Separator from header-left */
+            padding-top: 1rem; /* Add padding above buttons */
+        }
+        .main-nav-item {
+            background-color: transparent;
+            color: #3E92CC; /* Bright Teal for default text */
+            padding: 0.4rem 1rem;
+            border: 1px solid #93C5FD; /* Lighter blue border for pill shape */
+            border-radius: 9999px; /* Pill shape */
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease-in-out;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer; /* Indicate it's clickable */
+        }
+        .main-nav-item:hover, .main-nav-item.active { /* 'active' for scroll spy */
+            background-color: #DBEAFE; /* Lighter blue background on hover/active */
+            color: #0A2463; /* Dark blue text on hover/active */
+            transform: translateY(-2px);
+            box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+        }
+        /* No Font Awesome icon styling as icons are removed from HTML */
+
+
+        /* Side TOC is removed */
+        .toc-container {
+            display: none !important;
+        }
+
+        /* Headings - No collapsible functionality here */
+        h2, h3, h4 {
+            cursor: default; /* No pointer cursor for non-collapsible */
+            /* Removed data-level attributes and toggle-icon spans from HTML */
+            display: block !important; /* Re-add for safety, though default is block */
+        }
+        h2:hover, h3:hover, h4:hover {
+            color: inherit; /* No color change on hover */
+        }
+
+        /* Title Styles - Enhanced to look like prominent titles */
+        h2 {
+            font-size: 2.5rem; /* Larger for main titles */
+            font-weight: 800; /* Extra bold */
+            color: #0A2463; /* Deep blue */
+            margin-top: 3.5rem; /* More space above */
+            margin-bottom: 1.5rem; /* More space below */
+            padding-bottom: 0.75rem; /* More padding below for border */
+            border-bottom: 3px solid #3E92CC; /* Thicker, brighter blue border */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05); /* Subtle shadow for depth */
+        }
+        h3 {
+            font-size: 2rem; /* Larger for sub-titles */
+            font-weight: 700; /* Bold */
+            color: #3E92CC; /* Bright Teal */
+            margin-top: 2.5rem; /* More space above */
+            margin-bottom: 1rem; /* More space below */
+        }
+        h4 {
+            font-size: 1.5rem; /* Larger for sub-sub-titles */
+            font-weight: 600; /* Semi-bold */
+            color: #0A2463; /* Dark blue */
+            margin-top: 2rem; /* More space above */
+            margin-bottom: 0.75rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+        ul, ol {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+        ol {
+            list-style-type: decimal;
+        }
+        strong {
+            font-weight: bold;
+            color: #1F2937;
+        }
+
+        /* Jupyter-style code blocks (static for examples) */
+        .jupyter-cell {
+            background-color: #F8FAFC;
+            border-radius: 0.5rem;
+            border: 1px solid #E2E8F0;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+            margin: 1.5rem 0;
+            overflow: hidden;
+        }
+        .jupyter-input-wrapper { /* For In[] block content */
+            background-color: #FFFFFF;
+            padding: 1rem;
+            border-bottom: 1px solid #E2E8F0;
+            position: relative;
+            padding-left: 3.5rem;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: #0A2463;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .jupyter-input-wrapper::before {
+            content: 'In [ ] :';
+            position: absolute;
+            left: 0.75rem;
+            top: 1rem;
+            font-size: 0.8rem;
+            color: #6B7280;
+            font-family: sans-serif;
+            font-weight: bold;
+        }
+        .jupyter-output { /* For Out[] block content */
+            background-color: #F0F9FF;
+            padding: 1rem;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: #3E92CC;
+            font-weight: normal; /* Normal weight for output */
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            position: relative;
+            padding-left: 3.5rem;
+            text-indent: -2.5rem; /* Negative indent for alignment */
+        }
+        .jupyter-output::before {
+            content: 'Out[ ] :';
+            position: absolute;
+            left: 0.75rem;
+            top: 1rem;
+            font-size: 0.8rem;
+            color: #6B7280;
+            font-family: sans-serif;
+            font-weight: bold;
+        }
+        .jupyter-input .keyword {
+            color: #0A2463;
+            font-weight: bold;
+        }
+        .jupyter-input .comment { color: #6B7280; font-style: italic; }
+
+        /* No interactive code elements, copy buttons */
+        .copy-button, .code-actions, #reveal-solutions-button {
+            display: none !important;
+        }
+        
+        footer {
+            background-color: #1F2937;
+            color: white; /* Ensure text is white for readability */
+            padding: 1.5rem 0;
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: 2rem;
+        }
+
+        /* Quiz Specific Styling - purely static questions */
+        .quiz-section .question-card {
+            background-color: #FFFFFF;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #93C5FD;
+        }
+        .quiz-section .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #0A2463;
+            margin-bottom: 1rem;
+        }
+        /* Hide entire code-setup-block from quiz section */
+        .quiz-section .code-setup-block {
+            display: none !important;
+        }
+
+        /* Remove all solution-related divs and their children */
+        .code-solution-box,
+        #reveal-solutions-button
+        {
+            display: none !important;
+        }
+
+        /* Table styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+            color: #374151;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-radius: 0.5rem;
+            overflow: hidden; /* Ensures rounded corners apply to content */
+        }
+        table thead th {
+            background-color: #0A2463; /* Dark blue */
+            color: #FFFFFF;
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #3E92CC;
+        }
+        table tbody td {
+            background-color: #FDFDFD;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #E5E7EB;
+        }
+        table tbody tr:nth-child(odd) td {
+            background-color: #F5F7FA; /* Slightly darker for odd rows */
+        }
+        table tbody tr:hover td {
+            background-color: #EBF8FF; /* Light blue on hover */
+        }
+        table code {
+            background-color: #E0F2FE; /* Light blue for inline code */
+            padding: 0.2em 0.4em;
+            border-radius: 0.25rem;
+            font-size: 0.8em;
+            color: #0A2463;
+        }
+
+
+        @media print {
+            body {
+                background-color: #FFFFFF !important;
+                color: #000000 !important;
+                margin: 0;
+                padding: 0;
+                font-size: 9pt;
+            }
+            .container {
+                box-shadow: none !important;
+                margin: 0;
+                padding: 1cm;
+                border-radius: 0;
+                width: 100%;
+            }
+            header, footer {
+                background-color: #FFFFFF !important;
+                color: #000000 !important;
+                box-shadow: none !important;
+                padding: 0.5cm 0;
+                text-align: center;
+                border-bottom: none !important;
+            }
+            header .header-left {
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                justify-content: center !important;
+                width: 100% !important;
+                gap: 0.5cm !important;
+            }
+            header img {
+                width: 50px !important;
+                height: 50px !important;
+                margin-bottom: 0 !important;
+            }
+            header .institute-name, header .course-lesson-title, header .author-name {
+                color: #000000 !important;
+                font-size: 10pt !important;
+                margin: 0 !important;
+            }
+            header .institute-name { font-weight: bold !important; letter-spacing: normal !important; }
+            header .course-lesson-title { font-size: 8pt !important; }
+            header .author-name { font-size: 8pt !important; }
+            .main-nav-bar { display: none !important; } /* Hide main nav in print */
+
+            h2, h3, h4 {
+                color: #000000 !important;
+                border-bottom-color: #AAAAAA !important;
+                cursor: auto !important;
+                page-break-after: avoid;
+                margin-top: 1.5cm;
+            }
+            h2:hover, h3:hover, h4:hover { color: #000000 !important; }
+            p, ul, ol, pre {
+                page-break-inside: avoid;
+                margin-bottom: 0.8rem;
+            }
+            .jupyter-cell {
+                border: 1px solid #DDDDDD !important;
+                box-shadow: none !important;
+                background-color: #F9F9F9 !important;
+                margin: 1rem 0;
+                page-break-inside: avoid;
+            }
+            .jupyter-input-wrapper {
+                background-color: #FDFDFD !important;
+                color: #000000 !important;
+                border-bottom-color: #E0E0E0 !important;
+            }
+            .jupyter-input-textarea { /* Should not exist */
+                display: none !important;
+            }
+            .jupyter-input .keyword {
+                color: #333333 !important;
+                font-weight: bold;
+            }
+            .jupyter-input::before, .jupyter-output::before {
+                color: #777777 !important;
+            }
+            .jupyter-output {
+                background-color: #F0F0F0 !important;
+                color: #444444 !important;
+                font-weight: normal;
+                display: block !important;
+            }
+            strong {
+                color: #000000 !important;
+            }
+            .copy-button, .code-actions { display: none !important; }
+            .collapsible-content > div {
+                 min-height: auto !important;
+                 overflow: visible !important;
+            }
+            .toggle-icon { display: none !important; }
+            .toc-container { display: none !important; }
+            .main-layout { flex-direction: column !important; }
+            .property-box { background-color: #F9F9F9 !important; border-color: #E0E0E0 !important; }
+            .property-title { color: #000000 !important; }
+            .property-example { background-color: #F0F0F0 !important; }
+
+            /* Quiz section specific print styles */
+            .quiz-section .question-card {
+                border-color: #E0E0E0 !important;
+            }
+            .quiz-section .expected-code-label, .quiz-section .expected-output-label, .quiz-section .explanation-label {
+                color: #000000 !important;
+            }
+            .quiz-section .expected-code-snippet {
+                background-color: #F9F9F9 !important;
+                border-color: #E0E0E0 !important;
+                color: #000000 !important;
+            }
+            .quiz-section .expected-output-content {
+                background-color: #F0F0F0 !important;
+                border-color: #E0E0E0 !important;
+                color: #000000 !important;
+            }
+            .quiz-section .explanation-text {
+                color: #333333 !important;
+            }
+            .quiz-section .code-solution-box .code-input-display {
+                border-bottom: none !important;
+                margin-bottom: 0 !important;
+                padding-bottom: 0.5rem !important;
+            }
+            .quiz-section .code-solution-box .code-output-display {
+                display: none !important; /* Explicitly hide outputs in print */
+            }
+            .quiz-section .solution-container {
+                display: none !important; /* Hide solution containers for print */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <img src="logotsi.jpeg" alt="Tech Savvy Institute Logo" onerror="this.onerror=null;this.src='https://placehold.co/48x48/0A2463/FFFFFF?text=TSI'; this.alt='Logo Placeholder';">
+            <div class="header-text-block">
+                <p class="institute-name">TECH SAVVY INSTITUTE</p>
+                <p class="course-lesson-title">Python Programming Fundamentals - Lesson 2: Python Data Types</p>
+                <span class="author-name">by Maurice Otieno</span>
+            </div>
+        </div>
+    </header>
+
+    <nav class="main-nav-bar">
+        <a href="#introduction-data-types" class="main-nav-item">Introduction</a>
+        <a href="#mutability-concept" class="main-nav-item">Mutability</a>
+        <a href="#numeric-boolean-types" class="main-nav-item">Numeric & Boolean</a>
+        <a href="#text-sequence-type-str" class="main-nav-item">Text Sequence</a>
+        <a href="#sequence-container-types" class="main-nav-item">Sequence Containers</a>
+        <a href="#mapping-set-types" class="main-nav-item">Mapping & Set</a>
+        <a href="#special-ancillary-types" class="main-nav-item">Special Types</a>
+        <a href="#conclusion-cheat-sheet" class="main-nav-item">Cheat Sheet</a>
+        <a href="#practice-questions" class="main-nav-item">Practice Questions</a>
+        <a href="#overall-conclusion" class="main-nav-item">Conclusion</a>
+    </nav>
+
+    <div class="container">
+        <main class="main-content w-full">
+
+            <section id="introduction-data-types">
+                <h2>Introduction: The Foundation of Data in Python</h2>
+                <div>
+                    <p>In the Python programming language, every piece of data, from a simple number to a complex data structure, is treated as an object of a specific class. This fundamental principle, often summarized as "everything is an object," is the cornerstone of Python's design, providing a consistent and powerful model for data manipulation. A variable, in this context, is not a container for a value but rather a name or label that refers to an object in memory.</p>
+                    <p>This object-oriented foundation means that data types are not merely abstract classifications but are concrete classes. For instance, the integer `10` is an instance of the <code>int</code> class, and the text "hello" is an instance of the <code>str</code> class. The built-in <code>type()</code> function serves as a fundamental tool for introspection, allowing developers to verify the class of any object. Executing</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+print("Type of 10: {}".format(type(10)))
+print("Type of 3.14: {}".format(type(3.14)))
+print("Type of 'hello': {}".format(type("hello")))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">&lt;class 'int'&gt;
+&lt;class 'float'&gt;
+&lt;class 'str'&gt;</code></pre>
+                        </div>
+                    </div>
+                    <p>Python employs a dynamic typing system, which means the data type of a variable is determined at runtime based on the object it currently references. Unlike statically typed languages, Python does not require explicit type declarations for variables. This offers significant flexibility but also places the responsibility of type management on the developer.</p>
+                    <p>The principal built-in types can be broadly categorized, providing a structured landscape for understanding data in Python. These categories include Numeric, Text Sequence, Sequence, Mapping, Set, and Boolean types, each designed for specific kinds of data and operations. This report will provide a detailed exploration of these core data types, their properties, and their practical applications.</p>
+                    <p>The consistency of the object model is a key design feature. Because everything is an object, common functionalities can be applied uniformly across different kinds of data. This uniformity simplifies the language, as developers do not need to learn separate rules for "primitive" data versus "complex" structures. This design choice is central to what makes the language feel coherent and is essential for understanding more advanced concepts like polymorphism and inheritance.</p>
+                </div>
+            </section>
+
+            <section id="mutability-concept">
+                <h2>1. The Crucial Concept of Mutability</h2>
+                <div>
+                    <p>A deep understanding of Python's data model requires a firm grasp of the distinction between mutable and immutable objects. This property dictates whether an object's state can be changed after its creation and has profound implications for performance, programming patterns, and correctness.</p>
+                    <p>An <strong>immutable object</strong> is one whose state cannot be modified after it is created. Any operation that appears to alter an immutable object, such as adding to a number or changing a character in a string, does not modify the original object. Instead, it computes a new value and creates a completely new object to hold it. Python's core immutable types include <code>int</code>, <code>float</code>, <code>complex</code>, <code>str</code>, <code>tuple</code>, <code>frozenset</code>, and <code>bool</code>.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Demonstrating immutability of an integer
+x = 10
+y = x # y now refers to the same object as x
+x = x + 1 # A new integer object is created for x
+
+print("x: {}, id(x): {}".format(x, id(x)))
+print("y: {}, id(y): {}".format(y, id(y))) # y still refers to the original 10
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">x: 11, id(x): &lt;id_of_new_object&gt;
+y: 10, id(y): &lt;id_of_original_object&gt;</code></pre>
+                        </div>
+                    </div>
+                    <p>Conversely, a <strong>mutable object</strong> is one whose state can be changed in-place. Operations can alter the contents of the object directly without necessitating the creation of a new one. The primary built-in mutable types are <code>list</code>, <code>dict</code>, <code>set</code>, and <code>bytearray</code>.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Demonstrating mutability of a list
+my_list = [1, 2, 3]
+another_list = my_list # another_list now refers to the SAME object as my_list
+my_list.append(4) # Modifies the original list in-place
+
+print("my_list: {}, id(my_list): {}".format(my_list, id(my_list)))
+print("another_list: {}, id(another_list): {}".format(another_list, id(another_list))) # another_list also reflects the change
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">my_list: [1, 2, 3, 4], id(my_list): &lt;id_of_list_object&gt;
+another_list: [1, 2, 3, 4], id(another_list): &lt;id_of_list_object&gt;</code></pre>
+                        </div>
+                    </div>
+                    <p>This distinction has several practical consequences. One of the most critical is <strong>hashability</strong>. An object is considered hashable if it has a hash value that never changes during its lifetime. This is a prerequisite for any object intended to be used as a key in a dictionary or as an element in a set. Because the value of an immutable object is fixed, its hash value is also fixed, making it hashable. In contrast, a mutable object's value can change, which would alter its hash value. To maintain the integrity of hash-based structures, mutable objects are therefore unhashable. This is why a <code>tuple</code> can be a dictionary key, but a <code>list</code> cannot.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Tuples are hashable, lists are not
+my_tuple = (1, 2)
+my_list_for_key = [1, 2]
+
+my_dict = {my_tuple: "This works"}
+print("Dictionary with tuple key: {}".format(my_dict))
+
+try:
+    my_dict_fail = {my_list_for_key: "This fails"}
+except TypeError as e:
+    print("Error when using list as key: {}".format(e))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Dictionary with tuple key: {(1, 2): 'This works'}
+Error when using list as key: unhashable type: 'list'</code></pre>
+                        </div>
+                    </div>
+                    <p>Furthermore, mutability affects how data is handled when passed to functions. If a mutable object like a list is passed to a function, that function can modify the original list, potentially leading to unintended side effects that can be difficult to trace. Passing an immutable object like a tuple ensures that the function cannot alter the original data, promoting safer and more predictable code.</p>
+                    <h3>Table: Mutability of Core Data Types</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Data Type (class)</th>
+                                <th>Mutability</th>
+                                <th>Example Literal</th>
+                                <th>Hashable?</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>int</code></td>
+                                <td>Immutable</td>
+                                <td><code>10</code></td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <td><code>float</code></td>
+                                <td>Immutable</td>
+                                <td><code>3.14</code></td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <td><code>bool</code></td>
+                                <td>Immutable</td>
+                                <td><code>True</code></td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <td><code>str</code></td>
+                                <td>Immutable</td>
+                                <td><code>"text"</code></td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <td><code>tuple</code></td>
+                                <td>Immutable</td>
+                                <td><code>(1, 2)</code></td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <td><code>frozenset</code></td>
+                                <td>Immutable</td>
+                                <td><code>frozenset({1, 2})</code></td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <td><code>list</code></td>
+                                <td>Mutable</td>
+                                <td><code>[1, 2]</code></td>
+                                <td>No</td>
+                            </tr>
+                            <tr>
+                                <td><code>dict</code></td>
+                                <td>Mutable</td>
+                                <td><code>{"a": 1}</code></td>
+                                <td>No</td>
+                            </tr>
+                            <tr>
+                                <td><code>set</code></td>
+                                
+                                <td>Mutable</td>
+                                <td><code>{1, 2}</code></td>
+                                <td>No</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="numeric-boolean-types">
+                <h2>2. The Numeric and Boolean Types</h2>
+                <div>
+                    <p>Numeric types are the foundation for all mathematical and quantitative operations in Python. The language provides a comprehensive suite of numeric types, which form an integrated system rather than existing as isolated components.</p>
+
+                    <h3>2.1 Integers (int)</h3>
+                    <div>
+                        <p>The <code>int</code> type is used to represent whole numbers, whether positive, negative, or zero, without any fractional part. Integers are fundamental for tasks such as counting iterations, accessing sequence elements via indexing, and any calculation where absolute precision is required.</p>
+                        <div class="jupyter-cell">
+                            <div class="jupyter-input-wrapper">
+                                <pre class="jupyter-code-content">
+# Integer creation and basic operations
+num_int = 100
+negative_int = -50
+zero_int = 0
+
+print("Type of num_int: {}".format(type(num_int)))
+print("Addition: {}".format(num_int + 20))
+print("Multiplication: {}".format(negative_int * 2))
+print("Exponentiation: {}".format(2 ** 10)) # 2 to the power of 10
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">&lt;class 'int'&gt;
+120
+-100
+1024</code></pre>
+                        </div>
+                    </div>
+                    <p>A defining feature of Python's integers is their unlimited precision. Unlike fixed-size integers in languages such as C or Java, a Python <code>int</code> can grow to be arbitrarily large, constrained only by the computer's available memory. This eliminates the risk of integer overflow errors for large-number arithmetic. Integers are created using numeric literals (e.g., <code>x = 100</code>) or by explicitly converting other types using the <code>int()</code> constructor. They support all standard arithmetic operations, including true division (<code>/</code>), floor division (<code>//</code>), modulo (<code>%</code>), and exponentiation (<code>**</code>).</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Unlimited precision integer
+large_num = 123456789012345678901234567890 * 98765432109876543210
+print("Large number: {}".format(large_num))
+print("Type of large_num: {}".format(type(large_num)))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Large number: 1219326311126352690008544415840001000
+Type of large_num: &lt;class 'int'&gt;</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>2.2 Floating-Point Numbers (float)</h3>
+                    <div>
+                        <p>The <code>float</code> type represents real numbers, which can have a fractional component. They are essential for scientific measurements, financial calculations, and graphical applications where fractional precision is necessary. Floats can be created using literals that include a decimal point (e.g., <code>y = 3.14</code>) or with exponential notation (e.g., <code>z = 9.8e-2</code>), as well as through the <code>float()</code> type conversion function.</p>
+                        <div class="jupyter-cell">
+                            <div class="jupyter-input-wrapper">
+                                <pre class="jupyter-code-content">
+# Float creation and basic operations
+pi = 3.14159
+scientific_notation = 1.23e5 # 1.23 * 10^5 = 123000.0
+
+print("Type of pi: {}".format(type(pi)))
+print("Value: {}".format(scientific_notation))
+print("Division: {}".format(10 / 3)) # True division always results in a float
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Type of pi: &lt;class 'float'&gt;
+Value: 123000.0
+Division: 3.3333333333333335</code></pre>
+                        </div>
+                    </div>
+                    <p>It is critical to recognize that floating-point numbers have inherent imprecision. They are typically implemented using the IEEE 754 double-precision standard, which means they are binary approximations of decimal fractions. This can lead to small rounding errors in calculations. While they are accurate to approximately 15 decimal places, they should not be used for applications like financial accounting where exact decimal representation is paramount; the <code>decimal</code> module is preferred for such cases.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Floating-point precision issues
+result = 0.1 + 0.2
+print("0.1 + 0.2 = {}".format(result))
+print("Is 0.1 + 0.2 == 0.3? {}".format(result == 0.3))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">0.1 + 0.2 = 0.30000000000000004
+Is 0.1 + 0.2 == 0.3? False</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>2.3 Complex Numbers (complex)</h3>
+                    <div>
+                        <p>Python offers native support for complex numbers, a specialized type used extensively in fields like electrical engineering, physics, and advanced mathematics. A complex number consists of a real part and an imaginary part, with the imaginary unit denoted by a <code>j</code> suffix (e.g., <code>c = 2 + 3j</code>). They can be created with literals or by using the <code>complex(real, imag)</code> constructor.</p>
+                        <div class="jupyter-cell">
+                            <div class="jupyter-input-wrapper">
+                                <pre class="jupyter-code-content">
+# Complex number creation and properties
+c1 = 2 + 3j
+c2 = complex(4, -1)
+
+print("Complex number 1: {}, Type: {}".format(c1, type(c1)))
+print("Complex number 2: {}".format(c2))
+print("Real part of c1: {}".format(c1.real))
+print("Imaginary part of c1: {}".format(c1.imag))
+print("Addition: {}".format(c1 + c2))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Complex number 1: (2+3j), Type: &lt;class 'complex'&gt;
+Complex number 2: (4-1j)
+Real part of c1: 2.0
+Imaginary part of c1: 3.0
+Addition: (6+2j)</code></pre>
+                        </div>
+                    </div>
+                    <p>The numeric types in Python do not operate in isolation; they form a conceptual hierarchy. A <code>bool</code> is a specialized subtype of <code>int</code>, an <code>int</code> can be thought of as a <code>float</code> with a zero fractional part, and a <code>float</code> is a complex number with a zero imaginary part. When a binary arithmetic operation involves operands of different numeric types, Python automatically performs type widening, or coercion. The operand of the "narrower" type is converted to the type of the "wider" one before the operation is performed. For example, adding an <code>int</code> to a <code>float</code> results in a <code>float</code>. This seamless, automatic conversion (<code>bool</code> → <code>int</code> → <code>float</code> → <code>complex</code>) is a deliberate design choice that simplifies mixed-type arithmetic and reduces the need for explicit casting by the developer.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Type Coercion Example
+result_coercion = 5 + 3.0 # int + float
+print("5 + 3.0 = {}, Type: {}".format(result_coercion, type(result_coercion)))
+
+result_complex_coercion = 2.5 + 4j # float + complex
+print("2.5 + 4j = {}, Type: {}".format(result_complex_coercion, type(result_complex_coercion)))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">5 + 3.0 = 8.0, Type: &lt;class 'float'&gt;
+2.5 + 4j = (2.5+4j), Type: &lt;class 'complex'&gt;</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>2.4 Booleans (bool)</h3>
+                    <div>
+                        <p>The <code>bool</code> type represents the two truth values, <code>True</code> and <code>False</code>, and is fundamental to logical operations and controlling program flow in conditional statements. There are only two boolean objects in Python, <code>True</code> and <code>False</code>, which are instances of the <code>bool</code> class.</p>
+                        <div class="jupyter-cell">
+                            <div class="jupyter-input-wrapper">
+                                <pre class="jupyter-code-content">
+# Boolean creation
+is_active = True
+has_permission = False
+
+print("Type of is_active: {}".format(type(is_active)))
+print("Value of has_permission: {}".format(has_permission))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Type of is_active: &lt;class 'bool'&gt;
+Value of has_permission: False</code></pre>
+                        </div>
+                    </div>
+                    <p>Booleans are a subclass of integers, where <code>True</code> is equivalent to <code>1</code> and <code>False</code> is equivalent to <code>0</code> in most numeric contexts. However, relying on this implicit behavior is generally discouraged in favor of explicit conversions with <code>int()</code> when needed.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Boolean as integers (discouraged implicit use)
+print("True + True = {}".format(True + True)) # Evaluates to 1 + 1 = 2
+print("False * 10 = {}".format(False * 10))   # Evaluates to 0 * 10 = 0
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">True + True = 2
+False * 10 = 0</code></pre>
+                        </div>
+                    </div>
+                    <p>A core concept associated with booleans is Truth Value Testing. In Python, any object can be evaluated for a truth value, which is particularly useful in <code>if</code> and <code>while</code> statements. An object is considered "truthy" by default, unless it is one of the following "falsy" values:</p>
+                    <ul>
+                        <li>The constants <code>None</code> and <code>False</code>.</li>
+                        <li>Zero of any numeric type: <code>0</code>, <code>0.0</code>, <code>0j</code>.</li>
+                        <li>Any empty sequence or collection: <code>""</code>, `[]`, <code>()</code>, <code>{}</code>, <code>set()</code>, <code>range(0)</code>.</li>
+                    </ul>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Truthiness examples
+print("bool(1): {}".format(bool(1)))
+print("bool(0): {}".format(bool(0)))
+print("bool('hello'): {}".format(bool('hello')))
+print("bool(''): {}".format(bool('')))
+print("bool([]): {}".format(bool([])))
+print("bool([1, 2]): {}".format(bool([1, 2])))
+print("bool(None): {}".format(bool(None)))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">bool(1): True
+bool(0): False
+bool('hello'): True
+bool(''): False
+bool([]): False
+bool([1, 2]): True
+bool(None): False</code></pre>
+                        </div>
+                    </div>
+                    <p>Logical operations are performed using the <code>and</code>, <code>or</code>, and <code>not</code> operators. The <code>and</code> and <code>or</code> operators exhibit short-circuiting behavior, which is an important optimization. In the expression `x and y`, `y` is only evaluated if `x` is true. Similarly, in `x or y`, `y` is only evaluated if `x` is false. This prevents unnecessary computation and allows for idiomatic constructs like `value = user_input or "default"`. </p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Logical operations and short-circuiting
+a = True
+b = False
+c = 10
+d = 0
+
+print("a and b: {}".format(a and b))
+print("a or b: {}".format(a or b))
+print("not a: {}".format(not a))
+
+# Short-circuiting example with 'or'
+default_value = "Guest"
+user_input_1 = ""
+user_input_2 = "Alice"
+
+final_name_1 = user_input_1 or default_value
+final_name_2 = user_input_2 or default_value
+
+print("User 1 name: {}".format(final_name_1)) # user_input_1 is falsy, so default_value is used
+print("User 2 name: {}".format(final_name_2)) # user_input_2 is truthy, so it is used
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">a and b: False
+a or b: True
+not a: False
+User 1 name: Guest
+User 2 name: Alice</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="text-sequence-type-str">
+                <h2>3. The Text Sequence Type: str</h2>
+                <div>
+                    <p>The <code>str</code> type is Python's implementation for handling textual data. It is an immutable, ordered sequence of Unicode characters. Each of these properties is significant.</p>
+                    <ul>
+                        <li><strong>Immutable:</strong> Once a string object is created, its contents cannot be changed in-place. Methods that appear to modify a string, such as <code>.replace()</code> or <code>.lower()</code>, do not alter the original string; they return a new <code>str</code> object with the modified content.</li>
+                        <li><strong>Ordered:</strong> The characters in a string have a defined sequence. This allows for accessing individual characters by their numerical index and extracting subsequences using slicing.</li>
+                        <li><strong>Unicode:</strong> In Python 3, all strings are sequences of Unicode characters by default. This is a major improvement over Python 2 and means the <code>str</code> type can natively represent text from nearly every writing system in the world. Python does not have a distinct <code>char</code> type; a single character is simply a string of length one.</li>
+                    </ul>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# String creation and immutability
+my_string = "Hello, Python!"
+new_string = my_string.replace("Python", "World")
+
+print("Original string: {}, id: {}".format(my_string, id(my_string)))
+print("New string: {}, id: {}".format(new_string, id(new_string))) # Different ID
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Original string: Hello, Python!, id: &lt;id_of_original_string&gt;
+New string: Hello, World!, id: &lt;id_of_new_string&gt;</code></pre>
+                        </div>
+                    </div>
+                    <p>Strings can be created with literals enclosed in single (<code>'...'</code>), double (<code>"..."</code>), or triple quotes (<code>"""..."""</code> or <code>'''...'''</code>). Triple quotes are particularly useful as they can span multiple lines. For embedding expressions and values within strings,</p>
+                    <p><strong>f-strings (Formatted String Literals)</strong> are the modern, preferred method. Their syntax, <code>"The value is {}".format(variable)</code>, is concise, readable, and highly performant compared to older formatting techniques.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# String creation examples
+single_quote = 'This is a string.'
+double_quote = "This is also a string."
+triple_quote = """This is a
+multi-line string."""
+
+print(single_quote)
+print(double_quote)
+print(triple_quote)
+
+# .format() string example
+name = "Alice"
+age = 30
+message = "Hello, {}! You are {} years old.".format(name, age)
+print(message)
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">This is a string.
+This is also a string.
+This is a
+multi-line string.
+Hello, Alice! You are 30 years old.</code></pre>
+                        </div>
+                    </div>
+                    <p>Fundamental operations on strings include indexing to access a character (e.g., <code>my_string[0]</code>), slicing to extract a substring (e.g., <code>my_string[1:5]</code>), concatenation with the <code>+</code> operator, and repetition with the <code>*</code> operator.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# String operations: indexing, slicing, concatenation, repetition
+s = "Python"
+
+print("First character: {}".format(s[0]))
+print("Slice (index 1 to 3): {}".format(s[1:4])) # 'yth'
+print("Concatenation: {}".format('Hello ' + s))
+print("Repetition: {}".format(s * 3))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">First character: P
+Slice (index 1 to 3): yth
+Concatenation: Hello Python
+Repetition: PythonPythonPython</code></pre>
+                        </div>
+                    </div>
+                    <h3>Table: Essential String Methods</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Method</th>
+                                <th>Description</th>
+                                <th>Example</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>.upper()</code> / <code>.lower()</code></td>
+                                <td>Returns a new string converted to uppercase or lowercase.</td>
+                                <td><code>"PyThOn".lower()</code> → <code>"python"</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>.strip()</code> / <code>.lstrip()</code> / <code>.rstrip()</code></td>
+                                <td>Returns a new string with leading/trailing whitespace removed.</td>
+                                <td><code>"  hello  ".strip()</code> → <code>"hello"</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>.replace(old, new)</code></td>
+                                <td>Returns a new string with all occurrences of old replaced by new.</td>
+                                <td><code>'apple'.replace('p', 'b')</code> → <code>'abble'</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>.split(sep)</code></td>
+                                <td>Returns a list of substrings, splitting the string at the separator sep.</td>
+                                <td><code>"a,b,c".split(',')</code> → <code>['a', 'b', 'c']</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>.join(iterable)</code></td>
+                                <td>Returns a string by concatenating elements of an iterable with the string as a separator.</td>
+                                <td><code>'-'.join(['x', 'y'])</code> → <code>'x-y'</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>.find(sub)</code></td>
+                                <td>Returns the lowest index of substring sub; returns -1 if not found.</td>
+                                <td><code>"hello".find('ll')</code> → <code>2</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>.startswith(prefix)</code> / <code>.endswith(suffix)</code></td>
+                                <td>Returns True if the string starts/ends with the specified prefix/suffix.</td>
+                                <td><code>'image.jpg'.endswith('.jpg')</code> → <code>True</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>.isdigit()</code> / <code>.isalpha()</code></td>
+                                <td>Returns True if all characters are digits or alphabetic, respectively.</td>
+                                <td><code>'123'.isdigit()</code> → <code>True</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="sequence-container-types">
+                <h2>4. The Sequence Container Types: list, tuple, and range</h2>
+                <div>
+                    <p>Sequence types are containers that store ordered collections of items. Python's primary built-in sequence containers are <code>list</code>, <code>tuple</code>, and <code>range</code>, each with distinct characteristics and use cases.</p>
+
+                    <h3>4.1 Lists (list)</h3>
+                    <div>
+                        <p>A <code>list</code> is the most versatile and commonly used sequence type in Python. It is an ordered, mutable collection of items. Its mutability means that elements can be added, removed, or changed after the list has been created. Lists are heterogeneous, capable of storing items of different data types within the same collection. They are the workhorse container for storing collections that are expected to change in size or content during a program's execution.</p>
+                        <div class="jupyter-cell">
+                            <div class="jupyter-input-wrapper">
+                                <pre class="jupyter-code-content">
+# List creation
+my_list = [1, "hello", 3.14, True]
+empty_list = []
+
+print("My list: {}, Type: {}".format(my_list, type(my_list)))
+print("Length of my_list: {}".format(len(my_list)))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">My list: [1, 'hello', 3.14, True], Type: &lt;class 'list'&gt;
+Length of my_list: 4</code></pre>
+                        </div>
+                    </div>
+                    <p>Lists are created with square brackets (<code>[]</code>) or the <code>list()</code> constructor. A particularly powerful and idiomatic feature for creating lists is the <strong>list comprehension</strong>. This syntax provides a concise and readable way to generate lists based on existing iterables, for example: <code>squares = [x**2 for x in range(10)]</code>. Like all sequences, lists support indexing, slicing, concatenation, and membership testing with the <code>in</code> keyword.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# List comprehension example
+squares = [x**2 for x in range(5)]
+print("Squares: {}".format(squares))
+
+# List indexing and slicing
+data = [10, 20, 30, 40, 50]
+print("First element: {}".format(data[0]))
+print("Slice from index 1 to 3: {}".format(data[1:4]))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Squares: [0, 1, 4, 9, 16]
+First element: 10
+Slice from index 1 to 3: [20, 30, 40]</code></pre>
+                        </div>
+                    </div>
+                    <h3>Table: Key List Methods</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Method</th>
+                                <th>Description</th>
+                                <th>Example</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>.append(item)</code></td>
+                                <td>Adds a single item to the end of the list.</td>
+                                <td><code>L = []; L.append(3)</code> → <code>L</code> is <code>[3]</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>.extend(iterable)</code></td>
+                                <td>Appends all items from an iterable to the end of the list.</td>
+                                <td><code>L = [1]; L.extend([2,3])</code> → <code>L</code> is <code>[1,2,3]</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>.insert(i, item)</code></td>
+                                <td>Inserts an item at a given index i.</td>
+                                <td><code>L = [1,3]; L.insert(1,2)</code> → <code>L</code> is <code>[1,2,3]</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>.remove(item)</code></td>
+                                <td>Removes the first occurrence of an item. Raises ValueError if not found.</td>
+                                <td><code>L = [1,2,3]; L.remove(2)</code> → <code>L</code> is <code>[1,3]</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>.pop(i=-1)</code></td>
+                                <td>Removes and returns the item at index i (defaults to the last item).</td>
+                                <td><code>L = [1,2,3]; L.pop()</code> → <code>3</code>; <code>L</code> is <code>[1,2]</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>.sort()</code></td>
+                                <td>Sorts the items of the list in-place.</td>
+                                <td><code>L = [3,1,2]; L.sort()</code> → <code>L</code> is <code>[1,2,3]</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>.reverse()</code></td>
+                                <td>Reverses the elements of the list in-place.</td>
+                                <td><code>L = [1,2,3]; L.reverse()</code> → <code>L</code> is <code>[3,2,1]</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>.clear()</code></td>
+                                <td>Removes all items from the list.</td>
+                                <td><code>L = [1,2,3]; L.clear()</code> → <code>L</code> is <code>[]</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>4.2 Tuples (tuple)</h3>
+                    <div>
+                        <p>A <code>tuple</code> is an ordered, immutable collection of items. Its immutability is its defining feature, making it suitable for situations where data integrity is critical and the collection should not be modified after creation. Tuples are created with parentheses (<code>()</code>) or the <code>tuple()</code> constructor. A notable syntactic detail is that a single-element tuple must include a trailing comma (e.g., <code>(1,)</code>) to distinguish it from a simple parenthesized expression.</p>
+                        <div class="jupyter-cell">
+                            <div class="jupyter-input-wrapper">
+                                <pre class="jupyter-code-content">
+# Tuple creation and single-element tuple
+my_tuple = (1, "apple", 3.14)
+single_element_tuple = (5,) # Trailing comma is crucial
+
+print("My tuple: {}, Type: {}".format(my_tuple, type(my_tuple)))
+print("Single element tuple: {}, Type: {}".format(single_element_tuple, type(single_element_tuple)))
+print("Not a tuple: {}, Type: {}".format((5), type((5)))) # This is just an integer
+
+# Tuple unpacking
+coordinates = (10, 20)
+x, y = coordinates
+print("X: {}, Y: {}".format(x, y))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">My tuple: (1, 'apple', 3.14), Type: &lt;class 'tuple'&gt;
+Single element tuple: (5,), Type: &lt;class 'tuple'&gt;
+Not a tuple: 5, Type: &lt;class 'int'&gt;
+X: 10, Y: 20</code></pre>
+                        </div>
+                    </div>
+                    <p>Key use cases for tuples stem directly from their immutability. They are often used to return multiple values from a function, as their structure is fixed. Because they are hashable, they can be used as keys in a dictionary, whereas lists cannot.</p>
+                    <p>The choice between a list and a tuple often reflects a deeper semantic intent beyond just mutability. Lists are typically used for homogeneous sequences where the number of items can vary (e.g., a list of student names). Tuples are better suited for heterogeneous data structures where the size is fixed and the position of an element defines its meaning (e.g., a coordinate point <code>(x,y,z)</code> or a database record <code>(id, 'Alice', 'alice@example.com')</code>). Adhering to this convention makes code more self-documenting and signals the intended use of the data structure.</p>
+
+                    <h3>4.3 Ranges (range)</h3>
+                    <div>
+                        <p>The <code>range</code> type represents an immutable sequence of numbers and is most commonly used for iterating a specific number of times in <code>for</code> loops. It is created using <code>range(stop)</code>, <code>range(start, stop)</code>, or <code>range(start, stop, step)</code>.</p>
+                        <div class="jupyter-cell">
+                            <div class="jupyter-input-wrapper">
+                                <pre class="jupyter-code-content">
+# Range creation and iteration
+r1 = range(5)       # 0, 1, 2, 3, 4
+r2 = range(1, 6)    # 1, 2, 3, 4, 5
+r3 = range(0, 10, 2) # 0, 2, 4, 6, 8
+
+print("Range 1 as list: {}".format(list(r1)))
+print("Range 2 as list: {}".format(list(r2)))
+print("Range 3 as list: {}".format(list(r3)))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Range 1 as list: [0, 1, 2, 3, 4]
+Range 2 as list: [1, 2, 3, 4, 5]
+Range 3 as list: [0, 2, 4, 6, 8]</code></pre>
+                        </div>
+                    </div>
+                    <p>The key advantage of <code>range</code> is its memory efficiency. A range object does not store every number it represents in memory. Instead, it only stores the start, stop, and step parameters, calculating each number on-the-fly as it is requested during iteration. This makes `range(1_000_000)` vastly more memory-efficient than an equivalent list containing one million integers.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Memory efficiency of range vs list
+import sys
+
+large_range = range(1000000)
+large_list = list(large_range)
+
+print("Size of large_range (bytes): {}".format(sys.getsizeof(large_range)))
+print("Size of large_list (bytes): {}".format(sys.getsizeof(large_list)))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Size of large_range (bytes): 48 # This can vary slightly by Python version/system
+Size of large_list (bytes): 8000056 # This will be significantly larger</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="mapping-set-types">
+                <h2>5. The Mapping and Set Types</h2>
+                <div>
+                    <p>Mapping and set types provide powerful tools for storing and manipulating collections of data based on keys and uniqueness, respectively.</p>
+
+                    <h3>5.1 Dictionaries (dict)</h3>
+                    <div>
+                        <p>A <code>dict</code> is a mutable mapping of unique, immutable (hashable) keys to values. It is Python's implementation of a hash table and is highly optimized for fast value retrieval when the key is known.</p>
+                        <div class="jupyter-cell">
+                            <div class="jupyter-input-wrapper">
+                                <pre class="jupyter-code-content">
+# Dictionary creation and access
+my_dict = {"name": "Alice", "age": 30, "city": "New York"}
+print("My dictionary: {}".format(my_dict))
+print("Alice's age: {}".format(my_dict['age']))
+
+# Adding and modifying elements
+my_dict["email"] = "alice@example.com"
+my_dict["age"] = 31 # Modify existing value
+print("Modified dictionary: {}".format(my_dict))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">My dictionary: {'name': 'Alice', 'age': 30, 'city': 'New York'}
+Alice's age: 30
+Modified dictionary: {'name': 'Alice', 'age': 31, 'city': 'New York', 'email': 'alice@example.com'}</code></pre>
+                        </div>
+                    </div>
+                    <p>The keys within a dictionary must be unique and of an immutable type (e.g., <code>str</code>, <code>int</code>, <code>tuple</code>). The values, however, can be of any data type and can be duplicated. A significant feature, guaranteed since Python 3.7, is that dictionaries <strong>preserve insertion order</strong>. This means that when iterating over a dictionary, the items will be yielded in the same order they were added.</p>
+                    <p>Dictionaries are created using curly braces with key-value pairs (<code>{key: value}</code>) or the <code>dict()</code> constructor. An empty dictionary is created with <code>{}</code>, whereas <code>set()</code> must be used for an empty set.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Empty dict vs empty set
+empty_dict = {}
+empty_set = set()
+
+print("Type of {{}}: {}".format(type(empty_dict)))
+print("Type of set(): {}".format(type(empty_set)))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Type of {}: &lt;class 'dict'&gt;
+Type of set(): &lt;class 'set'&gt;</code></pre>
+                        </div>
+                    </div>
+                    <h3>Table: Essential Dictionary Methods</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Method</th>
+                                <th>Description</th>
+                                <th>Example</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>.keys()</code></td>
+                                <td>Returns a dynamic view object displaying a list of all keys.</td>
+                                <td><code>d={'a':1}; d.keys()</code> → <code>dict_keys(['a'])</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>.values()</code></td>
+                                <td>Returns a dynamic view object displaying a list of all values.</td>
+                                <td><code>d={'a':1}; d.values()</code> → <code>dict_values([1])</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>.items()</code></td>
+                                <td>Returns a dynamic view object displaying a list of key-value tuple pairs.</td>
+                                <td><code>d={'a':1}; d.items()</code> → <code>dict_items([('a', 1)])</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>.get(key, default=None)</code></td>
+                                <td>Returns the value for a key if it exists, otherwise returns a default value.</td>
+                                <td><code>d={'a':1}; d.get('b',0)</code> → <code>0</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>.update(other_dict)</code></td>
+                                <td>Updates the dictionary with key-value pairs from another dictionary or iterable.</td>
+                                <td><code>d={'a':1}; d.update({'b':2})</code> → <code>d</code> is <code>{'a':1, 'b':2}</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>.pop(key, default)</code></td>
+                                <td>Removes the specified key and returns its value. If not found, returns default.</td>
+                                <td><code>d={'a':1}; d.pop('a')</code> → <code>1</code>; <code>d</code> is <code>{}</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>.popitem()</code></td>
+                                <td>Removes and returns the last inserted key-value pair as a tuple.</td>
+                                <td><code>d={'a':1, 'b':2}; d.popitem()</code> → <code>('b', 2)</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="special-ancillary-types">
+                <h2>6. Special and Ancillary Types</h2>
+                <div>
+                    <p>Beyond the core types used in day-to-day programming, Python includes several special and ancillary types for specific purposes.</p>
+
+                    <h3>6.1 The NoneType</h3>
+                    <div>
+                        <p>The <code>NoneType</code> has only a single value: the object <code>None</code>. <code>None</code> is a singleton used to signify the absence of a value. It is the default return value of functions that do not explicitly return anything and is often used as a default value for optional function arguments. In truth value testing, <code>None</code> always evaluates to <code>False</code>.</p>
+                        <div class="jupyter-cell">
+                            <div class="jupyter-input-wrapper">
+                                <pre class="jupyter-code-content">
+# NoneType example
+# This is a conceptual demonstration, as user-defined functions are not being added by the model.
+user_data = None
+if user_data is None:
+    print("User data is not available.")
+else:
+    print("User data: {}".format(user_data))
+
+# Example of a variable initialized to None
+result = None
+if result: # This evaluates to False if result is None
+    print("Result is truthy.")
+else:
+    print("Result is falsy (None).")
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">User data is not available.
+Result is falsy (None).</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>6.2 Binary Types</h3>
+                    <div>
+                        <p>While <code>str</code> is used for text, binary types are used to handle raw binary data, which is essential for working with files, network protocols, and low-level data structures.</p>
+                        <ul>
+                            <li><code>bytes</code>: An immutable sequence of bytes.</li>
+                            <li><code>bytearray</code>: A mutable sequence of bytes.</li>
+                            <li><code>memoryview</code>: An object that provides a view into the memory of another binary object, allowing for efficient access and slicing without copying the underlying data.</li>
+                        </ul>
+                        <div class="jupyter-cell">
+                            <div class="jupyter-input-wrapper">
+                                <pre class="jupyter-code-content">
+# Binary types example
+b_data = b"hello" # bytes literal
+print("Bytes data: {}, Type: {}".format(b_data, type(b_data)))
+
+ba_data = bytearray(b_data) # Convert bytes to bytearray
+print("Bytearray data: {}, Type: {}".format(ba_data, type(ba_data)))
+
+ba_data[0] = 72 # Modify bytearray in-place (ASCII H for 'h')
+print("Modified bytearray: {}".format(ba_data))
+
+# Memoryview (conceptual, full demo is complex)
+mv = memoryview(b_data)
+print("Memoryview element: {}".format(mv[0]))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Bytes data: b'hello', Type: &lt;class 'bytes'&gt;
+Bytearray data: bytearray(b'hello'), Type: &lt;class 'bytearray'&gt;
+Modified bytearray: bytearray(b'Hello')
+Memoryview element: 104</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>6.3 Advanced Containers (collections module)</h3>
+                    <div>
+                        <p>The <code>collections</code> module provides specialized container datatypes that serve as powerful alternatives to the general-purpose built-ins. A brief introduction to these can guide further learning:</p>
+                        <ul>
+                            <li><code>collections.namedtuple</code>: A factory function for creating tuple subclasses with named fields, enhancing code readability by allowing access to elements by name instead of just index (e.g., <code>point.x</code> instead of <code>point[0]</code>).</li>
+                            <li><code>collections.deque</code>: A "double-ended queue" that is list-like but provides fast appends and pops from both its left and right ends.</li>
+                            <li><code>collections.Counter</code>: A <code>dict</code> subclass designed for counting hashable objects. It simplifies tasks like tallying frequencies of items in a list.</li>
+                            <li><code>collections.defaultdict</code>: A <code>dict</code> subclass that calls a factory function to supply a default value for missing keys. This can eliminate the need for manual key checks.</li>
+                            <li><code>collections.ChainMap</code>: A <code>dict</code>-like class that creates a single, updateable view of multiple underlying dictionaries, searching them sequentially until a key is found.</li>
+                        </ul>
+                        <div class="jupyter-cell">
+                            <div class="jupyter-input-wrapper">
+                                <pre class="jupyter-code-content">
+# collections.namedtuple example
+from collections import namedtuple
+
+Point = namedtuple('Point', ['x', 'y'])
+p1 = Point(10, 20)
+
+print("Point: {}".format(p1))
+print("X coordinate: {}".format(p1.x))
+
+# collections.deque example
+from collections import deque
+d = deque([1, 2, 3])
+d.appendleft(0)
+d.append(4)
+print("Deque: {}".format(list(d)))
+
+# collections.Counter example
+from collections import Counter
+c = Counter(['apple', 'banana', 'apple', 'orange', 'banana', 'apple'])
+print("Fruit counts: {}".format(c))
+
+# collections.defaultdict example
+from collections import defaultdict
+s = [('yellow', 1), ('blue', 2), ('yellow', 3), ('blue', 4), ('red', 1)]
+dd = defaultdict(list)
+for k, v in s:
+    dd[k].append(v)
+print("Grouped by color: {}".format(dict(dd)))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Point: Point(x=10, y=20)
+X coordinate: 10
+Deque: [0, 1, 2, 3, 4]
+Fruit counts: Counter({'apple': 3, 'banana': 2, 'orange': 1})
+Grouped by color: {'yellow': [1, 3], 'blue': [2, 4], 'red': [1]}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="conclusion-cheat-sheet">
+                <h2>Conclusion: A Unified Cheat Sheet</h2>
+                <div>
+                    <p>Python's data types form a rich and coherent system, built upon the foundation of its object model. Each type is designed with a specific purpose in mind, from the mathematical precision of <code>int</code> to the flexible mutability of <code>list</code> and the key-value efficiency of <code>dict</code>. Understanding the core characteristics of each type—particularly its mutability, ordering, and intended use case—is fundamental to writing effective, efficient, and "Pythonic" code. The following table consolidates these key attributes into a single, comprehensive reference.</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Syntax Example</th>
+                                <th>Mutability</th>
+                                <th>Ordering</th>
+                                <th>Description</th>
+                                <th>Core Use Case</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>int</code></td>
+                                <td><code>x = 10</code></td>
+                                <td>Immutable</td>
+                                <td>N/A</td>
+                                <td>An integer of unlimited precision.</td>
+                                <td>Counting & indexing.</td>
+                            </tr>
+                            <tr>
+                                <td><code>float</code></td>
+                                <td><code>x = 3.14</code></td>
+                                <td>Immutable</td>
+                                <td>N/A</td>
+                                <td>A floating-point number (approximate).</td>
+                                <td>Scientific & fractional math.</td>
+                            </tr>
+                            <tr>
+                                <td><code>bool</code></td>
+                                <td><code>x = True</code></td>
+                                <td>Immutable</td>
+                                <td>N/A</td>
+                                <td>A boolean value of True or False.</td>
+                                <td>Logical evaluation & flow control.</td>
+                            </tr>
+                            <tr>
+                                <td><code>str</code></td>
+                                <td><code>x = "text"</code></td>
+                                <td>Immutable</td>
+                                <td>Ordered</td>
+                                <td>A sequence of Unicode characters.</td>
+                                <td>Storing & manipulating text.</td>
+                            </tr>
+                            <tr>
+                                <td><code>list</code></td>
+                                <td><code>x = [1,2]</code></td>
+                                <td>Mutable</td>
+                                <td>Ordered</td>
+                                <td>A dynamic, ordered collection of items.</td>
+                                <td>General-purpose mutable sequence.</td>
+                            </tr>
+                            <tr>
+                                <td><code>tuple</code></td>
+                                <td><code>x = (1,2)</code></td>
+                                <td>Immutable</td>
+                                <td>Ordered</td>
+                                <td>A fixed, ordered collection of items.</td>
+                                <td>Storing fixed records, function returns.</td>
+                            </tr>
+                            <tr>
+                                <td><code>dict</code></td>
+                                <td><code>x = {'a':1}</code></td>
+                                <td>Mutable</td>
+                                <td>Ordered</td>
+                                <td>A mapping of unique keys to values.</td>
+                                <td>Key-value data storage & lookup.</td>
+                            </tr>
+                            <tr>
+                                <td><code>set</code></td>
+                                <td>Mutable</td>
+                                <td><code>{1, 2}</code></td>
+                                <td>Unordered</td>
+                                <td>A collection of unique, hashable items.</td>
+                                <td>Membership testing, removing duplicates.</td>
+                            </tr>
+                            <tr>
+                                <td><code>frozenset</code></td>
+                                <td><code>x = frozenset({1, 2})</code></td>
+                                <td>Immutable</td>
+                                <td>Unordered</td>
+                                <td>A fixed collection of unique items.</td>
+                                <td>Making set-like data hashable.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="practice-questions">
+                <h2>Practice Questions</h2>
+                <div>
+                    <p class="text-lg text-blue-800 mb-4">Test your understanding of Python's Core Data Types with these practice questions:</p>
+                    
+                    <div class="quiz-section">
+                        <div class="question-card">
+                            <p class="question-text">1. Explain the key difference between mutable and immutable data types in Python. Provide one example of each.</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">2. Why can a Python <code>tuple</code> be used as a key in a dictionary, but a <code>list</code> cannot?</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">3. Describe the main characteristic of Python's <code>int</code> type that differentiates it from integers in languages like C++ or Java.</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">4. What is the primary purpose of the <code>range</code> type, and why is it considered memory-efficient?</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">5. Given two sets, <code>A = {1, 2, 3}</code> and <code>B = {3, 4, 5}</code>, what would be the result of <code>A.union(B)</code> and <code>A.intersection(B)</code>?</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">6. How would you create an empty dictionary and an empty set in Python, and why are their literal notations different?</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">7. Explain the "short-circuiting" behavior of Python's logical <code>and</code> and <code>or</code> operators.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="overall-conclusion">
+                <h2>Overall Conclusion</h2>
+                <div>
+                    <p>You've completed the foundational concepts of Lesson 2. This is just the beginning of your Python programming adventure. Keep practicing, exploring, and building!</p>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <footer class="bg-blue-900 text-white py-6 text-center">
+        <p class="text-white">&copy; 2024 Tech Savvy Institute. All rights reserved. Content adapted from Lesson 2 notes by Maurice Otieno.</p>
+        <p class="text-white">Python is a trademark of the Python Software Foundation</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scrolling for main navigation
+            const navItems = document.querySelectorAll('.main-nav-bar .main-nav-item');
+            const headerElement = document.querySelector('header');
+            const mainNavBarElement = document.querySelector('.main-nav-bar');
+
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault(); // Prevent default anchor link behavior
+
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+
+                    if (targetElement) {
+                        // Calculate total offset from the top
+                        const headerHeight = headerElement ? headerElement.offsetHeight : 0;
+                        const navBarHeight = mainNavBarElement ? mainNavBarElement.offsetHeight : 0;
+                        const totalOffset = headerHeight + navBarHeight + 5; // Add a small buffer
+
+                        const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                        const offsetPosition = elementPosition - totalOffset;
+
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: "smooth"
+                        });
+                    }
+                });
+            });
+
+            // Scroll-spy functionality for active state
+            const sections = document.querySelectorAll('section[id]');
+            const observerOptions = {
+                root: null, // viewport
+                rootMargin: `-80px 0px -50% 0px`, /* Adjust top margin for fixed header/nav and bottom for earlier activation */
+                threshold: 0 /* Trigger as soon as target crosses rootMargin */
+            };
+
+            const observerCallback = (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const currentSectionId = '#' + entry.target.id;
+                        
+                        // Remove 'active' class from all nav items
+                        navItems.forEach(item => {
+                            item.classList.remove('active');
+                        });
+
+                        // Add 'active' class to the corresponding nav item
+                        const correspondingNavItem = document.querySelector(`.main-nav-item[href="${currentSectionId}"]`);
+                        if (correspondingNavItem) {
+                            correspondingNavItem.classList.add('active');
+                        }
+                    }
+                });
+            };
+
+            const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+            // Observe each section
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+
+            // Set initial active state on page load
+            const initialActiveSection = Array.from(sections).find(section => {
+                const rect = section.getBoundingClientRect();
+                return rect.top >= 0 && rect.top <= window.innerHeight / 2;
+            }) || sections[0]; // Fallback to first section if none are sufficiently in view
+
+            if (initialActiveSection) {
+                const initialActiveNavItem = document.querySelector(`.main-nav-item[href="#${initialActiveSection.id}"]`);
+                if (initialActiveNavItem) {
+                    initialActiveNavItem.classList.add('active');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Programming: Lesson 3 - Variables & Operators</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
+            background-color: #F8FAFC; /* Light background */
+            color: #1F2937; /* Dark text */
+        }
+        .container {
+            max-width: 1080px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 2.5rem 3rem;
+            background-color: #FFFFFF;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            border-radius: 1rem;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+        /* Header */
+        header {
+            background-color: #FFFFFF; /* White header background */
+            color: #1F2937; /* Dark text for header */
+            padding: 0.8rem 1.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column; /* Stack logo/title and nav buttons */
+            align-items: center; /* Center horizontally */
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 3px solid #E5E7EB; /* Subtle light gray border at bottom of header */
+        }
+        header .header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-shrink: 0;
+            margin-bottom: 0.5rem; /* Space below header-left block */
+            width: 100%; /* Occupy full width for centering */
+            justify-content: center; /* Center content within header-left */
+        }
+        header img {
+            width: 48px;
+            height: 48px;
+            border-radius: 9999px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+        }
+        header .header-text-block {
+            text-align: center; /* Center title text */
+            line-height: 1.2;
+            flex-grow: 1;
+        }
+        header .institute-name {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #0A2463; /* Dark blue for institute name */
+            margin-bottom: 0.05rem;
+            letter-spacing: 0.07em;
+        }
+        header .course-lesson-title {
+            font-size: 0.8rem;
+            color: #374151; /* Darker gray for course title */
+            line-height: 1.2;
+        }
+        header .author-name {
+            font-size: 0.75rem;
+            color: #6B7280; /* Medium gray for author name */
+            margin-top: 0.1rem;
+            display: block;
+        }
+
+        /* Main Navigation Bar */
+        .main-nav-bar {
+            background-color: #FDFDFD;
+            padding: 0.8rem 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem; /* Spacing between main nav items */
+            width: 100%; /* Occupy full width within header */
+            border-top: 1px solid #E5E7EB; /* Separator from header-left */
+            padding-top: 1rem; /* Add padding above buttons */
+        }
+        .main-nav-item {
+            background-color: transparent;
+            color: #3E92CC; /* Bright Teal for default text */
+            padding: 0.4rem 1rem;
+            border: 1px solid #93C5FD; /* Lighter blue border for pill shape */
+            border-radius: 9999px; /* Pill shape */
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease-in-out;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer; /* Indicate it's clickable */
+        }
+        .main-nav-item:hover, .main-nav-item.active { /* 'active' for scroll spy */
+            background-color: #DBEAFE; /* Lighter blue background on hover/active */
+            color: #0A2463; /* Dark blue text on hover/active */
+            transform: translateY(-2px);
+            box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+        }
+        /* No Font Awesome icon styling as icons are removed from HTML */
+
+
+        /* Side TOC is removed */
+        .toc-container {
+            display: none !important;
+        }
+
+        /* Headings - No collapsible functionality here */
+        h2, h3, h4 {
+            cursor: default; /* No pointer cursor for non-collapsible */
+            display: block !important; /* Re-add for safety, though default is block */
+        }
+        h2:hover, h3:hover, h4:hover {
+            color: inherit; /* No color change on hover */
+        }
+
+        /* Title Styles - Enhanced to look like prominent titles */
+        h2 {
+            font-size: 2.5rem; /* Larger for main titles */
+            font-weight: 800; /* Extra bold */
+            color: #0A2463; /* Deep blue */
+            margin-top: 3.5rem; /* More space above */
+            margin-bottom: 1.5rem; /* More space below */
+            padding-bottom: 0.75rem; /* More padding below for border */
+            border-bottom: 3px solid #3E92CC; /* Thicker, brighter blue border */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05); /* Subtle shadow for depth */
+        }
+        h3 {
+            font-size: 2rem; /* Larger for sub-titles */
+            font-weight: 700; /* Bold */
+            color: #3E92CC; /* Bright Teal */
+            margin-top: 2.5rem; /* More space above */
+            margin-bottom: 1rem; /* More space below */
+        }
+        h4 {
+            font-size: 1.5rem; /* Larger for sub-sub-titles */
+            font-weight: 600; /* Semi-bold */
+            color: #0A2463; /* Dark blue */
+            margin-top: 2rem; /* More space above */
+            margin-bottom: 0.75rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+        ul, ol {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+        ol {
+            list-style-type: decimal;
+        }
+        strong {
+            font-weight: bold;
+            color: #1F2937;
+        }
+
+        /* Jupyter-style code blocks (static for examples) */
+        .jupyter-cell {
+            background-color: #F8FAFC;
+            border-radius: 0.5rem;
+            border: 1px solid #E2E8F0;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+            margin: 1.5rem 0;
+            overflow: hidden;
+        }
+        .jupyter-input-wrapper { /* For In[] block content */
+            background-color: #FFFFFF;
+            padding: 1rem;
+            border-bottom: 1px solid #E2E8F0;
+            position: relative;
+            padding-left: 3.5rem;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: #0A2463;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .jupyter-input-wrapper::before {
+            content: 'In [ ] :';
+            position: absolute;
+            left: 0.75rem;
+            top: 1rem;
+            font-size: 0.8rem;
+            color: #6B7280;
+            font-family: sans-serif;
+            font-weight: bold;
+        }
+        .jupyter-output { /* For Out[] block content */
+            background-color: #F0F9FF;
+            padding: 1rem;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: #3E92CC;
+            font-weight: normal; /* Normal weight for output */
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            position: relative;
+            padding-left: 3.5rem;
+            text-indent: -2.5rem; /* Negative indent for alignment */
+        }
+        .jupyter-output::before {
+            content: 'Out[ ] :';
+            position: absolute;
+            left: 0.75rem;
+            top: 1rem;
+            font-size: 0.8rem;
+            color: #6B7280;
+            font-family: sans-serif;
+            font-weight: bold;
+        }
+        .jupyter-input .keyword {
+            color: #0A2463;
+            font-weight: bold;
+        }
+        .jupyter-input .comment { color: #6B7280; font-style: italic; }
+
+        /* No interactive code elements, copy buttons */
+        .copy-button, .code-actions, #reveal-solutions-button {
+            display: none !important;
+        }
+        
+        footer {
+            background-color: #1F2937;
+            color: white; /* Ensure text is white for readability */
+            padding: 1.5rem 0;
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: 2rem;
+        }
+
+        /* Quiz Specific Styling - purely static questions */
+        .quiz-section .question-card {
+            background-color: #FFFFFF;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #93C5FD;
+        }
+        .quiz-section .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #0A2463;
+            margin-bottom: 1rem;
+        }
+        /* Hide entire code-setup-block from quiz section */
+        .quiz-section .code-setup-block {
+            display: none !important;
+        }
+
+        /* Remove all solution-related divs and their children */
+        .code-solution-box,
+        #reveal-solutions-button
+        {
+            display: none !important;
+        }
+
+        /* Table styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+            color: #374151;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-radius: 0.5rem;
+            overflow: hidden; /* Ensures rounded corners apply to content */
+        }
+        table thead th {
+            background-color: #0A2463; /* Dark blue */
+            color: #FFFFFF;
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #3E92CC;
+        }
+        table tbody td {
+            background-color: #FDFDFD;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #E5E7EB;
+        }
+        table tbody tr:nth-child(odd) td {
+            background-color: #F5F7FA; /* Slightly darker for odd rows */
+        }
+        table tbody tr:hover td {
+            background-color: #EBF8FF; /* Light blue on hover */
+        }
+        table code {
+            background-color: #E0F2FE; /* Light blue for inline code */
+            padding: 0.2em 0.4em;
+            border-radius: 0.25rem;
+            font-size: 0.8em;
+            color: #0A2463;
+        }
+
+
+        @media print {
+            body {
+                background-color: #FFFFFF !important;
+                color: #000000 !important;
+                margin: 0;
+                padding: 0;
+                font-size: 9pt;
+            }
+            .container {
+                box-shadow: none !important;
+                margin: 0;
+                padding: 1cm;
+                border-radius: 0;
+                width: 100%;
+            }
+            header, footer {
+                background-color: #FFFFFF !important;
+                color: #000000 !important;
+                box-shadow: none !important;
+                padding: 0.5cm 0;
+                text-align: center;
+                border-bottom: none !important;
+            }
+            header .header-left {
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                justify-content: center !important;
+                width: 100% !important;
+                gap: 0.5cm !important;
+            }
+            header img {
+                width: 50px !important;
+                height: 50px !important;
+                margin-bottom: 0 !important;
+            }
+            header .institute-name, header .course-lesson-title, header .author-name {
+                color: #000000 !important;
+                font-size: 10pt !important;
+                margin: 0 !important;
+            }
+            header .institute-name { font-weight: bold !important; letter-spacing: normal !important; }
+            header .course-lesson-title { font-size: 8pt !important; }
+            header .author-name { font-size: 8pt !important; }
+            .main-nav-bar { display: none !important; } /* Hide main nav in print */
+
+            h2, h3, h4 {
+                color: #000000 !important;
+                border-bottom-color: #AAAAAA !important;
+                cursor: auto !important;
+                page-break-after: avoid;
+                margin-top: 1.5cm;
+            }
+            h2:hover, h3:hover, h4:hover { color: #000000 !important; }
+            p, ul, ol, pre {
+                page-break-inside: avoid;
+                margin-bottom: 0.8rem;
+            }
+            .jupyter-cell {
+                border: 1px solid #DDDDDD !important;
+                box-shadow: none !important;
+                background-color: #F9F9F9 !important;
+                margin: 1rem 0;
+                page-break-inside: avoid;
+            }
+            .jupyter-input-wrapper {
+                background-color: #FDFDFD !important;
+                color: #000000 !important;
+                border-bottom-color: #E0E0E0 !important;
+            }
+            .jupyter-input-textarea { /* Should not exist */
+                display: none !important;
+            }
+            .jupyter-input .keyword {
+                color: #333333 !important;
+                font-weight: bold;
+            }
+            .jupyter-input::before, .jupyter-output::before {
+                color: #777777 !important;
+            }
+            .jupyter-output {
+                background-color: #F0F0F0 !important;
+                color: #444444 !important;
+                font-weight: normal;
+                display: block !important;
+            }
+            strong {
+                color: #000000 !important;
+            }
+            .copy-button, .code-actions { display: none !important; }
+            .collapsible-content > div {
+                 min-height: auto !important;
+                 overflow: visible !important;
+            }
+            .toggle-icon { display: none !important; }
+            .toc-container { display: none !important; }
+            .main-layout { flex-direction: column !important; }
+            .property-box { background-color: #F9F9F9 !important; border-color: #E0E0E0 !important; }
+            .property-title { color: #000000 !important; }
+            .property-example { background-color: #F0F0F0 !important; }
+
+            /* Quiz section specific print styles */
+            .quiz-section .question-card {
+                border-color: #E0E0E0 !important;
+            }
+            .quiz-section .expected-code-label, .quiz-section .expected-output-label, .quiz-section .explanation-label {
+                color: #000000 !important;
+            }
+            .quiz-section .expected-code-snippet {
+                background-color: #F9F9F9 !important;
+                border-color: #E0E0E0 !important;
+                color: #000000 !important;
+            }
+            .quiz-section .expected-output-content {
+                background-color: #F0F0F0 !important;
+                border-color: #E0E0E0 !important;
+                color: #000000 !important;
+            }
+            .quiz-section .explanation-text {
+                color: #333333 !important;
+            }
+            .quiz-section .code-solution-box .code-input-display {
+                border-bottom: none !important;
+                margin-bottom: 0 !important;
+                padding-bottom: 0.5rem !important;
+            }
+            .quiz-section .code-solution-box .code-output-display {
+                display: none !important; /* Explicitly hide outputs in print */
+            }
+            .quiz-section .solution-container {
+                display: none !important; /* Hide solution containers for print */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <img src="logotsi.jpeg" alt="Tech Savvy Institute Logo" onerror="this.onerror=null;this.src='https://placehold.co/48x48/0A2463/FFFFFF?text=TSI'; this.alt='Logo Placeholder';">
+            <div class="header-text-block">
+                <p class="institute-name">TECH SAVVY INSTITUTE</p>
+                <p class="course-lesson-title">Python Programming Fundamentals - Lesson 3: Variables & Operators</p>
+                <span class="author-name">by Maurice Otieno</span>
+            </div>
+        </div>
+    </header>
+
+    <nav class="main-nav-bar">
+        <a href="#introduction-variables-operators" class="main-nav-item">Introduction</a>
+        <a href="#variables-explained" class="main-nav-item">Variables</a>
+        <a href="#variable-naming-rules" class="main-nav-item">Naming Rules</a>
+        <a href="#best-practices-variables" class="main-nav-item">Best Practices</a>
+        <a href="#arithmetic-operators" class="main-nav-item">Arithmetic Operators</a>
+        <a href="#operator-precedence" class="main-nav-item">Precedence</a>
+        <a href="#comparison-operators" class="main-nav-item">Comparison</a>
+        <a href="#logical-operators" class="main-nav-item">Logical</a>
+        <a href="#assignment-operators" class="main-nav-item">Assignment</a>
+        <a href="#identity-operators" class="main-nav-item">Identity</a>
+        <a href="#membership-operators" class="main-nav-item">Membership</a>
+        <a href="#bitwise-operators" class="main-nav-item">Bitwise</a>
+        <a href="#practice-questions" class="main-nav-item">Practice Questions</a>
+        <a href="#overall-conclusion" class="main-nav-item">Conclusion</a>
+    </nav>
+
+    <div class="container">
+        <main class="main-content w-full">
+
+            <section id="introduction-variables-operators">
+                <h2>Introduction: Variables & Operators</h2>
+                <div>
+                    <p>Operators are the backbone of computation and logic in Python. They are special symbols that perform operations on values and variables, allowing you to manipulate data, make comparisons, and control program flow. This lesson will demystify the various categories of operators and revisit the crucial concept of variables, providing clear definitions and practical examples.</p>
+                </div>
+            </section>
+
+            <section id="variables-explained">
+                <h2>1. Variables Explained</h2>
+                <div>
+                    <p>Variables are fundamental to programming, acting as named containers that store and manage data within your Python scripts, making your code dynamic and understandable.</p>
+                    <p><strong>Definition:</strong> Named storage locations in memory.</p>
+                    <p><strong>Purpose:</strong> Store diverse information (numbers, text, collections), refer to data by meaningful names, and enhance code flexibility.</p>
+                    <p><strong>Analogy:</strong> A labeled box holding items - the label is the variable name, the item is its value.</p>
+                </div>
+            </section>
+
+            <section id="variable-naming-rules">
+                <h2>2. Crafting Valid Python Variables: Naming Rules</h2>
+                <div>
+                    <p>Understanding the rules for naming variables is crucial for writing error-free and readable Python code.</p>
+
+                    <h3>Rule 1: Start with a Letter or Underscore</h3>
+                    <p>Variable names MUST begin with an alphabet character (a-z, A-Z) or an underscore (<code>_</code>).</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Valid Examples
+my_variable = 10
+_temp_value = 25.5
+name = "Alice"
+
+print("my_variable: {}".format(my_variable))
+print("_temp_value: {}".format(_temp_value))
+print("name: {}".format(name))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">my_variable: 10
+_temp_value: 25.5
+name: Alice</code></pre>
+                        </div>
+                    </div>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Invalid Example: Starts with a number
+# 1st_number = 5
+# print(1st_number)
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python"># SyntaxError: invalid decimal literal</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Rule 2: Cannot Start with a Number</h3>
+                    <p>A variable name CANNOT begin with a digit (0-9).</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Valid Examples
+count1 = 100
+data_2024 = "Report"
+
+print("count1: {}".format(count1))
+print("data_2024: {}".format(data_2024))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">count1: 100
+data_2024: Report</code></pre>
+                        </div>
+                    </div>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Invalid Example: Starts with a number
+# 7days = "week"
+# print(7days)
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python"># SyntaxError: invalid decimal literal</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Rule 3: Alpha-Numeric & Underscores Only</h3>
+                    <p>Variable names can ONLY consist of letters (a-z, A-Z), numbers (0-9), and underscores (<code>_</code>). No spaces or other special characters allowed.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Valid Examples
+total_score = 95
+user_id_123 = "john_doe"
+
+print("total_score: {}".format(total_score))
+print("user_id_123: {}".format(user_id_123))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">total_score: 95
+user_id_123: john_doe</code></pre>
+                        </div>
+                    </div>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Invalid Examples: Contains hyphen, space, or special character
+# my-variable = 50
+# first name = "Bob"
+# price$ = 20.00
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python"># SyntaxError: can't assign to operator
+# SyntaxError: invalid syntax
+# SyntaxError: invalid syntax</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Rule 4: Case-Sensitive</h3>
+                    <p>Python distinguishes between uppercase and lowercase letters. <code>'myVariable'</code> is different from <code>'myvariable'</code>.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+score = 100
+Score = 50
+
+print("score: {}".format(score))
+print("Score: {}".format(Score))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">score: 100
+Score: 50</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Rule 5: Cannot Be Keywords</h3>
+                    <p>Python's reserved keywords (e.g., <code>if</code>, <code>for</code>, <code>def</code>, <code>True</code>) have special meanings and cannot be used as variable names.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Invalid Example
+# if_keyword = 10 # 'if' is a keyword
+
+# Valid Example
+my_if_condition = True
+print("my_if_condition: {}".format(my_if_condition))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">my_if_condition: True</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="best-practices-variables">
+                <h2>3. Best Practices for Variable Names</h2>
+                <div>
+                    <p>Adhering to best practices makes your code more readable, maintainable, and less prone to errors.</p>
+                    <ul>
+                        <li><strong>Be Descriptive:</strong> Names should clearly indicate purpose (e.g., <code>student_name</code>, <code>total_price</code>).</li>
+                        <li><strong>Use snake_case:</strong> For multi-word names, use lowercase with underscores (e.g., <code>first_name</code>, <code>items_in_cart</code>). This is the Python standard (PEP 8).</li>
+                        <li><strong>Avoid Ambiguity:</strong> Choose names that are easy to understand and distinguish from each other.</li>
+                        <li><strong>Consistency is Key:</strong> Stick to a uniform naming style throughout your project.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="arithmetic-operators">
+                <h2>4. Arithmetic Operators: The Math Wizards</h2>
+                <div>
+                    <p>These operators are used to perform common mathematical operations such as addition, subtraction, multiplication, and division. They are the fundamental tools for numerical computations in Python.</p>
+                    
+                    <h3>Addition (+) & Unary Plus</h3>
+                    <p>Used to add two operands or indicate a positive number.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Adding values
+print("Addition: {}".format(2 + 5))
+
+# Unary Plus (indicates positive, usually implicit)
+print("Unary Plus: {}".format(+1))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Addition: 7
+Unary Plus: 1</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Subtraction (-) & Unary Minus</h3>
+                    <p>Used to subtract the right operand from the left, or indicate a negative number.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Subtracting values
+print("Subtraction: {}".format(6 - 4))
+
+# Unary Minus (indicates negative)
+print("Unary Minus: {}".format(-1))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Subtraction: 2
+Unary Minus: -1</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Multiplication (*)</h3>
+                    <p>Used to multiply two operands.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+result = 7 * 3
+print("Multiplication: {}".format(result))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Multiplication: 21</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Division (/)</h3>
+                    <p>Performs division and <strong>always returns a float</strong> result, even if the division is exact.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+X = 10
+Y = 20
+print("X/Y: {}".format(X / Y))
+print("Y/X: {}".format(Y / X)) # Note: still a float!
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">X/Y: 0.5
+Y/X: 2.0</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Floor Division (//)</h3>
+                    <p>Performs division but returns the integer part of the quotient (rounds down to the nearest whole number).</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+x_val = 18
+y_val = 20
+print("Y // X: {}".format(y_val // x_val)) # 20 divided by 18 is 1.11..., floor is 1
+print("7 // 2: {}".format(7 // 2))       # 7 divided by 2 is 3.5, floor is 3
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Y // X: 1
+7 // 2: 3</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Remainder Modulus (%)</h3>
+                    <p>Performs division but returns the <strong>remainder</strong> of the division.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+print("3 % 2: {}".format(3 % 2)) # 3 divided by 2 is 1 with remainder 1
+print("10 % 3: {}".format(10 % 3)) # 10 divided by 3 is 3 with remainder 1
+print("15 % 4: {}".format(15 % 4)) # 15 divided by 4 is 3 with remainder 3
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">1
+1
+3</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Power (**)</h3>
+                    <p>Raises the first operand to the power of the second operand (exponentiation).</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+print("2 ** 3: {}".format(2 ** 3)) # 2 to the power of 3 (2*2*2)
+print("5 ** 2: {}".format(5 ** 2)) # 5 to the power of 2 (5*5)
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">8
+25</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="operator-precedence">
+                <h2>5. Operator Precedence & Associativity</h2>
+                <div>
+                    <p>When multiple operators are in an expression, Python follows specific rules to determine the order of evaluation. <strong>Precedence</strong> dictates which operator is evaluated first, while <strong>Associativity</strong> defines the order when operators have the same precedence.</p>
+
+                    <h3>Precedence Hierarchy (Highest to Lowest)</h3>
+                    <p>Operators higher in the list are evaluated before those lower down.</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Operators</th>
+                                <th>Associativity</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>()</code></td>
+                                <td>Left to Right</td>
+                                <td>Parentheses (Grouping)</td>
+                            </tr>
+                            <tr>
+                                <td><code>**</code></td>
+                                <td>Right to Left</td>
+                                <td>Exponentiation</td>
+                            </tr>
+                            <tr>
+                                <td><code>+x</code>, <code>-x</code></td>
+                                <td>Left to Right</td>
+                                <td>Unary Plus, Unary Minus</td>
+                            </tr>
+                            <tr>
+                                <td><code>*</code>, <code>/</code>, <code>//</code>, <code>%</code></td>
+                                <td>Left to Right</td>
+                                <td>Multiplication, Division, Floor Division, Modulus</td>
+                            </tr>
+                            <tr>
+                                <td><code>+</code>, <code>-</code></td>
+                                <td>Left to Right</td>
+                                <td>Addition, Subtraction</td>
+                            </tr>
+                            <tr>
+                                <td><code>==</code>, <code>!=</code>, <code>></code>, <code><</code>, <code>>=</code>, <code><=</code></td>
+                                <td>Left to Right</td>
+                                <td>Comparison Operators</td>
+                            </tr>
+                            <tr>
+                                <td><code>not</code></td>
+                                <td>Right to Left</td>
+                                <td>Logical NOT</td>
+                            </tr>
+                            <tr>
+                                <td><code>and</code></td>
+                                <td>Left to Right</td>
+                                <td>Logical AND</td>
+                            </tr>
+                            <tr>
+                                <td><code>or</code></td>
+                                <td>Left to Right</td>
+                                <td>Logical OR</td>
+                            </tr>
+                            <tr>
+                                <td><code>=</code>, <code>+=</code>, <code>-=</code>, etc.</td>
+                                <td>Right to Left</td>
+                                <td>Assignment Operators</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Step-by-Step Evaluation Example</h3>
+                    <p>Let's break down the expression: <code>10 + 5 - 8 / 2</code></p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Original Expression
+result = 10 + 5 - 8 / 2
+print("Result: {}".format(result))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Result: 11.0</code></pre>
+                        </div>
+                    </div>
+                    <p>Detailed Steps:</p>
+                    <ol>
+                        <li><code>8 / 2</code> (Division has higher precedence than Addition/Subtraction)<br>Result: <code>4.0</code></li>
+                        <li><code>10 + 5</code> (Addition and Subtraction have same precedence, Left-to-Right associativity)<br>Result: <code>15</code></li>
+                        <li><code>15 - 4.0</code><br>Result: <code>11.0</code></li>
+                    </ol>
+                </div>
+            </section>
+
+            <section id="comparison-operators">
+                <h2>6. Comparison Operators: The Decision Makers</h2>
+                <div>
+                    <p>Also known as <strong>Relational Operators</strong>, these symbols compare two values and return a Boolean result (<code>True</code> or <code>False</code>).</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Operator</th>
+                                <th>Description</th>
+                                <th>Example</th>
+                                <th>Result</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>==</code></td>
+                                <td>Equal to</td>
+                                <td><code>5 == 5</code></td>
+                                <td><code>True</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>!=</code></td>
+                                <td>Not equal to</td>
+                                <td><code>5 != 10</code></td>
+                                <td><code>True</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>></code></td>
+                                <td>Greater than</td>
+                                <td><code>10 > 5</code></td>
+                                <td><code>True</code></td>
+                            </tr>
+                            <tr>
+                                <td><code><</code></td>
+                                <td>Less than</td>
+                                <td><code>3 < 7</code></td>
+                                <td><code>True</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>>=</code></td>
+                                <td>Greater than or equal to</td>
+                                <td><code>8 >= 8</code></td>
+                                <td><code>True</code></td>
+                            </tr>
+                            <tr>
+                                <td><code><=</code></td>
+                                <td>Less than or equal to</td>
+                                <td><code>4 <= 9</code></td>
+                                <td><code>True</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+a = 15
+b = 10
+print("a > b: {}".format(a > b))
+print("a == b: {}".format(a == b))
+print("a != b: {}".format(a != b))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">a > b: True
+a == b: False
+a != b: True</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="logical-operators">
+                <h2>7. Logical Operators: Combining Conditions</h2>
+                <div>
+                    <p>These operators are used to combine conditional expressions (which evaluate to <code>True</code> or <code>False</code>) and return a single Boolean result. They are essential for complex decision-making in programs.</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Operator</th>
+                                <th>Description</th>
+                                <th>Example</th>
+                                <th>Result</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>and</code></td>
+                                <td>True if BOTH are True</td>
+                                <td><code>(5 > 3) and (10 < 20)</code></td>
+                                <td><code>True</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>or</code></td>
+                                <td>True if ONE is True</td>
+                                <td><code>(5 > 10) or (10 < 20)</code></td>
+                                <td><code>True</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>not</code></td>
+                                <td>Reverses the result</td>
+                                <td><code>not (5 > 3)</code></td>
+                                <td><code>False</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+is_sunny = True
+is_warm = False
+
+print("is_sunny and is_warm: {}".format(is_sunny and is_warm))
+print("is_sunny or is_warm: {}".format(is_sunny or is_warm))
+print("not is_sunny: {}".format(not is_sunny))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">is_sunny and is_warm: False
+is_sunny or is_warm: True
+not is_sunny: False</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="assignment-operators">
+                <h2>8. Assignment Operators: Efficient Value Updates</h2>
+                <div>
+                    <p>These operators are used to assign values to variables. The basic assignment operator is <code>=</code>, but Python offers shorthand versions that combine an arithmetic operation with assignment for more concise code.</p>
+                    
+                    <h3>Shorthand Assignment Operators</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Operator</th>
+                                <th>Example</th>
+                                <th>Equivalent to</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>=</code></td>
+                                <td><code>x = 5</code></td>
+                                <td><code>x = 5</code></td>
+                                <td>Assigns value to variable</td>
+                            </tr>
+                            <tr>
+                                <td><code>+=</code></td>
+                                <td><code>x += 3</code></td>
+                                <td><code>x = x + 3</code></td>
+                                <td>Add and assign</td>
+                            </tr>
+                            <tr>
+                                <td><code>-=</code></td>
+                                <td><code>x -= 2</code></td>
+                                <td><code>x = x - 2</code></td>
+                                <td>Subtract and assign</td>
+                            </tr>
+                            <tr>
+                                <td><code>*=</code></td>
+                                <td><code>x *= 4</code></td>
+                                <td><code>x = x * 4</code></td>
+                                <td>Multiply and assign</td>
+                            </tr>
+                            <tr>
+                                <td><code>/=</code></td>
+                                <td><code>x /= 2</code></td>
+                                <td><code>x = x / 2</code></td>
+                                <td>Divide and assign (results in float)</td>
+                            </tr>
+                            <tr>
+                                <td><code>%=</code></td>
+                                <td><code>x %= 3</code></td>
+                                <td><code>x = x % 3</code></td>
+                                <td>Modulus and assign</td>
+                            </tr>
+                            <tr>
+                                <td><code>**=</code></td>
+                                <td><code>x **= 2</code></td>
+                                <td><code>x = x ** 2</code></td>
+                                <td>Exponentiate and assign</td>
+                            </tr>
+                            <tr>
+                                <td><code>//=</code></td>
+                                <td><code>x //= 2</code></td>
+                                <td><code>x = x // 2</code></td>
+                                <td>Floor divide and assign</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+counter = 10
+counter += 5 # counter becomes 15
+print("Counter: {}".format(counter))
+
+price = 20.0
+price *= 0.8 # price becomes 16.0
+print("Price: {}".format(price))
+
+data = 17
+data %= 5 # data = 17 % 5 = 2 (remainder)
+print("Data: {}".format(data))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Counter: 15
+Price: 16.0
+Data: 2</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="identity-operators">
+                <h2>9. Identity Operators</h2>
+                <div>
+                    <p>Compare if two variables refer to the <em>exact same object</em> in memory, not just if their values are equal.</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Operator</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>is</code></td>
+                                <td>True if both are the same object</td>
+                            </tr>
+                            <tr>
+                                <td><code>is not</code></td>
+                                <td>True if both are not the same object</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+list1 = [1, 2, 3]
+list2 = [1, 2, 3]
+list3 = list1
+
+print("list1 == list2: {}".format(list1 == list2)) # Checks value equality
+print("list1 is list2: {}".format(list1 is list2))   # Checks object identity
+print("list1 is list3: {}".format(list1 is list3))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">list1 == list2: True
+list1 is list2: False
+list1 is list3: True</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="membership-operators">
+                <h2>10. Membership Operators</h2>
+                <div>
+                    <p>Test if a specific value is present within a sequence (like a string, list, or tuple).</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Operator</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>in</code></td>
+                                <td>True if value is in sequence</td>
+                            </tr>
+                            <tr>
+                                <td><code>not in</code></td>
+                                <td>True if value is not in sequence</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+fruits = ["apple", "banana", "cherry"]
+print("'apple' in fruits: {}".format("apple" in fruits))
+print("'grape' in fruits: {}".format("grape" in fruits))
+
+message = "Hello Python"
+print("'Py' in message: {}".format("Py" in message))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">'apple' in fruits: True
+'grape' in fruits: False
+'Py' in message: True</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="bitwise-operators">
+                <h2>11. Bitwise Operators (Brief Mention)</h2>
+                <div>
+                    <p>These operators work on the individual bits of binary numbers. They are powerful but used in more specialized areas like system programming, graphics, or data compression, and are less common for everyday application development.</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Operator</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>&</code></td>
+                                <td>AND</td>
+                                <td>Sets bit to 1 if both bits are 1</td>
+                            </tr>
+                            <tr>
+                                <td><code>|</code></td>
+                                <td>OR</td>
+                                <td>Sets bit to 1 if one of two bits is 1</td>
+                            </tr>
+                            <tr>
+                                <td><code>^</code></td>
+                                <td>XOR</td>
+                                <td>Sets bit to 1 if only one of two bits is 1</td>
+                            </tr>
+                            <tr>
+                                <td><code>~</code></td>
+                                <td>NOT</td>
+                                <td>Inverts all the bits</td>
+                            </tr>
+                            <tr>
+                                <td><code><<</code></td>
+                                <td>Zero fill left shift</td>
+                                <td>Shifts left, pushing zeros from right</td>
+                            </tr>
+                            <tr>
+                                <td><code>>></code></td>
+                                <td>Signed right shift</td>
+                                <td>Shifts right, pushing copies of leftmost bit from left</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="practice-questions">
+                <h2>Practice Questions</h2>
+                <div>
+                    <p class="text-lg text-blue-800 mb-4">Test your understanding of Lesson 3 concepts with these practice questions:</p>
+                    
+                    <div class="quiz-section">
+                        <div class="question-card">
+                            <p class="question-text">1. Which of the following are valid Python variable names? Explain why or why not for each:</p>
+                            <ul class="list-disc ml-6 mt-2 text-gray-700">
+                                <li><code>_my_var</code></li>
+                                <li><code>2ndAttempt</code></li>
+                                <li><code>total-amount</code></li>
+                                <li><code>userAge</code></li>
+                                <li><code>for</code></li>
+                            </ul>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">2. What will be the final value and type of <code>x</code> after these operations?</p>
+                            <div class="jupyter-cell">
+                                <div class="jupyter-input-wrapper">
+                                    <pre class="jupyter-code-content">
+x = 20
+x /= 4
+x += 1.0
+print(x)
+                                    </pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">3. What will the following expression evaluate to?</p>
+                            <div class="jupyter-cell">
+                                <div class="jupyter-input-wrapper">
+                                    <pre class="jupyter-code-content">
+print(((10 > 5) and (3 != 3)) or (not (7 < 1)))
+                                    </pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">4. If <code>my_data = ("alpha", "beta", "gamma")</code>, what will <code>print("delta" not in my_data)</code> output?</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">5. Determine the result of this complex expression, showing your step-by-step evaluation based on operator precedence:</p>
+                            <div class="jupyter-cell">
+                                <div class="jupyter-input-wrapper">
+                                    <pre class="jupyter-code-content">
+# Expression to evaluate
+expression_result = 15 + 3 / 4 * 10 ** 2 ** 2
+print(expression_result)
+                                    </pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="overall-conclusion">
+                <h2>Overall Conclusion</h2>
+                <div>
+                    <p>You now have a comprehensive understanding of Python's variables and various operators. Mastering these tools is fundamental to writing effective and efficient Python code, enabling you to perform calculations, compare values, and build sophisticated logical structures.</p>
+                    <p>Consistent practice with these fundamental concepts will significantly enhance your Python programming skills. Experiment, build, and keep learning!</p>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <footer class="bg-blue-900 text-white py-6 text-center">
+        <p class="text-white">&copy; 2024 Tech Savvy Institute. All rights reserved. Content adapted from Lesson 3 notes by Maurice Otieno.</p>
+        <p class="text-white">Python is a trademark of the Python Software Foundation</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scrolling for main navigation
+            const navItems = document.querySelectorAll('.main-nav-bar .main-nav-item');
+            const headerElement = document.querySelector('header');
+            const mainNavBarElement = document.querySelector('.main-nav-bar');
+
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault(); // Prevent default anchor link behavior
+
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+
+                    if (targetElement) {
+                        // Calculate total offset from the top
+                        const headerHeight = headerElement ? headerElement.offsetHeight : 0;
+                        const navBarHeight = mainNavBarElement ? mainNavBarElement.offsetHeight : 0;
+                        const totalOffset = headerHeight + navBarHeight + 5; // Add a small buffer
+
+                        const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                        const offsetPosition = elementPosition - totalOffset;
+
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: "smooth"
+                        });
+                    }
+                });
+            });
+
+            // Scroll-spy functionality for active state
+            const sections = document.querySelectorAll('section[id]');
+            const observerOptions = {
+                root: null, // viewport
+                rootMargin: `-80px 0px -50% 0px`, /* Adjust top margin for fixed header/nav and bottom for earlier activation */
+                threshold: 0 /* Trigger as soon as target crosses rootMargin */
+            };
+
+            const observerCallback = (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const currentSectionId = '#' + entry.target.id;
+                        
+                        // Remove 'active' class from all nav items
+                        navItems.forEach(item => {
+                            item.classList.remove('active');
+                        });
+
+                        // Add 'active' class to the corresponding nav item
+                        const correspondingNavItem = document.querySelector(`.main-nav-item[href="${currentSectionId}"]`);
+                        if (correspondingNavItem) {
+                            correspondingNavItem.classList.add('active');
+                        }
+                    }
+                });
+            };
+
+            const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+            // Observe each section
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+
+            // Set initial active state on page load
+            const initialActiveSection = Array.from(sections).find(section => {
+                const rect = section.getBoundingClientRect();
+                return rect.top >= 0 && rect.top <= window.innerHeight / 2;
+            }) || sections[0]; // Fallback to first section if none are sufficiently in view
+
+            if (initialActiveSection) {
+                const initialActiveNavItem = document.querySelector(`.main-nav-item[href="#${initialActiveSection.id}"]`);
+                if (initialActiveNavItem) {
+                    initialActiveNavItem.classList.add('active');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

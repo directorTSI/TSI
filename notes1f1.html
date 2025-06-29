@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Programming: Lesson 1 - Introduction</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
+            background-color: #F8FAFC; /* Light background */
+            color: #1F2937; /* Dark text */
+        }
+        .container {
+            max-width: 1080px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 2.5rem 3rem;
+            background-color: #FFFFFF;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            border-radius: 1rem;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+        /* Header */
+        header {
+            background-color: #FFFFFF; /* White header background */
+            color: #1F2937; /* Dark text for header */
+            padding: 0.8rem 1.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column; /* Stack logo/title and nav buttons */
+            align-items: center; /* Center horizontally */
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 3px solid #E5E7EB; /* Subtle light gray border at bottom of header */
+        }
+        header .header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-shrink: 0;
+            margin-bottom: 0.5rem; /* Space below header-left block */
+            width: 100%; /* Occupy full width for centering */
+            justify-content: center; /* Center content within header-left */
+        }
+        header img {
+            width: 48px;
+            height: 48px;
+            border-radius: 9999px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+        }
+        header .header-text-block {
+            text-align: center; /* Center title text */
+            line-height: 1.2;
+            flex-grow: 1;
+        }
+        header .institute-name {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #0A2463; /* Dark blue for institute name */
+            margin-bottom: 0.05rem;
+            letter-spacing: 0.07em;
+        }
+        header .course-lesson-title {
+            font-size: 0.8rem;
+            color: #374151; /* Darker gray for course title */
+            line-height: 1.2;
+        }
+        header .author-name {
+            font-size: 0.75rem;
+            color: #6B7280; /* Medium gray for author name */
+            margin-top: 0.1rem;
+            display: block;
+        }
+
+        /* Main Navigation Bar */
+        .main-nav-bar {
+            background-color: #FDFDFD;
+            padding: 0.8rem 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem; /* Spacing between main nav items */
+            width: 100%; /* Occupy full width within header */
+            border-top: 1px solid #E5E7EB; /* Separator from header-left */
+            padding-top: 1rem; /* Add padding above buttons */
+        }
+        .main-nav-item {
+            background-color: transparent;
+            color: #3E92CC; /* Bright Teal for default text */
+            padding: 0.4rem 1rem;
+            border: 1px solid #93C5FD; /* Lighter blue border for pill shape */
+            border-radius: 9999px; /* Pill shape */
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease-in-out;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer; /* Indicate it's clickable */
+        }
+        .main-nav-item:hover, .main-nav-item.active { /* 'active' for scroll spy */
+            background-color: #DBEAFE; /* Lighter blue background on hover/active */
+            color: #0A2463; /* Dark blue text on hover/active */
+            transform: translateY(-2px);
+            box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+        }
+        /* No Font Awesome icon styling as icons are removed from HTML */
+
+
+        /* Side TOC is removed */
+        .toc-container {
+            display: none !important;
+        }
+
+        /* Headings - No collapsible functionality here */
+        h2, h3, h4 {
+            cursor: default; /* No pointer cursor for non-collapsible */
+            /* Removed data-level attributes and toggle-icon spans from HTML */
+            display: block !important; /* Re-add for safety, though default is block */
+        }
+        h2:hover, h3:hover, h4:hover {
+            color: inherit; /* No color change on hover */
+        }
+
+        /* Title Styles - Enhanced to look like prominent titles */
+        h2 {
+            font-size: 2.5rem; /* Larger for main titles */
+            font-weight: 800; /* Extra bold */
+            color: #0A2463; /* Deep blue */
+            margin-top: 3.5rem; /* More space above */
+            margin-bottom: 1.5rem; /* More space below */
+            padding-bottom: 0.75rem; /* More padding below for border */
+            border-bottom: 3px solid #3E92CC; /* Thicker, brighter blue border */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05); /* Subtle shadow for depth */
+        }
+        h3 {
+            font-size: 2rem; /* Larger for sub-titles */
+            font-weight: 700; /* Bold */
+            color: #3E92CC; /* Bright Teal */
+            margin-top: 2.5rem; /* More space above */
+            margin-bottom: 1rem; /* More space below */
+        }
+        h4 {
+            font-size: 1.5rem; /* Larger for sub-sub-titles */
+            font-weight: 600; /* Semi-bold */
+            color: #0A2463; /* Dark blue */
+            margin-top: 2rem; /* More space above */
+            margin-bottom: 0.75rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+        ul, ol {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+        ol {
+            list-style-type: decimal;
+        }
+        strong {
+            font-weight: bold;
+            color: #1F2937;
+        }
+
+        /* Jupyter-style code blocks (static for examples) */
+        .jupyter-cell {
+            background-color: #F8FAFC;
+            border-radius: 0.5rem;
+            border: 1px solid #E2E8F0;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+            margin: 1.5rem 0;
+            overflow: hidden;
+        }
+        .jupyter-input-wrapper { /* For In[] block content */
+            background-color: #FFFFFF;
+            padding: 1rem;
+            border-bottom: 1px solid #E2E8F0;
+            position: relative;
+            padding-left: 3.5rem;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: #0A2463;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .jupyter-input-wrapper::before {
+            content: 'In [ ] :';
+            position: absolute;
+            left: 0.75rem;
+            top: 1rem;
+            font-size: 0.8rem;
+            color: #6B7280;
+            font-family: sans-serif;
+            font-weight: bold;
+        }
+        .jupyter-output { /* For Out[] block content */
+            background-color: #F0F9FF;
+            padding: 1rem;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: #3E92CC;
+            font-weight: normal; /* Normal weight for output */
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            position: relative;
+            padding-left: 3.5rem;
+            text-indent: -2.5rem; /* Negative indent for alignment */
+        }
+        .jupyter-output::before {
+            content: 'Out[ ] :';
+            position: absolute;
+            left: 0.75rem;
+            top: 1rem;
+            font-size: 0.8rem;
+            color: #6B7280;
+            font-family: sans-serif;
+            font-weight: bold;
+        }
+        .jupyter-input .keyword {
+            color: #0A2463;
+            font-weight: bold;
+        }
+        .jupyter-input .comment { color: #6B7280; font-style: italic; }
+
+        /* No interactive code elements, copy buttons */
+        .copy-button, .code-actions, #reveal-solutions-button {
+            display: none !important;
+        }
+        
+        footer {
+            background-color: #1F2937;
+            color: white; /* Ensure text is white for readability */
+            padding: 1.5rem 0;
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: 2rem;
+        }
+
+        /* Quiz Specific Styling - purely static questions */
+        .quiz-section .question-card {
+            background-color: #FFFFFF;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #93C5FD;
+        }
+        .quiz-section .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #0A2463;
+            margin-bottom: 1rem;
+        }
+        /* Hide entire code-setup-block from quiz section */
+        .quiz-section .code-setup-block {
+            display: none !important;
+        }
+
+        /* Remove all solution-related divs and their children */
+        .code-solution-box,
+        #reveal-solutions-button
+        {
+            display: none !important;
+        }
+
+
+        @media print {
+            body {
+                background-color: #FFFFFF !important;
+                color: #000000 !important;
+                margin: 0;
+                padding: 0;
+                font-size: 9pt;
+            }
+            .container {
+                box-shadow: none !important;
+                margin: 0;
+                padding: 1cm;
+                border-radius: 0;
+                width: 100%;
+            }
+            header, footer {
+                background-color: #FFFFFF !important;
+                color: #000000 !important;
+                box-shadow: none !important;
+                padding: 0.5cm 0;
+                text-align: center;
+                border-bottom: none !important;
+            }
+            header .header-left {
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                justify-content: center !important;
+                width: 100% !important;
+                gap: 0.5cm !important;
+            }
+            header img {
+                width: 50px !important;
+                height: 50px !important;
+                margin-bottom: 0 !important;
+            }
+            header .institute-name, header .course-lesson-title, header .author-name {
+                color: #000000 !important;
+                font-size: 10pt !important;
+                margin: 0 !important;
+            }
+            header .institute-name { font-weight: bold !important; letter-spacing: normal !important; }
+            header .course-lesson-title { font-size: 8pt !important; }
+            header .author-name { font-size: 8pt !important; }
+            .main-nav-bar { display: none !important; } /* Hide main nav in print */
+
+            h2, h3, h4 {
+                color: #000000 !important;
+                border-bottom-color: #AAAAAA !important;
+                cursor: auto !important;
+                page-break-after: avoid;
+                margin-top: 1.5cm;
+            }
+            h2:hover, h3:hover, h4:hover { color: #000000 !important; }
+            p, ul, ol, pre {
+                page-break-inside: avoid;
+                margin-bottom: 0.8rem;
+            }
+            .jupyter-cell {
+                border: 1px solid #DDDDDD !important;
+                box-shadow: none !important;
+                background-color: #F9F9F9 !important;
+                margin: 1rem 0;
+                page-break-inside: avoid;
+            }
+            .jupyter-input-wrapper {
+                background-color: #FDFDFD !important;
+                color: #000000 !important;
+                border-bottom-color: #E0E0E0 !important;
+            }
+            .jupyter-input-textarea { /* Should not exist */
+                display: none !important;
+            }
+            .jupyter-input .keyword {
+                color: #333333 !important;
+                font-weight: bold;
+            }
+            .jupyter-input::before, .jupyter-output::before {
+                color: #777777 !important;
+            }
+            .jupyter-output {
+                background-color: #F0F0F0 !important;
+                color: #444444 !important;
+                font-weight: normal;
+                display: block !important;
+            }
+            strong {
+                color: #000000 !important;
+            }
+            .copy-button, .code-actions { display: none !important; }
+            .collapsible-content > div {
+                 min-height: auto !important;
+                 overflow: visible !important;
+            }
+            .toggle-icon { display: none !important; }
+            .toc-container { display: none !important; }
+            .main-layout { flex-direction: column !important; }
+            .property-box { background-color: #F9F9F9 !important; border-color: #E0E0E0 !important; }
+            .property-title { color: #000000 !important; }
+            .property-example { background-color: #F0F0F0 !important; }
+
+            /* Quiz section specific print styles */
+            .quiz-section .question-card {
+                border-color: #E0E0E0 !important;
+            }
+            .quiz-section .expected-code-label, .quiz-section .expected-output-label, .quiz-section .explanation-label {
+                color: #000000 !important;
+            }
+            .quiz-section .expected-code-snippet {
+                background-color: #F9F9F9 !important;
+                border-color: #E0E0E0 !important;
+                color: #000000 !important;
+            }
+            .quiz-section .expected-output-content {
+                background-color: #F0F0F0 !important;
+                border-color: #E0E0E0 !important;
+                color: #000000 !important;
+            }
+            .quiz-section .explanation-text {
+                color: #333333 !important;
+            }
+            .quiz-section .code-solution-box .code-input-display {
+                border-bottom: none !important;
+                margin-bottom: 0 !important;
+                padding-bottom: 0.5rem !important;
+            }
+            .quiz-section .code-solution-box .code-output-display {
+                display: none !important; /* Explicitly hide outputs in print */
+            }
+            .quiz-section .solution-container {
+                display: none !important; /* Hide solution containers for print */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <img src="logotsi.jpeg" alt="Tech Savvy Institute Logo" onerror="this.onerror=null;this.src='https://placehold.co/48x48/0A2463/FFFFFF?text=TSI'; this.alt='Logo Placeholder';">
+            <div class="header-text-block">
+                <p class="institute-name">TECH SAVVY INSTITUTE</p>
+                <p class="course-lesson-title">Python Programming Fundamentals - Lesson 1: Introduction</p>
+                <span class="author-name">by Maurice Otieno</span>
+            </div>
+        </div>
+    </header>
+
+    <nav class="main-nav-bar">
+        <a href="#about-the-creator" class="main-nav-item">About Creator</a>
+        <a href="#welcome-to-programming" class="main-nav-item">Introduction</a>
+        <a href="#how-programs-work" class="main-nav-item">How Programs Work</a>
+        <a href="#natural-vs-programming-languages" class="main-nav-item">Languages</a>
+        <a href="#language-building-blocks" class="main-nav-item">Building Blocks</a>
+        <a href="#high-level-languages" class="main-nav-item">High-Level</a>
+        <a href="#compilation-vs-interpretation" class="main-nav-item">Comp/Interp</a>
+        <a href="#how-python-runs-code" class="main-nav-item">Python Runs Code</a>
+        <a href="#introducing-python" class="main-nav-item">Introducing Python</a>
+        <a href="#pythons-core-philosophy" class="main-nav-item">Python Philosophy</a>
+        <a href="#why-choose-python" class="main-nav-item">Why Python?</a>
+        <a href="#practice-questions" class="main-nav-item">Practice Questions</a>
+        <a href="#conclusion" class="main-nav-item">Conclusion</a>
+    </nav>
+
+    <div class="container">
+        <main class="main-content w-full">
+
+            <section id="about-the-creator">
+                <h2>About the Creator: Maurice Otieno</h2>
+                <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
+                    <img src="mr. maurice.jpg" alt="Maurice Otieno" class="rounded-full shadow-lg w-40 h-40 object-cover flex-shrink-0">
+                    <div>
+                        <p class="mb-2">Maurice Otieno, the dedicated course creator, is the <strong>Founder, CEO, and Director of Tech Savvy Institute</strong>. His profound journey into statistical programming languages like Python was ignited during his Bachelor of Technology in Applied Statistics at the Technical University of Kenya.</p>
+                        <p class="mb-2">Beyond Python, Maurice is also a recognized expert in <strong>Julia Programming and R Programming</strong>, demonstrating his broad command of data-centric languages. His passion extends beyond current expertise, as he remains a keen enthusiast about other cutting-edge areas of technology, including <strong>Artificial Intelligence</strong>.</p>
+                        <p>Currently, Maurice is furthering his academic pursuits by undertaking a <strong>Master's degree in Financial Engineering at WorldQuant University</strong>, reinforcing his commitment to combining advanced quantitative skills with practical industry application.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="welcome-to-programming">
+                <h2>Welcome to Python Programming!</h2>
+                <div>
+                    <p>This lesson introduces foundational concepts in computer programming and the Python language, preparing you for an exciting journey into software development.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 my-8">
+                        <div class="card bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
+                            <h3 class="text-xl font-semibold mb-2 text-blue-800">What You'll Learn</h3>
+                            <p class="text-gray-700">Design, write, run, debug, and improve programs while understanding how they work and the different types of languages computers use.</p>
+                        </div>
+                        <div class="card bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
+                            <h3 class="text-xl font-semibold mb-2 text-blue-800">How Programs Work</h3>
+                            <p class="text-gray-700">A program makes a computer usable. It's a set of instructions that tell the computer what to do step by step.</p>
+                        </div>
+                        <div class="card bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500 md:col-span-2">
+                            <h3 class="text-xl font-semibold mb-2 text-blue-800">Unlock the Power</h3>
+                            <p class="text-gray-700">Learning to code opens up endless possibilities for creativity, problem-solving, and career opportunities in technology.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="how-programs-work">
+                <h2>1. How a Computer Program Work</h2>
+                <div>
+                    <p>A program makes a computer usable. Without a program, a computer, even the most powerful, is nothing but an object.</p>
+                    <p>Imagine that you want to know the average speed you've reached during a long journey. You know the distance, you know the time, you need the speed.</p>
+                    <p>Naturally, the computer will be able to compute this, but the computer is not aware of such things as distance, speed, or time. Therefore, it is necessary to instruct the computer to:</p>
+                    <ol>
+                        <li>accept a number representing the distance;</li>
+                        <li>accept a number representing the travel time;</li>
+                        <li>divide the former value by the latter and store the result in the memory;</li>
+                        <li>display the result (representing the average speed) in a readable format.</li>
+                        <li>Repeat/loop the process</li>
+                    </ol>
+                    <p>These five simple actions form a program. Of course, these examples are very far from what the computer can understand, but they are good enough to be translated into a language the computer can accept.</p>
+                    <p>Language is the keyword.</p>
+                </div>
+            </section>
+
+            <section id="natural-vs-programming-languages">
+                <h2>2. Natural vs. Programming Languages</h2>
+                <div>
+                    <p>Language can be defined as a 'way of expressing thoughts.' There are many languages all around us. Some of them require neither speaking nor writing, such as body language; it's possible to express your deepest feelings very precisely without saying a word.</p>
+                    <p>Another language you use each day is your mother tongue, which you use to manifest your will. Computers also have their own language, called machine language, which is limited to various principles.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 my-8">
+                        <div class="card bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-400">
+                            <h3 class="text-xl font-semibold mb-2 text-blue-700">Natural Languages</h3>
+                            <p class="text-gray-700">Examples: English, Swahili, Spanish. Evolve naturally. Used for human communication.</p>
+                            <ul class="list-disc list-inside text-gray-600 mt-2">
+                                <li>Flexible and often ambiguous</li>
+                                <li>Rich vocabulary and expressions</li>
+                                <li>Context-dependent meaning</li>
+                            </ul>
+                        </div>
+                        <div class="card bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-400">
+                            <h3 class="text-xl font-semibold mb-2 text-blue-700">Programming Languages</h3>
+                            <p class="text-gray-700">Examples: Python, Java, C++. Human-developed languages designed to give precise instructions to computers. Simpler grammar than natural languages.</p>
+                            <ul class="list-disc list-inside text-gray-600 mt-2">
+                                <li>Strict syntax rules</li>
+                                <li>Unambiguous meaning</li>
+                                <li>Designed for logical operations</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p class="mt-4">It is important to note that machine languages are developed by humans. No computer is currently capable of creating a new language. However, that may change soon. Just as people use several very different languages, machines have many different languages too.</p>
+                    <p>The difference, though, is that human languages are developed naturally. Moreover, they are still evolving, and new words are created every day as old words disappear. These languages are called natural languages.</p>
+                </div>
+            </section>
+
+            <section id="language-building-blocks">
+                <h2>3. Language Building Blocks</h2>
+                <div>
+                    <p>Every language, whether human or computer, has fundamental components:</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 my-8">
+                        <div class="card text-center bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
+                            <h3 class="text-xl font-semibold mb-2 text-blue-700">Alphabet</h3>
+                            <p class="text-gray-700">A set of symbols used to build words (e.g., the Latin alphabet for English).</p>
+                        </div>
+                        <div class="card text-center bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
+                            <h3 class="text-xl font-semibold mb-2 text-blue-700">Lexis (Dictionary)</h3>
+                            <p class="text-gray-700">A set of words the language offers its users (e.g., "computer" from the English dictionary).</p>
+                        </div>
+                        <div class="card text-center bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
+                            <h3 class="text-xl font-semibold mb-2 text-blue-700">Syntax</h3>
+                            <p class="text-gray-700">A set of rules used to determine if a certain string of words forms a valid sentence (e.g., "I am a python" is correct).</p>
+                        </div>
+                        <div class="card text-center bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
+                            <h3 class="text-xl font-semibold mb-2 text-blue-700">Semantics</h3>
+                            <p class="text-gray-700">A set of rules determining if a phrase makes sense (e.g., "I ate a doughnut" makes sense, but "A doughnut ate me" doesn't).</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="high-level-languages">
+                <h2>4. High-Level Languages</h2>
+                <div>
+                    <p>We need a language in which humans can write their programs and a language that computers may use to execute the programs, one that is far more complex than machine language and yet far simpler than natural language.</p>
+                    <p>Such languages are often called high-level programming languages. They are at least somewhat similar to natural ones in that they use symbols and words readable to humans.</p>
+                    <p>A program written in a high-level programming language is called a <strong>source code</strong> (in contrast to the machine code executed by computers). Similarly, the file containing the source code is called the source file.</p>
+                    
+                    <h3 class="text-center">Bridging the Human-Computer Gap</h3>
+                    <div class="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4 my-8">
+                        <div class="flowchart-step bg-blue-100 border-blue-500 text-blue-800">🧑‍💻 Programmer</div>
+                        <div class="flowchart-arrow-horizontal">→</div>
+                        <div class="flowchart-step bg-blue-200 border-blue-500 text-blue-800">📝 Source Code</div>
+                        <div class="flowchart-arrow-horizontal">→</div>
+                        <div class="flowchart-step bg-blue-300 border-blue-500 text-blue-800">💻 Execution</div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="compilation-vs-interpretation">
+                <h2>5. Compilation vs. Interpretation</h2>
+                <div>
+                    <p>Computer programming is the process of writing code in a chosen language to make a computer do what you want. The outcome depends on the programmer's creativity, knowledge, and experience.</p>
+                    <p>Of course, such a composition has to be correct in many senses:</p>
+                    <ul>
+                        <li>alphabetically - a program needs to be written in a recognizable script, such as Roman, Cyrillic, etc.</li>
+                        <li>lexically - each programming language has its dictionary, and you need to master it; thankfully, it's much simpler and smaller than the dictionary of any natural language;</li>
+                        <li>syntactically - each language has its rules and they must be obeyed;</li>
+                        <li>semantically - the program has to make sense.</li>
+                    </ul>
+                    <p>Unfortunately, a programmer can also make mistakes with each of the above four senses. Each of them can cause the program to become completely useless.</p>
+                    <p>Let's assume that you've successfully written a program. How do we persuade the computer to execute it? You have to render your program into machine language. Luckily, the translation can be done by a computer itself, making the whole process fast and efficient.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 my-8">
+                        <div class="card bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
+                            <h3 class="text-xl font-semibold mb-2 text-blue-700">Compilation</h3>
+                            <p class="text-gray-700 mb-2">The source code is translated into a machine-readable file (executable) <strong>before</strong> execution. This is done by a <strong>compiler</strong>.</p>
+                            <ul class="list-disc list-inside text-gray-600 space-y-1">
+                                <li>Entire program translated at once.</li>
+                                <li>If code changes, it must be recompiled.</li>
+                                <li>Faster execution once compiled.</li>
+                            </ul>
+                        </div>
+                        <div class="card bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
+                            <h3 class="text-xl font-semibold mb-2 text-blue-700">Interpretation</h3>
+                            <p class="text-gray-700 mb-2">The program performing this kind of transformation is called an <strong>interpreter</strong>, as it interprets the code every time it is intended to be executed. It also means that you cannot just distribute the source code as-is, because the end-user also needs the interpreter to execute it.</p>
+                            <ul class="list-disc list-inside text-gray-600 space-y-1">
+                                <li>Translates and executes line by line.</li>
+                                <li>No separate compilation step needed to run.</li>
+                                <li>Easier to debug, but can be slower.</li>
+                                <li>Python is an interpreted language!</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p class="mt-4">Due to some very fundamental reasons, a particular high-level programming language is designed to fall into one of these two categories. There are very few languages that can be both compiled and interpreted.</p>
+                </div>
+            </section>
+
+            <section id="how-python-runs-code">
+                <h2>6. How Python Runs Code</h2>
+                <div>
+                    <p>Python is an interpreted language. Here's how source code is transformed into instructions a computer can execute:</p>
+                    <div class="space-y-2 my-8">
+                        <div class="flowchart-step bg-blue-100 border-blue-500 text-blue-800">1. Read a line of Source Code</div>
+                        <p class="text-sm text-gray-600 text-center">The interpreter processes one line of Python code at a time.</p>
+                        <div class="flowchart-arrow">↓</div>
+                        <div class="flowchart-step bg-blue-100 border-blue-500 text-blue-800">2. Check Line for Correctness</div>
+                        <p class="text-sm text-gray-600 text-center">Verify syntax, semantics, and other requirements.</p>
+                        <div class="flowchart-arrow">↓</div>
+                        <div class="flowchart-step bg-red-100 border-red-500 text-red-700">Error Found?</div>
+                        <p class="text-sm text-gray-600 text-center">If an error is detected, the process stops and reports the error.</p>
+                        <div class="flowchart-arrow">↓ No</div>
+                        <div class="flowchart-step bg-green-100 border-green-500 text-green-700">3. Execute the Line</div>
+                        <p class="text-sm text-gray-600 text-center">If no errors, the line is executed and results are produced.</p>
+                        <div class="flowchart-arrow">↓</div>
+                        <div class="flowchart-step bg-blue-100 border-blue-500 text-blue-800">4. More Lines?</div>
+                        <p class="text-sm text-gray-600 text-center">If there are more lines, the process repeats from step 1.</p>
+                        <div class="flowchart-arrow">↓ No</div>
+                        <div class="flowchart-step bg-gray-100 border-gray-400 text-gray-700">5. Program End</div>
+                        <p class="text-sm text-gray-600 text-center">When all lines are processed, the program ends successfully.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="introducing-python">
+                <h2>7. Introducing Python</h2>
+                <div>
+                    <p>Python is a widely used, interpreted, object-oriented, and high-level programming language with dynamic semantics, used for general-purpose programming.</p>
+                    <p class="my-4 text-center text-blue-700 font-bold">Fun Fact: Python was named after the BBC comedy series "Monty Python's Flying Circus," not the snake!</p>
+                    
+                    <h3>The Creator: Guido van Rossum</h3>
+                    <div class="flex items-center space-x-4 my-4">
+                        <img src="gvr.webp" alt="Guido van Rossum" class="rounded-full shadow-md w-32 h-32 object-cover">
+                        <div>
+                            <p>Born in 1956 in Haarlem, Netherlands. Guido van Rossum is the original author of Python.</p>
+                            <p class="mt-2 text-sm text-gray-600">While thousands contribute to Python's development, the initial vision was Guido's. He served as Python's "Benevolent Dictator For Life" (BDFL) until 2018, overseeing decisions about the language's evolution.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="pythons-core-philosophy">
+                <h2>8. Python's Core Philosophy</h2>
+                <div>
+                    <p>In 1999, Guido van Rossum defined his goals for Python:</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+                        <div class="card bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
+                            <h3 class="text-xl font-semibold mb-2 text-blue-700">Easy & Intuitive</h3>
+                            <p class="text-gray-700">Just as powerful as major competitors, but simple to pick up. Anyone can learn to use it effectively.</p>
+                        </div>
+                        <div class="card bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
+                            <h3 class="text-xl font-semibold mb-2 text-blue-700">Open Source</h3>
+                            <p class="text-gray-700">Anyone can use it and contribute to its development. Completely free for all purposes.</p>
+                        </div>
+                        <div class="card bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
+                            <h3 class="text-xl font-semibold mb-2 text-blue-700">Readable Code</h3>
+                            <p class="text-gray-700">Code should be as clear as plain English, emphasizing readability and maintainability.</p>
+                        </div>
+                        <div class="card bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
+                            <h3 class="text-xl font-semibold mb-2 text-blue-700">Rapid Development</h3>
+                            <p class="text-gray-700">Suitable for everyday tasks, allowing for short development times and quick prototyping.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="why-choose-python">
+                <h2>9. Why Choose Python?</h2>
+                <div>
+                    <p>There are many reasons we've listed some of them already, but let's enumerate them again in a more practical manner:</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 my-8 items-stretch">
+                        <div class="card bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500 flex flex-col">
+                            <h3 class="text-xl font-semibold mb-2 text-blue-700">Easy to Learn</h3>
+                            <p class="text-gray-700 flex-grow">The time needed to learn Python is shorter than for many other languages; this means that it's possible to start the actual programming faster.</p>
+                        </div>
+                        <div class="card bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500 flex flex-col">
+                            <h3 class="text-xl font-semibold mb-2 text-blue-700">Easy to Understand</h3>
+                            <p class="text-gray-700 flex-grow">It's also often easier to understand someone else's code faster if it is written in Python.</p>
+                        </div>
+                        <div class="card bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500 flex flex-col md:col-span-2 lg:col-span-1">
+                            <h3 class="text-xl font-semibold mb-2 text-blue-700">Easy to Obtain, Install, and Deploy</h3>
+                            <p class="text-gray-700 flex-grow">Python is free, open, and multiplatform (works on Windows, macOS, Linux, etc.).</p>
+                        </div>
+                        <div class="card bg-white p-6 rounded-lg shadow-md md:col-span-2 lg:col-span-3">
+                            <h3 class="text-xl font-semibold mb-2 text-blue-700 text-center">Global Popularity</h3>
+                            <p class="text-center mb-4 text-gray-700">Python is the most popular programming language in the world, or at least ranks very high in the top three. Its versatility and ease of use make it a top choice for various applications.</p>
+                            <!-- Chart removed as per request -->
+                        </div>
+                    </div>
+                    <p class="mt-4">The installation process will be discussed or has already been discussed during the live session for "Lesson 1."</p>
+                </div>
+            </section>
+
+            <section id="practice-questions">
+                <h2>Practice Questions</h2>
+                <div>
+                    <p class="text-lg text-blue-800 mb-4">Test your understanding of Lesson 1 concepts with these practice questions:</p>
+                    
+                    <div class="quiz-section">
+                        <div class="question-card">
+                            <p class="question-text">1. What are the four fundamental elements that constitute any language, whether natural or programming?</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">2. Briefly explain the difference between a "compiler" and an "interpreter" in the context of programming languages.</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">3. List three key advantages of Python as a programming language, as outlined in this lesson.</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">4. What is "source code," and how does it relate to machine language?</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">5. Python is an interpreted language. What are some implications of this for a developer (e.g., related to execution speed or debugging)?</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">6. Who created Python, and what was the inspiration behind its name?</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="conclusion">
+                <h2>Conclusion</h2>
+                <div>
+                    <p>You've completed the foundational concepts of Lesson 1. This is just the beginning of your Python programming adventure. Keep practicing, exploring, and building!</p>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <footer class="bg-blue-900 text-white py-6 text-center">
+        <p class="text-white">&copy; 2024 Tech Savvy Institute. All rights reserved. Content adapted from Lesson 1 by Maurice Otieno.</p>
+        <p class="text-white">Python is a trademark of the Python Software Foundation</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scrolling for main navigation
+            const navItems = document.querySelectorAll('.main-nav-bar .main-nav-item');
+            const headerElement = document.querySelector('header');
+            const mainNavBarElement = document.querySelector('.main-nav-bar');
+
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault(); // Prevent default anchor link behavior
+
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+
+                    if (targetElement) {
+                        // Calculate total offset from the top
+                        const headerHeight = headerElement ? headerElement.offsetHeight : 0;
+                        const navBarHeight = mainNavBarElement ? mainNavBarElement.offsetHeight : 0;
+                        const totalOffset = headerHeight + navBarHeight + 5; // Add a small buffer
+
+                        const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                        const offsetPosition = elementPosition - totalOffset;
+
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: "smooth"
+                        });
+                    }
+                });
+            });
+
+            // Scroll-spy functionality for active state
+            const sections = document.querySelectorAll('section[id]');
+            const observerOptions = {
+                root: null, // viewport
+                rootMargin: `-80px 0px -50% 0px`, /* Adjust top margin for fixed header/nav and bottom for earlier activation */
+                threshold: 0 /* Trigger as soon as target crosses rootMargin */
+            };
+
+            const observerCallback = (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const currentSectionId = '#' + entry.target.id;
+                        
+                        // Remove 'active' class from all nav items
+                        navItems.forEach(item => {
+                            item.classList.remove('active');
+                        });
+
+                        // Add 'active' class to the corresponding nav item
+                        const correspondingNavItem = document.querySelector(`.main-nav-item[href="${currentSectionId}"]`);
+                        if (correspondingNavItem) {
+                            correspondingNavItem.classList.add('active');
+                        }
+                    }
+                });
+            };
+
+            const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+            // Observe each section
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+
+            // Set initial active state on page load
+            const initialActiveSection = Array.from(sections).find(section => {
+                const rect = section.getBoundingClientRect();
+                return rect.top >= 0 && rect.top <= window.innerHeight / 2;
+            }) || sections[0]; // Fallback to first section if none are sufficiently in view
+
+            if (initialActiveSection) {
+                const initialActiveNavItem = document.querySelector(`.main-nav-item[href="#${initialActiveSection.id}"]`);
+                if (initialActiveNavItem) {
+                    initialActiveNavItem.classList.add('active');
+                }
+            }
+        });
+
+        // Chart.js script is completely removed as there's no chart in the HTML anymore.
+    </script>
+
+</body>
+</html>

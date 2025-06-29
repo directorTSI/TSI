@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Programming: Lesson 6 - Loops</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
+            background-color: #F8FAFC; /* Light background */
+            color: #1F2937; /* Dark text */
+        }
+        .container {
+            max-width: 1080px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 2.5rem 3rem;
+            background-color: #FFFFFF;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            border-radius: 1rem;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+        /* Header */
+        header {
+            background-color: #FFFFFF; /* White header background */
+            color: #1F2937; /* Dark text for header */
+            padding: 0.8rem 1.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column; /* Stack logo/title and nav buttons */
+            align-items: center; /* Center horizontally */
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 3px solid #E5E7EB; /* Subtle light gray border at bottom of header */
+        }
+        header .header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-shrink: 0;
+            margin-bottom: 0.5rem; /* Space below header-left block */
+            width: 100%; /* Occupy full width for centering */
+            justify-content: center; /* Center content within header-left */
+        }
+        header img {
+            width: 48px;
+            height: 48px;
+            border-radius: 9999px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+        }
+        header .header-text-block {
+            text-align: center; /* Center title text */
+            line-height: 1.2;
+            flex-grow: 1;
+        }
+        header .institute-name {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #0A2463; /* Dark blue for institute name */
+            margin-bottom: 0.05rem;
+            letter-spacing: 0.07em;
+        }
+        header .course-lesson-title {
+            font-size: 0.8rem;
+            color: #374151; /* Darker gray for course title */
+            line-height: 1.2;
+        }
+        header .author-name {
+            font-size: 0.75rem;
+            color: #6B7280; /* Medium gray for author name */
+            margin-top: 0.1rem;
+            display: block;
+        }
+
+        /* Main Navigation Bar */
+        .main-nav-bar {
+            background-color: #FDFDFD;
+            padding: 0.8rem 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem; /* Spacing between main nav items */
+            width: 100%; /* Occupy full width within header */
+            border-top: 1px solid #E5E7EB; /* Separator from header-left */
+            padding-top: 1rem; /* Add padding above buttons */
+        }
+        .main-nav-item {
+            background-color: transparent;
+            color: #3E92CC; /* Bright Teal for default text */
+            padding: 0.4rem 1rem;
+            border: 1px solid #93C5FD; /* Lighter blue border for pill shape */
+            border-radius: 9999px; /* Pill shape */
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease-in-out;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer; /* Indicate it's clickable */
+        }
+        .main-nav-item:hover, .main-nav-item.active { /* 'active' for scroll spy */
+            background-color: #DBEAFE; /* Lighter blue background on hover/active */
+            color: #0A2463; /* Dark blue text on hover/active */
+            transform: translateY(-2px);
+            box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+        }
+        /* No Font Awesome icon styling as icons are removed from HTML */
+
+
+        /* Side TOC is removed */
+        .toc-container {
+            display: none !important;
+        }
+
+        /* Headings - No collapsible functionality here */
+        h2, h3, h4 {
+            cursor: default; /* No pointer cursor for non-collapsible */
+            display: block !important; /* Re-add for safety, though default is block */
+        }
+        h2:hover, h3:hover, h4:hover {
+            color: inherit; /* No color change on hover */
+        }
+
+        /* Title Styles - Enhanced to look like prominent titles */
+        h2 {
+            font-size: 2.5rem; /* Larger for main titles */
+            font-weight: 800; /* Extra bold */
+            color: #0A2463; /* Deep blue */
+            margin-top: 3.5rem; /* More space above */
+            margin-bottom: 1.5rem; /* More space below */
+            padding-bottom: 0.75rem; /* More padding below for border */
+            border-bottom: 3px solid #3E92CC; /* Thicker, brighter blue border */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05); /* Subtle shadow for depth */
+        }
+        h3 {
+            font-size: 2rem; /* Larger for sub-titles */
+            font-weight: 700; /* Bold */
+            color: #3E92CC; /* Bright Teal */
+            margin-top: 2.5rem; /* More space above */
+            margin-bottom: 1rem; /* More space below */
+        }
+        h4 {
+            font-size: 1.5rem; /* Larger for sub-sub-titles */
+            font-weight: 600; /* Semi-bold */
+            color: #0A2463; /* Dark blue */
+            margin-top: 2rem; /* More space above */
+            margin-bottom: 0.75rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+        ul, ol {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+        ol {
+            list-style-type: decimal;
+        }
+        strong {
+            font-weight: bold;
+            color: #1F2937;
+        }
+
+        /* Jupyter-style code blocks (static for examples) */
+        .jupyter-cell {
+            background-color: #F8FAFC;
+            border-radius: 0.5rem;
+            border: 1px solid #E2E8F0;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+            margin: 1.5rem 0;
+            overflow: hidden;
+        }
+        .jupyter-input-wrapper { /* For In[] block content */
+            background-color: #FFFFFF;
+            padding: 1rem;
+            border-bottom: 1px solid #E2E8F0;
+            position: relative;
+            padding-left: 3.5rem; /* Keep initial padding for In[]: */
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: #0A2463;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .jupyter-input-wrapper::before {
+            content: 'In [ ] :';
+            position: absolute;
+            left: 0.75rem;
+            top: 1rem;
+            font-size: 0.8rem;
+            color: #6B7280;
+            font-family: sans-serif;
+            font-weight: bold;
+        }
+        .jupyter-output { /* For Out[] block content */
+            background-color: #F0F9FF;
+            padding: 1rem;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: #3E92CC;
+            font-weight: normal; /* Normal weight for output */
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            padding-left: 1rem; /* Adjust to align with main content, removing indent */
+            position: relative; /* Needed for pseudo-element positioning */
+        }
+        .jupyter-output pre {
+            margin-left: 2.5rem; /* Push the actual content after the Out[]: prefix */
+            white-space: pre-wrap; /* Ensure text wraps */
+        }
+
+
+        .jupyter-input .keyword {
+            color: #0A2463;
+            font-weight: bold;
+        }
+        .jupyter-input .comment { color: #6B7280; font-style: italic; }
+
+        /* No interactive code elements, copy buttons */
+        .copy-button, .code-actions, #reveal-solutions-button {
+            display: none !important;
+        }
+        
+        footer {
+            background-color: #1F2937;
+            color: white; /* Ensure text is white for readability */
+            padding: 1.5rem 0;
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: 2rem;
+        }
+
+        /* Quiz Specific Styling - purely static questions */
+        .quiz-section .question-card {
+            background-color: #FFFFFF;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #93C5FD;
+        }
+        .quiz-section .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #0A2463;
+            margin-bottom: 1rem;
+        }
+        /* Hide entire code-setup-block from quiz section */
+        .quiz-section .code-setup-block {
+            display: none !important;
+        }
+
+        /* Remove all solution-related divs and their children */
+        .code-solution-box,
+        #reveal-solutions-button
+        {
+            display: none !important;
+        }
+
+        /* Table styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+            color: #374151;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-radius: 0.5rem;
+            overflow: hidden; /* Ensures rounded corners apply to content */
+        }
+        table thead th {
+            background-color: #0A2463; /* Dark blue */
+            color: #FFFFFF;
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #3E92CC;
+        }
+        table tbody td {
+            background-color: #FDFDFD;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #E5E7EB;
+        }
+        table tbody tr:nth-child(odd) td {
+            background-color: #F5F7FA; /* Slightly darker for odd rows */
+        }
+        table tbody tr:hover td {
+            background-color: #EBF8FF; /* Light blue on hover */
+        }
+        table code {
+            background-color: #E0F2FE; /* Light blue for inline code */
+            padding: 0.2em 0.4em;
+            border-radius: 0.25rem;
+            font-size: 0.8em;
+            color: #0A2463;
+        }
+
+        /* Flowchart styling for this lesson */
+        .flowchart-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .flowchart-box {
+            background-color: #DBEAFE; /* Light blue */
+            border: 1px solid #93C5FD; /* Lighter blue border */
+            padding: 0.8rem 1.2rem;
+            border-radius: 0.5rem;
+            margin: 0.5rem 0;
+            font-weight: 500;
+            color: #0A2463; /* Dark blue text */
+            text-align: center;
+            width: fit-content;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .flowchart-diamond {
+            background-color: #DBEAFE; /* Light blue */
+            border: 1px solid #93C5FD; /* Lighter blue border */
+            width: 120px; /* Increased size to better fit text */
+            height: 80px; /* Increased size */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: rotate(45deg);
+            margin: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .flowchart-diamond p {
+            transform: rotate(-45deg); /* Counter-rotate text */
+            margin: 0;
+            font-size: 0.8em; /* Slightly smaller font for longer text */
+            white-space: normal;
+            line-height: 1.2;
+            color: #0A2463; /* Dark blue text */
+        }
+        /* Vertical arrow */
+        .flowchart-arrow {
+            font-size: 2rem; /* Larger arrow for visual flow */
+            color: #3E92CC; /* Teal color for arrows */
+            height: 20px; /* Space for vertical arrow */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1; /* Adjust line height to prevent extra space */
+            margin: 0; /* Remove default margins */
+            padding: 0; /* Remove default padding */
+        }
+        .flowchart-arrow:after {
+            content: '↓';
+        }
+        /* Horizontal split arrows (for decision branches) */
+        .flowchart-decision-line {
+            display: flex;
+            justify-content: space-between;
+            width: 100%; /* Spans the width of the main flow */
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            position: relative; /* For positioning arrows */
+            height: 40px; /* Provide space for arrows to draw */
+        }
+        .flowchart-decision-line .arrow-label {
+            font-size: 0.85rem;
+            color: #374151;
+            position: absolute;
+            top: -1.5rem; /* Position label above the arrow */
+            font-weight: 500;
+        }
+        .flowchart-decision-line .arrow-left {
+            position: absolute;
+            left: 5%; /* Adjust left position for arrow origin */
+            width: 40%; /* Length of the horizontal part of the arrow */
+            border-bottom: 2px solid #3E92CC;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .flowchart-decision-line .arrow-left::before {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: -5px; /* Adjust for arrowhead position */
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+            border-right: 6px solid #3E92CC; /* Left-pointing arrowhead */
+        }
+        .flowchart-decision-line .arrow-right {
+            position: absolute;
+            right: 5%; /* Adjust right position for arrow origin */
+            width: 40%; /* Length of the horizontal part of the arrow */
+            border-bottom: 2px solid #3E92CC;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .flowchart-decision-line .arrow-right::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: -5px; /* Adjust for arrowhead position */
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+            border-left: 6px solid #3E92CC; /* Right-pointing arrowhead */
+        }
+        /* Vertical lines connecting to other blocks */
+        .flowchart-vertical-line {
+            border-left: 2px solid #3E92CC;
+            height: 30px; /* Length of the vertical line */
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .flowchart-text {
+            font-size: 0.85rem;
+            color: #6B7280;
+            text-align: center;
+            margin-top: 0.5rem;
+        }
+
+        @media print {
+            body {
+                background-color: #FFFFFF !important;
+                color: #000000 !important;
+                margin: 0;
+                padding: 0;
+                font-size: 9pt;
+            }
+            .container {
+                box-shadow: none !important;
+                margin: 0;
+                padding: 1cm;
+                border-radius: 0;
+                width: 100%;
+            }
+            header, footer {
+                background-color: #FFFFFF !important;
+                color: #000000 !important;
+                box-shadow: none !important;
+                padding: 0.5cm 0;
+                text-align: center;
+                border-bottom: none !important;
+            }
+            header .header-left {
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                justify-content: center !important;
+                width: 100% !important;
+                gap: 0.5cm !important;
+            }
+            header img {
+                width: 50px !important;
+                height: 50px !important;
+                margin-bottom: 0 !important;
+            }
+            header .institute-name, header .course-lesson-title, header .author-name {
+                color: #000000 !important;
+                font-size: 10pt !important;
+                margin: 0 !important;
+            }
+            header .institute-name { font-weight: bold !important; letter-spacing: normal !important; }
+            header .course-lesson-title { font-size: 8pt !important; }
+            header .author-name { font-size: 8pt !important; }
+            .main-nav-bar { display: none !important; } /* Hide main nav in print */
+
+            h2, h3, h4 {
+                color: #000000 !important;
+                border-bottom-color: #AAAAAA !important;
+                cursor: auto !important;
+                page-break-after: avoid;
+                margin-top: 1.5cm;
+            }
+            h2:hover, h3:hover, h4:hover { color: #000000 !important; }
+            p, ul, ol, pre {
+                page-break-inside: avoid;
+                margin-bottom: 0.8rem;
+            }
+            .jupyter-cell {
+                border: 1px solid #DDDDDD !important;
+                box-shadow: none !important;
+                background-color: #F9F9F9 !important;
+                margin: 1rem 0;
+                page-break-inside: avoid;
+            }
+            .jupyter-input-wrapper {
+                background-color: #FDFDFD !important;
+                color: #000000 !important;
+                border-bottom-color: #E0E0E0 !important;
+            }
+            .jupyter-input-textarea { /* Should not exist */
+                display: none !important;
+            }
+            .jupyter-input .keyword {
+                color: #333333 !important;
+                font-weight: bold;
+            }
+            .jupyter-input::before, .jupyter-output::before {
+                color: #777777 !important;
+            }
+            .jupyter-output {
+                background-color: #F0F0F0 !important;
+                color: #444444 !important;
+                font-weight: normal;
+                display: block !important;
+            }
+            .jupyter-output pre {
+                margin-left: 0 !important; /* Remove margin from pre for print */
+            }
+            strong {
+                color: #000000 !important;
+            }
+            .copy-button, .code-actions { display: none !important; }
+            .collapsible-content > div {
+                 min-height: auto !important;
+                 overflow: visible !important;
+            }
+            .toggle-icon { display: none !important; }
+            .toc-container { display: none !important; }
+            .main-layout { flex-direction: column !important; }
+            .property-box { background-color: #F9F9F9 !important; border-color: #E0E0E0 !important; }
+            .property-title { color: #000000 !important; }
+            .property-example { background-color: #F0F0F0 !important; }
+
+            /* Quiz section specific print styles */
+            .quiz-section .question-card {
+                border-color: #E0E0E0 !important;
+            }
+            .quiz-section .expected-code-label, .quiz-section .expected-output-label, .quiz-section .explanation-label {
+                color: #000000 !important;
+            }
+            .quiz-section .expected-code-snippet {
+                background-color: #F9F9F9 !important;
+                border-color: #E0E0E0 !important;
+                color: #000000 !important;
+            }
+            .quiz-section .expected-output-content {
+                background-color: #F0F0F0 !important;
+                border-color: #E0E0E0 !important;
+                color: #000000 !important;
+            }
+            .quiz-section .explanation-text {
+                color: #333333 !important;
+            }
+            .quiz-section .code-solution-box .code-input-display {
+                border-bottom: none !important;
+                margin-bottom: 0 !important;
+                padding-bottom: 0.5rem !important;
+            }
+            .quiz-section .code-solution-box .code-output-display {
+                display: none !important; /* Explicitly hide outputs in print */
+            }
+            .quiz-section .solution-container {
+                display: none !important; /* Hide solution containers for print */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <img src="logotsi.jpeg" alt="Tech Savvy Institute Logo" onerror="this.onerror=null;this.src='https://placehold.co/48x48/0A2463/FFFFFF?text=TSI'; this.alt='Logo Placeholder';">
+            <div class="header-text-block">
+                <p class="institute-name">TECH SAVVY INSTITUTE</p>
+                <p class="course-lesson-title">Python Programming Fundamentals - Lesson 6: Loops</p>
+                <span class="author-name">by Maurice Otieno</span>
+            </div>
+        </div>
+    </header>
+
+    <nav class="main-nav-bar">
+        <a href="#introduction-loops" class="main-nav-item">Introduction</a>
+        <a href="#while-loop" class="main-nav-item">While Loop</a>
+        <a href="#for-loop" class="main-nav-item">For Loop</a>
+        <a href="#loop-control-statements" class="main-nav-item">Control Statements</a>
+        <a href="#practice-questions" class="main-nav-item">Practice Questions</a>
+        <a href="#overall-conclusion" class="main-nav-item">Conclusion</a>
+    </nav>
+
+    <div class="container">
+        <main class="main-content w-full">
+
+            <section id="introduction-loops">
+                <h2>Introduction: Loops in Python</h2>
+                <div>
+                    <p>Loops are fundamental programming constructs that allow statements to be executed repeatedly. They are essential for automating repetitive tasks and processing collections of data efficiently.</p>
+                    <p>This lesson will cover the two main types of loops in Python: the `while` loop for indefinite iteration and the `for` loop for definite iteration over sequences, along with important control statements that alter loop behavior.</p>
+                </div>
+            </section>
+
+            <section id="while-loop">
+                <h2>1. The `while` Loop: Indefinite Repetition</h2>
+                <div>
+                    <p>The `while` loop is used for <strong>indefinite iteration</strong>, meaning it continues to execute a block of code as long as a specified condition remains `True`. The exact number of times the loop will run is not known at the outset; it depends entirely on when its controlling condition becomes `False`.</p>
+                    
+                    <h3>Why Use `while` Loops?</h3>
+                    <p>You use `while` loops when you need to repeat an action until a specific condition is met, such as validating user input, polling for an event, or performing a task until a certain state is reached.</p>
+
+                    <h3>Syntax and Structure</h3>
+                    <p>The `while` keyword is followed by the condition and a colon. The loop's body is indented.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Syntax for while loop
+# while condition:
+#     # Code to execute repeatedly
+#     # (Must eventually change 'condition' to False!)
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python"># Output: This is a static example of syntax.</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Loop Variable Initialization</h3>
+                    <p>It is <strong>essential</strong> to initialize variables controlling the loop's condition <em>before</em> the loop starts.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+count = 0 # Initialization outside the loop
+while count < 5:
+    print(count)
+    count += 1
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">0
+1
+2
+3
+4</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Controlling the Loop</h3>
+                    <p>Inside the loop, you must modify variables that are part of the condition to eventually make it `False` and terminate the loop. Failure to do so results in an infinite loop.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+g = 1
+while g < 4: # Loop while g is less than 4
+    print("Hello")
+    print("Iteration: {}".format(g))
+    g += 1 # Crucial update to prevent infinite loop
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Hello
+Iteration: 1
+Hello
+Iteration: 2
+Hello
+Iteration: 3</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Condition-Based Execution Flow</h3>
+                    <p>The loop continues as long as its condition is `True`, often using comparison operators.</p>
+                    <div class="flowchart-container text-center my-4">
+                        <p class="font-semibold text-lg text-blue-700">Flow of a `while` Loop</p>
+                        <div class="flex flex-col items-center">
+                            <div class="flowchart-box bg-blue-200 border-blue-500 p-3 rounded-md shadow-sm">Start</div>
+                            <div class="flowchart-arrow"></div>
+                            <div class="flowchart-diamond bg-blue-300 border-blue-600 p-3 rounded-md shadow-sm"><p>Is condition true?</p></div>
+                            <div class="flowchart-decision-line">
+                                <span class="arrow-label" style="left: 0;">No</span>
+                                <div class="flowchart-arrow-left"></div>
+                                <span class="arrow-label" style="right: 0;">Yes</span>
+                                <div class="flowchart-arrow-right"></div>
+                            </div>
+                            <div class="flex justify-between w-full max-w-sm">
+                                <div class="flowchart-box bg-red-200 border-red-500 p-3 rounded-md shadow-sm">End Loop</div>
+                                <div class="flex flex-col items-center">
+                                    <div class="flowchart-box bg-green-200 border-green-500 p-3 rounded-md shadow-sm">Execute loop body</div>
+                                    <div class="flowchart-arrow"></div>
+                                    <div class="flowchart-text text-sm text-gray-600">....loop back to condition...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>Demonstrating `while` Loop Behavior</h3>
+                    <h4>1. Endless Execution (Infinite Loop)</h4>
+                    <p>If the condition never becomes `False`, the loop will run forever. This is usually an unintended error.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# WARNING: This loop will run indefinitely!
+# To stop it in an IDE, you usually press Ctrl+C or restart kernel.
+# while True:
+#     print("This is conceptual; don't run it as is.")
+
+print("This is conceptual; don't run an infinite loop as is.")
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">This is conceptual; don't run an infinite loop as is.</code></pre>
+                        </div>
+                    </div>
+
+                    <h4>2. Simple Controlled Counter</h4>
+                    <p>A `count` variable is incremented inside the loop, eventually making the condition false.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+count = 0
+while count < 10:
+    print("Tech Institute")
+    count += 1
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Tech Institute
+Tech Institute
+Tech Institute
+Tech Institute
+Tech Institute
+Tech Institute
+Tech Institute
+Tech Institute
+Tech Institute
+Tech Institute</code></pre>
+                        </div>
+                    </div>
+
+                    <h4>3. Multiple Statements in Loop</h4>
+                    <p>Any number of indented statements will execute in every iteration as long as the condition is `True`.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+g = 1
+while g < 4:
+    print("Hello")
+    print("Iteration: {}".format(g))
+    g += 1
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Hello
+Iteration: 1
+Hello
+Iteration: 2
+Hello
+Iteration: 3</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="for-loop">
+                <h2>2. The `for` Loop: Definite Iteration</h2>
+                <div>
+                    <p>A `for` loop is used for <strong>iterating over a sequence</strong> (such as a list, tuple, dictionary, set, or string). This is known as <strong>definite iteration</strong> because the number of repetitions is fixed by the length of the sequence being iterated over.</p>
+
+                    <h3>Why Use `for` Loops?</h3>
+                    <p>You use `for` loops when you know exactly how many times you need to loop, or when you need to process every item in a collection.</p>
+
+                    <h3>Syntax and Flow</h3>
+                    <p>The `for` keyword is followed by a variable, the `in` keyword, the sequence, and a colon. The loop's body is indented.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Syntax for for loop
+# for variable in sequence:
+#     # Code to execute for each item
+#     ...
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python"># Output: This is a static example of syntax.</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Execution Flow</h3>
+                    <p>The `for` loop processes each item in the sequence one by one until all items have been covered.</p>
+                    <div class="flowchart-container text-center my-4">
+                        <p class="font-semibold text-lg text-blue-700">Flow of a `for` Loop</p>
+                        <div class="flex flex-col items-center">
+                            <div class="flowchart-box bg-blue-200 border-blue-500 p-3 rounded-md shadow-sm">Start Loop</div>
+                            <div class="flowchart-arrow"></div>
+                            <div class="flowchart-diamond bg-blue-300 border-blue-600 p-3 rounded-md shadow-sm"><p>Are there more items in sequence?</p></div>
+                            <div class="flowchart-decision-line">
+                                <span class="arrow-label" style="left: 0;">No</span>
+                                <div class="flowchart-arrow-left"></div>
+                                <span class="arrow-label" style="right: 0;">Yes</span>
+                                <div class="flowchart-arrow-right"></div>
+                            </div>
+                            <div class="flex justify-between w-full max-w-sm">
+                                <div class="flowchart-box bg-red-200 border-red-500 p-3 rounded-md shadow-sm">End Loop</div>
+                                <div class="flex flex-col items-center">
+                                    <div class="flowchart-box bg-green-200 border-green-500 p-3 rounded-md shadow-sm">Assign next item to variable</div>
+                                    <div class="flowchart-arrow"></div>
+                                    <div class="flowchart-box bg-green-200 border-green-500 p-3 rounded-md shadow-sm">Execute loop body</div>
+                                    <div class="flowchart-arrow"></div>
+                                    <div class="flowchart-text text-sm text-gray-600">....loop back to check next item...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>`for` Loop Examples</h3>
+                    <h4>1. Iterating Over a List</h4>
+                    <p>The most common use is to perform an action for each element in a list.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+fruits = ["apple", "banana", "cherry"]
+for fruit in fruits:
+    print(fruit)
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">apple
+banana
+cherry</code></pre>
+                        </div>
+                    </div>
+
+                    <h4>2. Iterating Over a String</h4>
+                    <p>You can loop through each character of a string directly.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+for letter in "Python":
+    print(letter)
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">P
+y
+t
+h
+o
+n</code></pre>
+                        </div>
+                    </div>
+
+                    <h4>3. Using the `range()` Function</h4>
+                    <p>To loop a specific number of times, use `range()` to generate a sequence of numbers (e.g., `range(5)` generates 0, 1, 2, 3, 4).</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Loop 5 times (i from 0 to 4)
+for i in range(5):
+    print("Loop number: {}".format(i))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Loop number: 0
+Loop number: 1
+Loop number: 2
+Loop number: 3
+Loop number: 4</code></pre>
+                        </div>
+                    </div>
+
+                    <h4>4. Summing Numbers in a List</h4>
+                    <p>Loops are perfect for aggregating data, like calculating a sum or average.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+numbers = [10, 20, 30, 40]
+total = 0
+for num in numbers:
+    total = total + num
+print("The sum is: {}".format(total))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">The sum is: 100</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="loop-control-statements">
+                <h2>3. Loop Control Statements</h2>
+                <div>
+                    <p>Python provides statements to alter the normal execution flow of loops. These are applicable to both `for` and `while` loops.</p>
+
+                    <h3>`break` Statement</h3>
+                    <p>The `break` statement <strong>immediately terminates the loop</strong> and transfers execution to the statement right after the loop.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Find the first number divisible by 7
+for number in range(1, 100):
+    if number % 7 == 0:
+        print("Found it! {}".format(number))
+        break
+print("Search complete.")
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Found it! 7
+Search complete.</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>`continue` Statement</h3>
+                    <p>The `continue` statement <strong>skips the current iteration</strong> of the loop and moves immediately to the next iteration.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Print only even numbers
+for number in range(1, 11):
+    if number % 2 != 0: # If number is odd
+        continue        # Skip this iteration
+    print(number)
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">2
+4
+6
+8
+10</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>`else` Clause in Loops</h3>
+                    <p>A loop's `else` clause runs if the loop completes normally (i.e., not terminated by a `break` statement).</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Search for a number (not found)
+for n in [1, 2, 3]:
+    if n == 4:
+        print("Found 4!")
+        break
+else: # This 'else' belongs to the for loop
+    print("Did not find 4.")
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Did not find 4.</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="practice-questions">
+                <h2>Practice Questions</h2>
+                <div>
+                    <p class="text-lg text-blue-800 mb-4">Test your understanding of Python Loops with these practice questions:</p>
+                    
+                    <div class="quiz-section">
+                        <div class="question-card">
+                            <p class="question-text">1. Explain the primary difference between a `while` loop and a `for` loop in Python. Provide a scenario where each would be more appropriate.</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">2. Write a Python `while` loop that counts down from 5 to 1, printing each number, and then prints "Blastoff!"</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">3. Given a list of numbers: `[10, 25, 30, 45, 50]`. Write a `for` loop to iterate through the list and print only the numbers that are greater than 20.</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">4. What is the purpose of the `break` statement in a loop? Provide a short code example.</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">5. Use a `for` loop and the `range()` function to print all odd numbers from 1 to 10 (inclusive).</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">6. Describe a situation where using `continue` inside a loop would be beneficial.</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">7. Write a `while` loop that continuously asks the user to enter a number greater than 10. Once a valid number is entered, print "Valid input!" and exit the loop. (Assume a simple input mechanism without complex error handling).</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="overall-conclusion">
+                <h2>Overall Conclusion</h2>
+                <div>
+                    <p>You've completed this comprehensive lesson on Python Loops. You now have a solid understanding of how to automate repetitive tasks and iterate over data structures efficiently. Keep practicing and building!</p>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <footer class="bg-blue-900 text-white py-6 text-center">
+        <p class="text-white">&copy; 2024 Tech Savvy Institute. All rights reserved. Content adapted from Lesson 6 notes by Maurice Otieno.</p>
+        <p class="text-white">Python is a trademark of the Python Software Foundation</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scrolling for main navigation
+            const navItems = document.querySelectorAll('.main-nav-bar .main-nav-item');
+            const headerElement = document.querySelector('header');
+            const mainNavBarElement = document.querySelector('.main-nav-bar');
+
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault(); // Prevent default anchor link behavior
+
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+
+                    if (targetElement) {
+                        // Calculate total offset from the top
+                        const headerHeight = headerElement ? headerElement.offsetHeight : 0;
+                        const navBarHeight = mainNavBarElement ? mainNavBarElement.offsetHeight : 0;
+                        const totalOffset = headerHeight + navBarHeight + 5; // Add a small buffer
+
+                        const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                        const offsetPosition = elementPosition - totalOffset;
+
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: "smooth"
+                        });
+                    }
+                });
+            });
+
+            // Scroll-spy functionality for active state
+            const sections = document.querySelectorAll('section[id]');
+            const observerOptions = {
+                root: null, // viewport
+                rootMargin: `-80px 0px -50% 0px`, /* Adjust top margin for fixed header/nav and bottom for earlier activation */
+                threshold: 0 /* Trigger as soon as target crosses rootMargin */
+            };
+
+            const observerCallback = (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const currentSectionId = '#' + entry.target.id;
+                        
+                        // Remove 'active' class from all nav items
+                        navItems.forEach(item => {
+                            item.classList.remove('active');
+                        });
+
+                        // Add 'active' class to the corresponding nav item
+                        const correspondingNavItem = document.querySelector(`.main-nav-item[href="${currentSectionId}"]`);
+                        if (correspondingNavItem) {
+                            correspondingNavItem.classList.add('active');
+                        }
+                    }
+                });
+            };
+
+            const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+            // Observe each section
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+
+            // Set initial active state on page load
+            const initialActiveSection = Array.from(sections).find(section => {
+                const rect = section.getBoundingClientRect();
+                return rect.top >= 0 && rect.top <= window.innerHeight / 2;
+            }) || sections[0]; // Fallback to first section if none are sufficiently in view
+
+            if (initialActiveSection) {
+                const initialActiveNavItem = document.querySelector(`.main-nav-item[href="#${initialActiveSection.id}"]`);
+                if (initialActiveNavItem) {
+                    initialActiveNavItem.classList.add('active');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

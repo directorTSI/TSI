@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Programming: Lesson 5 - Conditional Statements</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
+            background-color: #F8FAFC; /* Light background */
+            color: #1F2937; /* Dark text */
+        }
+        .container {
+            max-width: 1080px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 2.5rem 3rem;
+            background-color: #FFFFFF;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            border-radius: 1rem;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+        /* Header */
+        header {
+            background-color: #FFFFFF; /* White header background */
+            color: #1F2937; /* Dark text for header */
+            padding: 0.8rem 1.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column; /* Stack logo/title and nav buttons */
+            align-items: center; /* Center horizontally */
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 3px solid #E5E7EB; /* Subtle light gray border at bottom of header */
+        }
+        header .header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-shrink: 0;
+            margin-bottom: 0.5rem; /* Space below header-left block */
+            width: 100%; /* Occupy full width for centering */
+            justify-content: center; /* Center content within header-left */
+        }
+        header img {
+            width: 48px;
+            height: 48px;
+            border-radius: 9999px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+        }
+        header .header-text-block {
+            text-align: center; /* Center title text */
+            line-height: 1.2;
+            flex-grow: 1;
+        }
+        header .institute-name {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #0A2463; /* Dark blue for institute name */
+            margin-bottom: 0.05rem;
+            letter-spacing: 0.07em;
+        }
+        header .course-lesson-title {
+            font-size: 0.8rem;
+            color: #374151; /* Darker gray for course title */
+            line-height: 1.2;
+        }
+        header .author-name {
+            font-size: 0.75rem;
+            color: #6B7280; /* Medium gray for author name */
+            margin-top: 0.1rem;
+            display: block;
+        }
+
+        /* Main Navigation Bar */
+        .main-nav-bar {
+            background-color: #FDFDFD;
+            padding: 0.8rem 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem; /* Spacing between main nav items */
+            width: 100%; /* Occupy full width within header */
+            border-top: 1px solid #E5E7EB; /* Separator from header-left */
+            padding-top: 1rem; /* Add padding above buttons */
+        }
+        .main-nav-item {
+            background-color: transparent;
+            color: #3E92CC; /* Bright Teal for default text */
+            padding: 0.4rem 1rem;
+            border: 1px solid #93C5FD; /* Lighter blue border for pill shape */
+            border-radius: 9999px; /* Pill shape */
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease-in-out;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer; /* Indicate it's clickable */
+        }
+        .main-nav-item:hover, .main-nav-item.active { /* 'active' for scroll spy */
+            background-color: #DBEAFE; /* Lighter blue background on hover/active */
+            color: #0A2463; /* Dark blue text on hover/active */
+            transform: translateY(-2px);
+            box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+        }
+        /* No Font Awesome icon styling as icons are removed from HTML */
+
+
+        /* Side TOC is removed */
+        .toc-container {
+            display: none !important;
+        }
+
+        /* Headings - No collapsible functionality here */
+        h2, h3, h4 {
+            cursor: default; /* No pointer cursor for non-collapsible */
+            display: block !important; /* Re-add for safety, though default is block */
+        }
+        h2:hover, h3:hover, h4:hover {
+            color: inherit; /* No color change on hover */
+        }
+
+        /* Title Styles - Enhanced to look like prominent titles */
+        h2 {
+            font-size: 2.5rem; /* Larger for main titles */
+            font-weight: 800; /* Extra bold */
+            color: #0A2463; /* Deep blue */
+            margin-top: 3.5rem; /* More space above */
+            margin-bottom: 1.5rem; /* More space below */
+            padding-bottom: 0.75rem; /* More padding below for border */
+            border-bottom: 3px solid #3E92CC; /* Thicker, brighter blue border */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05); /* Subtle shadow for depth */
+        }
+        h3 {
+            font-size: 2rem; /* Larger for sub-titles */
+            font-weight: 700; /* Bold */
+            color: #3E92CC; /* Bright Teal */
+            margin-top: 2.5rem; /* More space above */
+            margin-bottom: 1rem; /* More space below */
+        }
+        h4 {
+            font-size: 1.5rem; /* Larger for sub-sub-titles */
+            font-weight: 600; /* Semi-bold */
+            color: #0A2463; /* Dark blue */
+            margin-top: 2rem; /* More space above */
+            margin-bottom: 0.75rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+        ul, ol {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+        ol {
+            list-style-type: decimal;
+        }
+        strong {
+            font-weight: bold;
+            color: #1F2937;
+        }
+
+        /* Jupyter-style code blocks (static for examples) */
+        .jupyter-cell {
+            background-color: #F8FAFC;
+            border-radius: 0.5rem;
+            border: 1px solid #E2E8F0;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+            margin: 1.5rem 0;
+            overflow: hidden;
+        }
+        .jupyter-input-wrapper { /* For In[] block content */
+            background-color: #FFFFFF;
+            padding: 1rem;
+            border-bottom: 1px solid #E2E8F0;
+            position: relative;
+            padding-left: 3.5rem;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: #0A2463;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .jupyter-input-wrapper::before {
+            content: 'In [ ] :';
+            position: absolute;
+            left: 0.75rem;
+            top: 1rem;
+            font-size: 0.8rem;
+            color: #6B7280;
+            font-family: sans-serif;
+            font-weight: bold;
+        }
+        .jupyter-output { /* For Out[] block content */
+            background-color: #F0F9FF;
+            padding: 1rem;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: #3E92CC;
+            font-weight: normal; /* Normal weight for output */
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            position: relative;
+            padding-left: 3.5rem;
+            text-indent: -2.5rem; /* Negative indent for alignment */
+        }
+        .jupyter-output::before {
+            content: 'Out[ ] :';
+            position: absolute;
+            left: 0.75rem;
+            top: 1rem;
+            font-size: 0.8rem;
+            color: #6B7280;
+            font-family: sans-serif;
+            font-weight: bold;
+        }
+        .jupyter-input .keyword {
+            color: #0A2463;
+            font-weight: bold;
+        }
+        .jupyter-input .comment { color: #6B7280; font-style: italic; }
+
+        /* No interactive code elements, copy buttons */
+        .copy-button, .code-actions, #reveal-solutions-button {
+            display: none !important;
+        }
+        
+        footer {
+            background-color: #1F2937;
+            color: white; /* Ensure text is white for readability */
+            padding: 1.5rem 0;
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: 2rem;
+        }
+
+        /* Quiz Specific Styling - purely static questions */
+        .quiz-section .question-card {
+            background-color: #FFFFFF;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #93C5FD;
+        }
+        .quiz-section .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #0A2463;
+            margin-bottom: 1rem;
+        }
+        /* Hide entire code-setup-block from quiz section */
+        .quiz-section .code-setup-block {
+            display: none !important;
+        }
+
+        /* Remove all solution-related divs and their children */
+        .code-solution-box,
+        #reveal-solutions-button
+        {
+            display: none !important;
+        }
+
+        /* Table styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+            color: #374151;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-radius: 0.5rem;
+            overflow: hidden; /* Ensures rounded corners apply to content */
+        }
+        table thead th {
+            background-color: #0A2463; /* Dark blue */
+            color: #FFFFFF;
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #3E92CC;
+        }
+        table tbody td {
+            background-color: #FDFDFD;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #E5E7EB;
+        }
+        table tbody tr:nth-child(odd) td {
+            background-color: #F5F7FA; /* Slightly darker for odd rows */
+        }
+        table tbody tr:hover td {
+            background-color: #EBF8FF; /* Light blue on hover */
+        }
+        table code {
+            background-color: #E0F2FE; /* Light blue for inline code */
+            padding: 0.2em 0.4em;
+            border-radius: 0.25rem;
+            font-size: 0.8em;
+            color: #0A2463;
+        }
+
+
+        @media print {
+            body {
+                background-color: #FFFFFF !important;
+                color: #000000 !important;
+                margin: 0;
+                padding: 0;
+                font-size: 9pt;
+            }
+            .container {
+                box-shadow: none !important;
+                margin: 0;
+                padding: 1cm;
+                border-radius: 0;
+                width: 100%;
+            }
+            header, footer {
+                background-color: #FFFFFF !important;
+                color: #000000 !important;
+                box-shadow: none !important;
+                padding: 0.5cm 0;
+                text-align: center;
+                border-bottom: none !important;
+            }
+            header .header-left {
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                justify-content: center !important;
+                width: 100% !important;
+                gap: 0.5cm !important;
+            }
+            header img {
+                width: 50px !important;
+                height: 50px !important;
+                margin-bottom: 0 !important;
+            }
+            header .institute-name, header .course-lesson-title, header .author-name {
+                color: #000000 !important;
+                font-size: 10pt !important;
+                margin: 0 !important;
+            }
+            header .institute-name { font-weight: bold !important; letter-spacing: normal !important; }
+            header .course-lesson-title { font-size: 8pt !important; }
+            header .author-name { font-size: 8pt !important; }
+            .main-nav-bar { display: none !important; } /* Hide main nav in print */
+
+            h2, h3, h4 {
+                color: #000000 !important;
+                border-bottom-color: #AAAAAA !important;
+                cursor: auto !important;
+                page-break-after: avoid;
+                margin-top: 1.5cm;
+            }
+            h2:hover, h3:hover, h4:hover { color: #000000 !important; }
+            p, ul, ol, pre {
+                page-break-inside: avoid;
+                margin-bottom: 0.8rem;
+            }
+            .jupyter-cell {
+                border: 1px solid #DDDDDD !important;
+                box-shadow: none !important;
+                background-color: #F9F9F9 !important;
+                margin: 1rem 0;
+                page-break-inside: avoid;
+            }
+            .jupyter-input-wrapper {
+                background-color: #FDFDFD !important;
+                color: #000000 !important;
+                border-bottom-color: #E0E0E0 !important;
+            }
+            .jupyter-input-textarea { /* Should not exist */
+                display: none !important;
+            }
+            .jupyter-input .keyword {
+                color: #333333 !important;
+                font-weight: bold;
+            }
+            .jupyter-input::before, .jupyter-output::before {
+                color: #777777 !important;
+            }
+            .jupyter-output {
+                background-color: #F0F0F0 !important;
+                color: #444444 !important;
+                font-weight: normal;
+                display: block !important;
+            }
+            strong {
+                color: #000000 !important;
+            }
+            .copy-button, .code-actions { display: none !important; }
+            .collapsible-content > div {
+                 min-height: auto !important;
+                 overflow: visible !important;
+            }
+            .toggle-icon { display: none !important; }
+            .toc-container { display: none !important; }
+            .main-layout { flex-direction: column !important; }
+            .property-box { background-color: #F9F9F9 !important; border-color: #E0E0E0 !important; }
+            .property-title { color: #000000 !important; }
+            .property-example { background-color: #F0F0F0 !important; }
+
+            /* Quiz section specific print styles */
+            .quiz-section .question-card {
+                border-color: #E0E0E0 !important;
+            }
+            .quiz-section .expected-code-label, .quiz-section .expected-output-label, .quiz-section .explanation-label {
+                color: #000000 !important;
+            }
+            .quiz-section .expected-code-snippet {
+                background-color: #F9F9F9 !important;
+                border-color: #E0E0E0 !important;
+                color: #000000 !important;
+            }
+            .quiz-section .expected-output-content {
+                background-color: #F0F0F0 !important;
+                border-color: #E0E0E0 !important;
+                color: #000000 !important;
+            }
+            .quiz-section .explanation-text {
+                color: #333333 !important;
+            }
+            .quiz-section .code-solution-box .code-input-display {
+                border-bottom: none !important;
+                margin-bottom: 0 !important;
+                padding-bottom: 0.5rem !important;
+            }
+            .quiz-section .code-solution-box .code-output-display {
+                display: none !important; /* Explicitly hide outputs in print */
+            }
+            .quiz-section .solution-container {
+                display: none !important; /* Hide solution containers for print */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <img src="logotsi.jpeg" alt="Tech Savvy Institute Logo" onerror="this.onerror=null;this.src='https://placehold.co/48x48/0A2463/FFFFFF?text=TSI'; this.alt='Logo Placeholder';">
+            <div class="header-text-block">
+                <p class="institute-name">TECH SAVVY INSTITUTE</p>
+                <p class="course-lesson-title">Python Programming Fundamentals - Lesson 5: Conditional Statements</p>
+                <span class="author-name">by Maurice Otieno</span>
+            </div>
+        </div>
+    </header>
+
+    <nav class="main-nav-bar">
+        <a href="#introduction-conditionals" class="main-nav-item">Introduction</a>
+        <a href="#if-statement" class="main-nav-item">If Statement</a>
+        <a href="#if-else-statement" class="main-nav-item">If-Else Statement</a>
+        <a href="#if-elif-else-statement" class="main-nav-item">If-Elif-Else Statement</a>
+        <a href="#nested-if-statements" class="main-nav-item">Nested Ifs</a>
+        <a href="#best-practices-conditionals" class="main-nav-item">Best Practices</a>
+        <a href="#practice-questions" class="main-nav-item">Practice Questions</a>
+        <a href="#overall-conclusion" class="main-nav-item">Conclusion</a>
+    </nav>
+
+    <div class="container">
+        <main class="main-content w-full">
+
+            <section id="introduction-conditionals">
+                <h2>Introduction: Conditional Statements</h2>
+                <div>
+                    <p>Conditional statements are essential programming constructs that allow your Python programs to make decisions and execute different blocks of code based on whether certain conditions are <code>True</code> or <code>False</code>. They introduce logic and adaptability into your applications.</p>
+                    <p>This lesson will cover the various forms of conditional statements in Python, including `if`, `if-else`, `if-elif-else`, and nested `if` statements, along with best practices for writing clean and effective conditional logic.</p>
+                </div>
+            </section>
+
+            <section id="if-statement">
+                <h2>1. The `if` Statement: Simple Decisions</h2>
+                <div>
+                    <p>The <code>if</code> statement is the most basic conditional. It executes a block of code ONLY if a specified condition evaluates to <code>True</code>. If the condition is <code>False</code>, the <code>if</code> block is skipped.</p>
+                    <h3>Syntax</h3>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Syntax for if statement
+# if condition:
+#     # Code to execute if condition is True
+#     statement_1
+#     statement_2
+# # Code outside the if block (always executes after if)
+
+# Remember the colon : after the condition and the indentation for the code block!
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python"># Output: This is a static example of syntax.</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Example 1: Check if Positive</h3>
+                    <p>If a number is positive, print a message.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+num = 10
+if num > 0:
+    print("Number is positive.")
+
+num = -5
+if num > 0:
+    print("Number is positive.")
+# No output for num = -5 as condition is False
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Number is positive.</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Example 2: Non-Empty String</h3>
+                    <p>Print a message if a string is not empty.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+my_string = "Hello"
+if my_string:
+    print("String is not empty.")
+
+my_string = ""
+if my_string:
+    print("String is not empty.")
+# No output for empty string as condition is False
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">String is not empty.</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Example 3: Item in List</h3>
+                    <p>Check if a specific fruit is in a list of fruits.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+fruits = ["apple", "banana", "cherry"]
+item = "banana"
+if item in fruits:
+    print("{} is in the list.".format(item))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">banana is in the list.</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Example 4: Boolean Flag</h3>
+                    <p>Perform an action if a boolean variable is <code>True</code>.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+is_active = True
+if is_active:
+    print("User account is active.")
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">User account is active.</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="if-else-statement">
+                <h2>2. The `if-else` Statement: Two Paths</h2>
+                <div>
+                    <p>The <code>if-else</code> statement provides two possible execution paths. If the <code>if</code> condition is <code>True</code>, the <code>if</code> block executes. Otherwise (if <code>False</code>), the <code>else</code> block executes.</p>
+                    <h3>Syntax</h3>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Syntax for if-else statement
+# if condition:
+#     # Code if condition is True
+# else:
+#     # Code if condition is False
+
+# The 'else' block provides a default action when the 'if' condition isn't met.
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python"># Output: This is a static example of syntax.</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Example 1: Even or Odd</h3>
+                    <p>Check if a number is even or odd using the modulus operator.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+number = 7
+if number % 2 == 0:
+    print("It's an even number.")
+else:
+    print("It's an odd number.")
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">It's an odd number.</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Example 2: Pass or Fail</h3>
+                    <p>Determine if a student passed based on their score.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+score = 45
+if score >= 50:
+    print("Congratulations! You passed.")
+else:
+    print("Keep trying! You did not pass.")
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Keep trying! You did not pass.</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Example 3: Login Status</h3>
+                    <p>Provide feedback based on a login attempt's success.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+is_logged_in = False
+if is_logged_in:
+    print("Welcome back!")
+else:
+    print("Please log in to continue.")
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Please log in to continue.</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Example 4: String Length</h3>
+                    <p>Categorize a word as 'short' or 'long' based on its length.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+word = "elephant"
+if len(word) < 6:
+    print("This is a short word.")
+else:
+    print("This is a long word.")
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">This is a long word.</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="if-elif-else-statement">
+                <h2>3. The `if-elif-else` Statement: Multiple Choices</h2>
+                <div>
+                    <p>When you have more than two possible conditions to check, the `if-elif-else` chain is used. Python checks conditions sequentially. The first `True` condition's block is executed, and the rest of the chain is skipped. The `else` block acts as a fallback if no `if` or `elif` conditions are met.</p>
+                    <h3>Syntax</h3>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Syntax for if-elif-else statement
+# if condition_1:
+#     # Code if condition_1 is True
+# elif condition_2:
+#     # Code if condition_1 is False AND condition_2 is True
+# elif condition_3:
+#     # Code if condition_1, condition_2 are False AND condition_3 is True
+# else:
+#     # Code if all above conditions are False
+
+# You can have as many 'elif' (short for 'else if') blocks as needed.
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python"># Output: This is a static example of syntax.</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Example 1: Grading System</h3>
+                    <p>Assign a letter grade based on a numerical score.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+grade = 85
+if grade >= 90:
+    print("Grade: A")
+elif grade >= 80:
+    print("Grade: B")
+elif grade >= 70:
+    print("Grade: C")
+else:
+    print("Grade: F")
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Grade: B</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Example 2: Time-based Greeting</h3>
+                    <p>Greet the user based on the hour of the day (simplified).</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+current_hour = 14 # 2 PM
+if current_hour < 12:
+    print("Good Morning!")
+elif current_hour < 18: # Less than 6 PM
+    print("Good Afternoon!")
+else:
+    print("Good Evening!")
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Good Afternoon!</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Example 3: Traffic Light Logic</h3>
+                    <p>Simulate traffic light instructions based on color.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+light_color = "yellow"
+if light_color == "red":
+    print("STOP! Do not proceed.")
+elif light_color == "yellow":
+    print("Prepare to stop.")
+else: # green
+    print("Go! Proceed safely.")
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Prepare to stop.</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Example 4: Number Categorization</h3>
+                    <p>Classify a number as positive, negative, or zero.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+value = 0
+if value > 0:
+    print("Positive Number")
+elif value < 0:
+    print("Negative Number")
+else:
+    print("Zero")
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Zero</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="nested-if-statements">
+                <h2>4. Nested `if` Statements: Conditions Within Conditions</h2>
+                <div>
+                    <p>A nested <code>if</code> statement is an <code>if</code> statement that is placed inside another <code>if</code>, <code>elif</code>, or <code>else</code> block. This allows for more complex, hierarchical decision-making, where one condition must be true before a secondary condition is evaluated.</p>
+                    <h3>Syntax</h3>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Syntax for Nested if statements
+# if outer_condition:
+#     # Code for outer condition is True
+#     if inner_condition_1:
+#         # Code if outer is True AND inner_1 is True
+#     else:
+#         # Code if outer is True AND inner_1 is False
+# else:
+#     # Code if outer condition is False
+
+# Indentation is critical to define the scope of each nested block.
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python"># Output: This is a static example of syntax.</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Example 1: Discount Eligibility</h3>
+                    <p>Apply a discount if a customer is a VIP AND makes a large purchase.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+is_vip = True
+purchase_amount = 120
+
+if is_vip:
+    print("Eligible for VIP benefits.")
+    if purchase_amount > 100:
+        print("Applying extra discount for large purchase!")
+    else:
+        print("Standard VIP discount.")
+else:
+    print("No VIP benefits.")
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Eligible for VIP benefits.
+Applying extra discount for large purchase!</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Example 2: Loan Approval</h3>
+                    <p>Approve a loan based on income and then credit score.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+income = 60000
+credit_score = 720
+
+if income >= 50000:
+    print("Income criteria met.")
+    if credit_score >= 700:
+        print("Loan Approved!")
+    else:
+        print("Low credit score, loan denied.")
+else:
+    print("Income too low, loan denied.")
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Income criteria met.
+Loan Approved!</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Example 3: Restaurant Suggestion</h3>
+                    <p>Suggest a restaurant based on cuisine and then a dietary preference.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+cuisine = "Italian"
+is_vegetarian = True
+
+if cuisine == "Italian":
+    print("Checking Italian options:")
+    if is_vegetarian:
+        print("Suggesting a vegetarian pasta dish.")
+    else:
+        print("Suggesting a classic pizza.")
+elif cuisine == "Mexican":
+    print("Consider tacos or burritos.")
+else:
+    print("No specific recommendation for this cuisine.")
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Checking Italian options:
+Suggesting a vegetarian pasta dish.</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Example 4: Game Access Level</h3>
+                    <p>Grant game access based on age and then premium status.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+user_age = 16
+has_premium = True
+
+if user_age >= 18:
+    print("Access to all mature content.")
+    if has_premium:
+        print("Premium mature content unlocked.")
+else:
+    print("Access limited to family-friendly content.")
+    if has_premium:
+        print("Premium family-friendly content unlocked.")
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Access limited to family-friendly content.
+Premium family-friendly content unlocked.</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="best-practices-conditionals">
+                <h2>5. Best Practices for Conditionals</h2>
+                <div>
+                    <p>Writing clear, efficient, and maintainable conditional statements is key to robust code.</p>
+                    <ul>
+                        <li><strong>Proper Indentation:</strong> Always use consistent indentation (4 spaces is standard) to define code blocks. Incorrect indentation leads to <code>IndentationError</code>.</li>
+                        <li><strong>Clear Conditions:</strong> Make your conditions (<code>></code>, <code>==</code>, <code>and</code>, <code>or</code>) as simple and readable as possible. Avoid overly complex single conditions.</li>
+                        <li><strong>Use Logical Operators:</strong> For combining multiple checks, <code>and</code> and <code>or</code> can often simplify nested <code>if</code>'s (e.g., <code>if age > 18 and has_license:</code>).</li>
+                        <li><strong>Order Matters:</strong> In <code>if-elif-else</code> chains, the order of <code>elif</code> conditions is crucial as Python executes the first <code>True</code> block it encounters.</li>
+                        <li><strong>Readability:</strong> If conditions become very long or complex, consider breaking them into smaller, more readable variables.</li>
+                        <li><strong>The <code>else</code> Fallback:</strong> Always consider an <code>else</code> block to handle cases where none of your <code>if</code> or <code>elif</code> conditions are met, preventing unexpected behavior.</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <section id="practice-questions">
+                <h2>Practice Questions</h2>
+                <div>
+                    <p class="text-lg text-blue-800 mb-4">Test your understanding of Conditional Statements with these practice questions:</p>
+                    
+                    <div class="quiz-section">
+                        <div class="question-card">
+                            <p class="question-text">1. Write a Python `if` statement that checks if a variable `temperature` is greater than `25`. If it is, print "It's hot!".</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">2. Create an `if-else` statement to determine if a `user_age` is `18` or older. Print "Eligible to vote" if true, otherwise print "Not eligible to vote".</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">3. Design an `if-elif-else` chain to classify a `score`:</p>
+                            <ul class="list-decimal ml-6 mt-2 text-gray-700">
+                                <li>If `score` is 90 or above, print "Excellent".</li>
+                                <li>If `score` is between 70 and 89 (inclusive), print "Good".</li>
+                                <li>Otherwise, print "Needs Improvement".</li>
+                            </ul>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">4. Explain the importance of indentation in Python conditional statements. What happens if indentation is incorrect?</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">5. Use a nested `if` statement to check if a `password` is at least 8 characters long AND contains at least one digit. Print appropriate messages for each condition.</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">6. Given a variable `is_admin` (boolean) and `access_level` (integer). Write a conditional statement that grants access if `is_admin` is True OR if `access_level` is greater than or equal to 5. Print "Access Granted" or "Access Denied".</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="overall-conclusion">
+                <h2>Overall Conclusion</h2>
+                <div>
+                    <p>You've completed the foundational concepts of Lesson 5. This is just the beginning of your Python programming adventure. Keep practicing, exploring, and building!</p>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <footer class="bg-blue-900 text-white py-6 text-center">
+        <p class="text-white">&copy; 2024 Tech Savvy Institute. All rights reserved. Content adapted from Lesson 5 notes by Maurice Otieno.</p>
+        <p class="text-white">Python is a trademark of the Python Software Foundation</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scrolling for main navigation
+            const navItems = document.querySelectorAll('.main-nav-bar .main-nav-item');
+            const headerElement = document.querySelector('header');
+            const mainNavBarElement = document.querySelector('.main-nav-bar');
+
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault(); // Prevent default anchor link behavior
+
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+
+                    if (targetElement) {
+                        // Calculate total offset from the top
+                        const headerHeight = headerElement ? headerElement.offsetHeight : 0;
+                        const navBarHeight = mainNavBarElement ? mainNavBarElement.offsetHeight : 0;
+                        const totalOffset = headerHeight + navBarHeight + 5; // Add a small buffer
+
+                        const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                        const offsetPosition = elementPosition - totalOffset;
+
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: "smooth"
+                        });
+                    }
+                });
+            });
+
+            // Scroll-spy functionality for active state
+            const sections = document.querySelectorAll('section[id]');
+            const observerOptions = {
+                root: null, // viewport
+                rootMargin: `-80px 0px -50% 0px`, /* Adjust top margin for fixed header/nav and bottom for earlier activation */
+                threshold: 0 /* Trigger as soon as target crosses rootMargin */
+            };
+
+            const observerCallback = (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const currentSectionId = '#' + entry.target.id;
+                        
+                        // Remove 'active' class from all nav items
+                        navItems.forEach(item => {
+                            item.classList.remove('active');
+                        });
+
+                        // Add 'active' class to the corresponding nav item
+                        const correspondingNavItem = document.querySelector(`.main-nav-item[href="${currentSectionId}"]`);
+                        if (correspondingNavItem) {
+                            correspondingNavItem.classList.add('active');
+                        }
+                    }
+                });
+            };
+
+            const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+            // Observe each section
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+
+            // Set initial active state on page load
+            const initialActiveSection = Array.from(sections).find(section => {
+                const rect = section.getBoundingClientRect();
+                return rect.top >= 0 && rect.top <= window.innerHeight / 2;
+            }) || sections[0]; // Fallback to first section if none are sufficiently in view
+
+            if (initialActiveSection) {
+                const initialActiveNavItem = document.querySelector(`.main-nav-item[href="#${initialActiveSection.id}"]`);
+                if (initialActiveNavItem) {
+                    initialActiveNavItem.classList.add('active');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

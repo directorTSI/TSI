@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Programming: Lesson 7 - Introduction to NumPy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7; /* Slightly more line height for readability */
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
+            background-color: #F8FAFC; /* Light background matching other lessons */
+            color: #1F2937; /* Dark text matching other lessons */
+        }
+        .container {
+            max-width: 1080px; /* Wider container matching other lessons */
+            margin-left: auto;
+            margin-right: auto;
+            padding: 2.5rem 3rem; /* Adjusted padding */
+            background-color: #FFFFFF;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08); /* Stronger shadow matching other lessons */
+            border-radius: 1rem;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+        /* Header */
+        header {
+            background-color: #FFFFFF; /* White header background */
+            color: #1F2937; /* Dark text for header */
+            padding: 0.8rem 1.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column; /* Stack logo/title and nav buttons */
+            align-items: center; /* Center horizontally */
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 3px solid #E5E7EB; /* Subtle light gray border at bottom of header */
+        }
+        header .header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-shrink: 0;
+            margin-bottom: 0.5rem; /* Space below header-left block */
+            width: 100%; /* Occupy full width for centering */
+            justify-content: center; /* Center content within header-left */
+        }
+        header img {
+            width: 48px;
+            height: 48px;
+            border-radius: 9999px; /* Tailwind's rounded-full */
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Subtle shadow */
+            flex-shrink: 0;
+        }
+        header .header-text-block {
+            text-align: center; /* Center title text */
+            line-height: 1.2;
+            flex-grow: 1;
+        }
+        header .institute-name {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #0A2463; /* Dark blue for institute name */
+            margin-bottom: 0.05rem;
+            letter-spacing: 0.07em;
+        }
+        header .course-lesson-title {
+            font-size: 0.8rem;
+            color: #374151; /* Darker gray for course title */
+            line-height: 1.2;
+        }
+        header .author-name {
+            font-size: 0.75rem;
+            color: #6B7280; /* Medium gray for author name */
+            margin-top: 0.1rem;
+            display: block;
+        }
+
+        /* Main Navigation Bar */
+        .main-nav-bar {
+            background-color: #FDFDFD;
+            padding: 0.8rem 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem; /* Spacing between main nav items */
+            width: 100%; /* Occupy full width within header */
+            border-top: 1px solid #E5E7EB; /* Separator from header-left */
+            padding-top: 1rem; /* Add padding above buttons */
+        }
+        .main-nav-item {
+            background-color: transparent;
+            color: #3E92CC; /* Bright Teal for default text */
+            padding: 0.4rem 1rem;
+            border: 1px solid #93C5FD; /* Lighter blue border for pill shape */
+            border-radius: 9999px; /* Pill shape */
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease-in-out;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer; /* Indicate it's clickable */
+        }
+        .main-nav-item:hover, .main-nav-item.active { /* 'active' for scroll spy */
+            background-color: #DBEAFE; /* Lighter blue background on hover/active */
+            color: #0A2463; /* Dark blue text on hover/active */
+            transform: translateY(-2px);
+            box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+        }
+        /* No Font Awesome icon styling as icons are removed from HTML */
+
+
+        /* Side TOC is removed */
+        .toc-container {
+            display: none !important;
+        }
+
+        /* Headings - No collapsible functionality here */
+        h2, h3, h4 {
+            cursor: default; /* No pointer cursor for non-collapsible */
+            display: block !important; /* Re-add for safety, though default is block */
+        }
+        h2:hover, h3:hover, h4:hover {
+            color: inherit; /* No color change on hover */
+        }
+
+        /* Title Styles - Enhanced to look like prominent titles */
+        h2 {
+            font-size: 2.5rem; /* Larger for main titles */
+            font-weight: 800; /* Extra bold */
+            color: #0A2463; /* Deep blue */
+            margin-top: 3.5rem; /* More space above */
+            margin-bottom: 1.5rem; /* More space below */
+            padding-bottom: 0.75rem; /* More padding below for border */
+            border-bottom: 3px solid #3E92CC; /* Thicker, brighter blue border */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05); /* Subtle shadow for depth */
+        }
+        h3 {
+            font-size: 2rem; /* Larger for sub-titles */
+            font-weight: 700; /* Bold */
+            color: #3E92CC; /* Bright Teal */
+            margin-top: 2.5rem; /* More space above */
+            margin-bottom: 1rem; /* More space below */
+        }
+        h4 {
+            font-size: 1.5rem; /* Larger for sub-sub-titles */
+            font-weight: 600; /* Semi-bold */
+            color: #0A2463; /* Dark blue */
+            margin-top: 2rem; /* More space above */
+            margin-bottom: 0.75rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+        ul, ol {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+        ol {
+            list-style-type: decimal;
+        }
+        strong {
+            font-weight: bold;
+            color: #1F2937;
+        }
+
+        /* Jupyter-style code blocks (static for examples) */
+        .jupyter-cell {
+            background-color: #F8FAFC;
+            border-radius: 0.5rem;
+            border: 1px solid #E2E8F0;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+            margin: 1.5rem 0;
+            overflow: hidden;
+        }
+        .jupyter-input-wrapper { /* For In[] block content */
+            background-color: #FFFFFF;
+            padding: 1rem;
+            border-bottom: 1px solid #E2E8F0;
+            position: relative;
+            padding-left: 3.5rem; /* Keep initial padding for In[]: */
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: #0A2463;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .jupyter-input-wrapper::before {
+            content: 'In [ ] :';
+            position: absolute;
+            left: 0.75rem;
+            top: 1rem;
+            font-size: 0.8rem;
+            color: #6B7280;
+            font-family: sans-serif;
+            font-weight: bold;
+        }
+        .jupyter-output { /* For Out[] block content */
+            background-color: #F0F9FF;
+            padding: 1rem;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: #3E92CC;
+            font-weight: normal; /* Normal weight for output */
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            padding-left: 1rem; /* Adjust to align with main content, removing indent */
+            position: relative; /* Needed for pseudo-element positioning */
+        }
+        .jupyter-output pre {
+            margin-left: 2.5rem; /* Push the actual content after the Out[]: prefix */
+            white-space: pre-wrap; /* Ensure text wraps */
+        }
+
+
+        .jupyter-input .keyword {
+            color: #0A2463;
+            font-weight: bold;
+        }
+        .jupyter-input .comment { color: #6B7280; font-style: italic; }
+
+        /* No interactive code elements, copy buttons */
+        .copy-button, .code-actions, #reveal-solutions-button {
+            display: none !important;
+        }
+        
+        footer {
+            background-color: #1F2937;
+            color: white; /* Ensure text is white for readability */
+            padding: 1.5rem 0;
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: 2rem;
+        }
+
+        /* Quiz Specific Styling - purely static questions */
+        .quiz-section .question-card {
+            background-color: #FFFFFF;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #93C5FD;
+        }
+        .quiz-section .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #0A2463;
+            margin-bottom: 1rem;
+        }
+        /* Hide entire code-setup-block from quiz section */
+        .quiz-section .code-setup-block {
+            display: none !important;
+        }
+
+        /* Remove all solution-related divs and their children */
+        .code-solution-box,
+        #reveal-solutions-button
+        {
+            display: none !important;
+        }
+
+        /* Table styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+            color: #374151;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-radius: 0.5rem;
+            overflow: hidden; /* Ensures rounded corners apply to content */
+        }
+        table thead th {
+            background-color: #0A2463; /* Dark blue */
+            color: #FFFFFF;
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #3E92CC;
+        }
+        table tbody td {
+            background-color: #FDFDFD;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #E5E7EB;
+        }
+        table tbody tr:nth-child(odd) td {
+            background-color: #F5F7FA; /* Slightly darker for odd rows */
+        }
+        table tbody tr:hover td {
+            background-color: #EBF8FF; /* Light blue on hover */
+        }
+        table code {
+            background-color: #E0F2FE; /* Light blue for inline code */
+            padding: 0.2em 0.4em;
+            border-radius: 0.25rem;
+            font-size: 0.8em;
+            color: #0A2463;
+        }
+
+        /* Flowchart styling for this lesson */
+        .flowchart-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .flowchart-box {
+            background-color: #DBEAFE; /* Light blue */
+            border: 1px solid #93C5FD; /* Lighter blue border */
+            padding: 0.8rem 1.2rem;
+            border-radius: 0.5rem;
+            margin: 0.5rem 0;
+            font-weight: 500;
+            color: #0A2463; /* Dark blue text */
+            text-align: center;
+            width: fit-content;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .flowchart-diamond {
+            background-color: #DBEAFE; /* Light blue */
+            border: 1px solid #93C5FD; /* Lighter blue border */
+            width: 120px; /* Increased size to better fit text */
+            height: 80px; /* Increased size */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: rotate(45deg);
+            margin: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .flowchart-diamond p {
+            transform: rotate(-45deg); /* Counter-rotate text */
+            margin: 0;
+            font-size: 0.8em; /* Slightly smaller font for longer text */
+            white-space: normal;
+            line-height: 1.2;
+            color: #0A2463; /* Dark blue text */
+        }
+        /* Vertical arrow for direct flow */
+        .flowchart-arrow {
+            font-size: 2rem; /* Larger arrow for visual flow */
+            color: #3E92CC; /* Teal color for arrows */
+            height: 20px; /* Space for vertical arrow */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1; /* Adjust line height to prevent extra space */
+            margin: 0; /* Remove default margins */
+            padding: 0; /* Remove default padding */
+            position: relative; /* For arrowhead positioning */
+            width: 0; /* Collapse width */
+            border: none; /* No border for the arrow container itself */
+        }
+        .flowchart-arrow::after {
+            content: '↓'; /* Downward arrow */
+        }
+        /* Horizontal split arrows (for decision branches) */
+        .flowchart-decision-line {
+            display: flex;
+            justify-content: space-between;
+            width: 100%; /* Spans the width of the main flow */
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            position: relative; /* For positioning arrows and labels */
+            height: 40px; /* Provide space for arrows to draw */
+        }
+        .flowchart-decision-line .arrow-label {
+            font-size: 0.85rem;
+            color: #374151;
+            position: absolute;
+            top: -1.5rem; /* Position label above the arrow line */
+            font-weight: 500;
+        }
+        .flowchart-decision-line .arrow-left-line,
+        .flowchart-decision-line .arrow-right-line {
+            position: absolute;
+            border-bottom: 2px solid #3E92CC;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .flowchart-decision-line .arrow-left-line {
+            left: 0;
+            width: calc(50% - 70px); /* Adjusted width to leave space for label */
+        }
+        .flowchart-decision-line .arrow-left-line::before {
+            content: '';
+            position: absolute;
+            right: -6px; /* Position at the end of the line */
+            top: -5px; /* Half of border-width to center it vertically */
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+            border-left: 6px solid #3E92CC; /* Points right (towards next box) */
+            transform: rotate(180deg); /* Rotate to point left (towards End Loop) */
+            transform-origin: center; /* Ensure rotation is correct */
+        }
+        .flowchart-decision-line .arrow-right-line {
+            right: 0;
+            width: calc(50% - 70px); /* Adjusted width */
+        }
+        .flowchart-decision-line .arrow-right-line::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: -5px; /* Half of border-width to center it vertically */
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+            border-right: 6px solid #3E92CC; /* Points right (towards next box) */
+        }
+
+        /* Vertical line for looping back - specific adjustments for visual flow */
+        .flowchart-loop-back {
+            position: relative; /* Container for the loop-back line */
+            width: 100%; /* Spans width to allow line to go up */
+            height: 50px; /* Space for the loop back */
+            margin-top: 10px; /* Space from previous box */
+        }
+        .flowchart-loop-back::before {
+            content: ''; /* Vertical line segment */
+            position: absolute;
+            left: 50%;
+            top: 0;
+            height: 100%;
+            border-left: 2px solid #3E92CC; /* Vertical line */
+            transform: translateX(-50%);
+        }
+        .flowchart-loop-back::after {
+            content: '↑'; /* Upward arrow */
+            position: absolute;
+            bottom: -5px; /* Position at the bottom of the line */
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            color: #3E92CC;
+            line-height: 1;
+        }
+
+        .flowchart-text {
+            font-size: 0.85rem;
+            color: #6B7280;
+            text-align: center;
+            margin-top: 0.5rem;
+        }
+
+        @media print {
+            body {
+                background-color: #FFFFFF !important;
+                color: #000000 !important;
+                margin: 0;
+                padding: 0;
+                font-size: 9pt;
+            }
+            .container {
+                box-shadow: none !important;
+                margin: 0;
+                padding: 1cm;
+                border-radius: 0;
+                width: 100%;
+            }
+            header, footer {
+                background-color: #FFFFFF !important;
+                color: #000000 !important;
+                box-shadow: none !important;
+                padding: 0.5cm 0;
+                text-align: center;
+                border-bottom: none !important;
+            }
+            header .header-left {
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                justify-content: center !important;
+                width: 100% !important;
+                gap: 0.5cm !important;
+            }
+            header img {
+                width: 50px !important;
+                height: 50px !important;
+                margin-bottom: 0 !important;
+            }
+            header .institute-name, header .course-lesson-title, header .author-name {
+                color: #000000 !important;
+                font-size: 10pt !important;
+                margin: 0 !important;
+            }
+            header .institute-name { font-weight: bold !important; letter-spacing: normal !important; }
+            header .course-lesson-title { font-size: 8pt !important; }
+            header .author-name { font-size: 8pt !important; }
+            .main-nav-bar { display: none !important; } /* Hide main nav in print */
+
+            h2, h3, h4 {
+                color: #000000 !important;
+                border-bottom-color: #AAAAAA !important;
+                cursor: auto !important;
+                page-break-after: avoid;
+                margin-top: 1.5cm;
+            }
+            h2:hover, h3:hover, h4:hover { color: #000000 !important; }
+            p, ul, ol, pre {
+                page-break-inside: avoid;
+                margin-bottom: 0.8rem;
+            }
+            .jupyter-cell {
+                border: 1px solid #DDDDDD !important;
+                box-shadow: none !important;
+                background-color: #F9F9F9 !important;
+                margin: 1rem 0;
+                page-break-inside: avoid;
+            }
+            .jupyter-input-wrapper {
+                background-color: #FDFDFD !important;
+                color: #000000 !important;
+                border-bottom-color: #E0E0E0 !important;
+            }
+            .jupyter-input-textarea { /* Should not exist */
+                display: none !important;
+            }
+            .jupyter-input .keyword {
+                color: #333333 !important;
+                font-weight: bold;
+            }
+            .jupyter-input::before, .jupyter-output::before {
+                color: #777777 !important;
+            }
+            .jupyter-output {
+                background-color: #F0F0F0 !important;
+                color: #444444 !important;
+                font-weight: normal;
+                display: block !important;
+            }
+            .jupyter-output pre {
+                margin-left: 0 !important; /* Remove margin from pre for print */
+            }
+            strong {
+                color: #000000 !important;
+            }
+            .copy-button, .code-actions { display: none !important; }
+            .collapsible-content > div {
+                 min-height: auto !important;
+                 overflow: visible !important;
+            }
+            .toggle-icon { display: none !important; }
+            .toc-container { display: none !important; }
+            .main-layout { flex-direction: column !important; }
+            .property-box { background-color: #F9F9F9 !important; border-color: #E0E0E0 !important; }
+            .property-title { color: #000000 !important; }
+            .property-example { background-color: #F0F0F0 !important; }
+
+            /* Quiz section specific print styles */
+            .quiz-section .question-card {
+                border-color: #E0E0E0 !important;
+            }
+            .quiz-section .expected-code-label, .quiz-section .expected-output-label, .quiz-section .explanation-label {
+                color: #000000 !important;
+            }
+            .quiz-section .expected-code-snippet {
+                background-color: #F9F9F9 !important;
+                border-color: #E0E0E0 !important;
+                color: #000000 !important;
+            }
+            .quiz-section .expected-output-content {
+                background-color: #F0F0F0 !important;
+                border-color: #E0E0E0 !important;
+                color: #000000 !important;
+            }
+            .quiz-section .explanation-text {
+                color: #333333 !important;
+            }
+            .quiz-section .code-solution-box .code-input-display {
+                border-bottom: none !important;
+                margin-bottom: 0 !important;
+                padding-bottom: 0.5rem !important;
+            }
+            .quiz-section .code-solution-box .code-output-display {
+                display: none !important; /* Explicitly hide outputs in print */
+            }
+            .quiz-section .solution-container {
+                display: none !important; /* Hide solution containers for print */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <img src="logotsi.jpeg" alt="Tech Savvy Institute Logo" onerror="this.onerror=null;this.src='https://placehold.co/48x48/0A2463/FFFFFF?text=TSI'; this.alt='Logo Placeholder';">
+            <div class="header-text-block">
+                <p class="institute-name">TECH SAVVY INSTITUTE</p>
+                <p class="course-lesson-title">Python Programming Fundamentals - Lesson 7: User-Defined Functions</p>
+                <span class="author-name">by Maurice Otieno</span>
+            </div>
+        </div>
+    </header>
+
+    <nav class="main-nav-bar">
+        <a href="#introduction-to-functions" class="main-nav-item">Introduction</a>
+        <a href="#defining-functions" class="main-nav-item">Defining Functions</a>
+        <a href="#function-parameters" class="main-nav-item">Parameters</a>
+        <a href="#scope-of-variables" class="main-nav-item">Variable Scope</a>
+        <a href="#docstrings" class="main-nav-item">Docstrings</a>
+        <a href="#calling-functions" class="main-nav-item">Calling Functions</a>
+        <a href="#practice-questions" class="main-nav-item">Practice Questions</a>
+        <a href="#overall-conclusion" class="main-nav-item">Conclusion</a>
+    </nav>
+
+    <div class="container">
+        <main class="main-content w-full">
+
+            <section id="introduction-to-functions">
+                <h2>Introduction: Building Blocks with Functions</h2>
+                <div>
+                    <p>Functions are fundamental programming constructs that encapsulate a block of code designed to perform a specific task. They act as reusable building blocks, allowing you to organize your code, make it more modular, and improve its readability and maintainability.</p>
+                    <p>Understanding functions is crucial for writing efficient and scalable Python programs. This lesson will guide you through defining and using your own functions, handling parameters, understanding variable scope, and documenting your code effectively.</p>
+                    <h3>Why Use Functions?</h3>
+                    <ul>
+                        <li><strong>Modularity:</strong> Break down complex problems into smaller, manageable pieces.</li>
+                        <li><strong>Reusability:</strong> Write code once and use it multiple times, avoiding redundancy.</li>
+                        <li><strong>Readability:</strong> Make your code easier to understand by giving meaningful names to logical blocks.</li>
+                        <li><strong>Debugging:</strong> Isolate issues to specific functions, simplifying the debugging process.</li>
+                        <li><strong>Collaboration:</strong> Facilitate teamwork by allowing different developers to work on different parts of a program independently.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="defining-functions">
+                <h2>1. Defining Functions (`def`)</h2>
+                <div>
+                    <p>In Python, you define a function using the `def` keyword, followed by the function name, parentheses `()`, and a colon `:`. The code block forming the function's body must be indented.</p>
+                    <p>The `return` statement is used to send a result back from the function to the caller. If `return` is omitted, the function implicitly returns `None`.</p>
+                    <h3>Syntax</h3>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Basic Function Syntax
+# def function_name(parameter1, parameter2):
+#     """Docstring: Explain what the function does."""
+#     # Function body (indented)
+#     result = parameter1 + parameter2
+#     return result
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python"># Output: This is a static example of syntax.</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Basic Function Example (No Parameters, No Return)</h3>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+def greet_user():
+    print("Hello from a function!")
+
+greet_user() # Calling the function
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Hello from a function!</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Function with Parameters and Return Value</h3>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+def add_numbers(a, b):
+    sum_result = a + b
+    return sum_result
+
+# Calling the function with arguments
+result = add_numbers(5, 3)
+print(f"The sum is: {result}")
+
+another_result = add_numbers(10, 20)
+print(f"Another sum: {another_result}")
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">The sum is: 8
+Another sum: 30</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="function-parameters">
+                <h2>2. Function Parameters</h2>
+                <div>
+                    <p>Parameters are placeholders for the values that a function expects to receive when it's called. Python supports various types of arguments for flexibility.</p>
+                    
+                    <h3>Positional Arguments</h3>
+                    <p>Arguments passed in the order they are defined in the function signature. Their position matters.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+def describe_pet(animal_type, pet_name):
+    print(f"I have a {animal_type}.")
+    print(f"Its name is {pet_name}.")
+
+describe_pet("dog", "Buddy") # Positional arguments
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">I have a dog.
+Its name is Buddy.</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Keyword Arguments</h3>
+                    <p>Arguments passed by explicitly naming the parameter. The order does not matter as long as they are named.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+def describe_car(make, model):
+    print(f"This car is a {make} {model}.")
+
+describe_car(model="Civic", make="Honda") # Keyword arguments
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">This car is a Honda Civic.</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Default Parameters</h3>
+                    <p>Parameters that have a default value. If an argument is not provided for them, the default value is used.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+def get_greeting(name="Guest"):
+    print(f"Hello, {name}!")
+
+get_greeting("Alice")  # Uses provided argument
+get_greeting()         # Uses default argument
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Hello, Alice!
+Hello, Guest!</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Variable-Length Arguments (`*args` and `**kwargs`)</h3>
+                    <p>These allow functions to accept an arbitrary number of positional arguments (`*args`) or keyword arguments (`**kwargs`).</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+def sum_all_numbers(*args):
+    total = 0
+    for num in args:
+        total += num
+    return total
+
+print(f"Sum of (1, 2, 3): {sum_all_numbers(1, 2, 3)}")
+print(f"Sum of (10, 20, 30, 40, 50): {sum_all_numbers(10, 20, 30, 40, 50)}")
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Sum of (1, 2, 3): 6
+Sum of (10, 20, 30, 40, 50): 150</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="scope-of-variables">
+                <h2>3. Scope of Variables (Local vs. Global)</h2>
+                <div>
+                    <p>The scope of a variable refers to the region of a program where that variable is accessible. In Python, variables typically have either local or global scope.</p>
+                    <h3>Local Variables</h3>
+                    <p>Variables defined inside a function are local to that function. They can only be accessed from within that function.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+def my_local_function():
+    local_var = 10 # This is a local variable
+    print(f"Inside function, local_var: {local_var}")
+
+my_local_function()
+# The following line would cause a NameError because local_var is not defined in global scope:
+# print(local_var) 
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Inside function, local_var: 10</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Global Variables</h3>
+                    <p>Variables defined outside any function are global. They can be accessed from anywhere in the program, both inside and outside functions. To *modify* a global variable from within a function, you must use the `global` keyword (use with caution, as it can make code harder to debug).</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+global_var = 100 # This is a global variable
+
+def modify_global():
+    global global_var # Declare intent to modify the global variable
+    global_var = 200
+    print(f"Inside function, global_var modified to: {global_var}")
+
+def read_global():
+    print(f"Inside function, reading global_var: {global_var}")
+
+read_global()
+modify_global()
+print(f"Outside function, global_var: {global_var}") # Global variable has been modified
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Inside function, reading global_var: 100
+Inside function, global_var modified to: 200
+Outside function, global_var: 200</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="docstrings">
+                <h2>4. Docstrings: Documenting Your Functions</h2>
+                <div>
+                    <p>Docstrings (documentation strings) are multi-line strings used to explain what a function does, its arguments, and what it returns. They are enclosed in triple quotes (`"""Docstring content"""`) immediately after the function's definition line.</p>
+                    <h3>Purpose and Syntax</h3>
+                    <p>Docstrings are essential for code readability and maintainability. They provide a quick overview of the function's purpose without needing to delve into its implementation details. Tools like IDEs use docstrings to provide helpful tips.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+def multiply(x, y):
+    """
+    This function multiplies two numbers and returns the result.
+
+    Args:
+        x (int/float): The first number.
+        y (int/float): The second number.
+
+    Returns:
+        int/float: The product of x and y.
+    """
+    return x * y
+
+result_mult = multiply(4, 5)
+print(f"Product: {result_mult}")
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Product: 20</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Accessing Docstrings</h3>
+                    <p>Docstrings can be accessed programmatically using the `help()` function or the `__doc__` attribute.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+def example_function(arg1):
+    """
+    This is a short example docstring.
+    It explains arg1.
+    """
+    pass # 'pass' is a placeholder, does nothing
+
+print(f"Docstring via __doc__:\n{example_function.__doc__}")
+
+# To see full help output (uncomment in a live Python environment):
+# help(example_function) 
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Docstring via __doc__:
+    This is a short example docstring.
+    It explains arg1.</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="calling-functions">
+                <h2>5. Calling Functions</h2>
+                <div>
+                    <p>After a function has been defined, it can be executed (called) by using its name followed by parentheses containing any necessary arguments.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+def display_message():
+    print("Welcome to Python programming!")
+
+def calculate_area(length, width):
+    area = length * width
+    return area
+
+# Calling functions
+display_message() # Function call without arguments
+
+room_area = calculate_area(10, 5) # Function call with positional arguments
+print(f"Room area: {room_area}")
+
+box_area = calculate_area(width=3, length=7) # Function call with keyword arguments
+print(f"Box area: {box_area}")
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Welcome to Python programming!
+Room area: 50
+Box area: 21</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="practice-questions">
+                <h2>Practice Questions</h2>
+                <div>
+                    <p class="text-lg text-blue-800 mb-4">Test your understanding of User-Defined Functions with these practice questions:</p>
+                    
+                    <div class="quiz-section">
+                        <div class="question-card">
+                            <p class="question-text">1. Define a Python function named `greet` that takes one parameter, `name`, and prints "Hello, [name]!" (replace `[name]` with the actual name). Then, call this function with your own name.</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">2. What is the purpose of the `return` statement in a Python function? What does a function return if no `return` statement is explicitly used?</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">3. Create a function `calculate_average(num1, num2, num3)` that takes three numbers as parameters and returns their average. Call the function and print the result.</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">4. Explain the difference between positional arguments and keyword arguments when calling a function. Provide a simple example for each.</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">5. Define a function `power(base, exponent=2)` that calculates `base` raised to the `exponent` (defaulting to 2 if no exponent is provided). Call this function once with a custom exponent and once using the default.</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">6. What is a "docstring" in Python, and why is it considered a best practice to include them in your functions?</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">7. Briefly explain the concept of "local scope" in Python functions.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="overall-conclusion">
+                <h2>Overall Conclusion</h2>
+                <div>
+                    <p>You've completed this comprehensive lesson on User-Defined Functions. You now have the essential knowledge to create modular, reusable, and readable code, which is a cornerstone of effective programming. Keep practicing and building your own functions!</p>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <footer class="bg-blue-900 text-white py-6 text-center">
+        <p class="text-white">&copy; 2024 Tech Savvy Institute. All rights reserved. Content adapted from Lesson 7 notes by Maurice Otieno.</p>
+        <p class="text-white">Python is a trademark of the Python Software Foundation</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scrolling for main navigation
+            const navItems = document.querySelectorAll('.main-nav-bar .main-nav-item');
+            const headerElement = document.querySelector('header');
+            const mainNavBarElement = document.querySelector('.main-nav-bar');
+
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault(); // Prevent default anchor link behavior
+
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+
+                    if (targetElement) {
+                        // Calculate total offset from the top
+                        const headerHeight = headerElement ? headerElement.offsetHeight : 0;
+                        const navBarHeight = mainNavBarElement ? mainNavBarElement.offsetHeight : 0;
+                        const totalOffset = headerHeight + navBarHeight + 5; // Add a small buffer
+
+                        const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                        const offsetPosition = elementPosition - totalOffset;
+
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: "smooth"
+                        });
+                    }
+                });
+            });
+
+            // Scroll-spy functionality for active state
+            const sections = document.querySelectorAll('section[id]');
+            const observerOptions = {
+                root: null, // viewport
+                rootMargin: `-80px 0px -50% 0px`, /* Adjust top margin for fixed header/nav and bottom for earlier activation */
+                threshold: 0 /* Trigger as soon as target crosses rootMargin */
+            };
+
+            const observerCallback = (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const currentSectionId = '#' + entry.target.id;
+                        
+                        // Remove 'active' class from all nav items
+                        navItems.forEach(item => {
+                            item.classList.remove('active');
+                        });
+
+                        // Add 'active' class to the corresponding nav item
+                        const correspondingNavItem = document.querySelector(`.main-nav-item[href="${currentSectionId}"]`);
+                        if (correspondingNavItem) {
+                            correspondingNavItem.classList.add('active');
+                        }
+                    }
+                });
+            };
+
+            const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+            // Observe each section
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+
+            // Set initial active state on page load
+            const initialActiveSection = Array.from(sections).find(section => {
+                const rect = section.getBoundingClientRect();
+                return rect.top >= 0 && rect.top <= window.innerHeight / 2;
+            }) || sections[0]; // Fallback to first section if none are sufficiently in view
+
+            if (initialActiveSection) {
+                const initialActiveNavItem = document.querySelector(`.main-nav-item[href="#${initialActiveSection.id}"]`);
+                if (initialActiveNavItem) {
+                    initialActiveNavItem.classList.add('active');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

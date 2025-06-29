@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Programming: Lesson 4 - Strings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
+            background-color: #F8FAFC; /* Light background */
+            color: #1F2937; /* Dark text */
+        }
+        .container {
+            max-width: 1080px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 2.5rem 3rem;
+            background-color: #FFFFFF;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            border-radius: 1rem;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+        /* Header */
+        header {
+            background-color: #FFFFFF; /* White header background */
+            color: #1F2937; /* Dark text for header */
+            padding: 0.8rem 1.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column; /* Stack logo/title and nav buttons */
+            align-items: center; /* Center horizontally */
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 3px solid #E5E7EB; /* Subtle light gray border at bottom of header */
+        }
+        header .header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-shrink: 0;
+            margin-bottom: 0.5rem; /* Space below header-left block */
+            width: 100%; /* Occupy full width for centering */
+            justify-content: center; /* Center content within header-left */
+        }
+        header img {
+            width: 48px;
+            height: 48px;
+            border-radius: 9999px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+        }
+        header .header-text-block {
+            text-align: center; /* Center title text */
+            line-height: 1.2;
+            flex-grow: 1;
+        }
+        header .institute-name {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #0A2463; /* Dark blue for institute name */
+            margin-bottom: 0.05rem;
+            letter-spacing: 0.07em;
+        }
+        header .course-lesson-title {
+            font-size: 0.8rem;
+            color: #374151; /* Darker gray for course title */
+            line-height: 1.2;
+        }
+        header .author-name {
+            font-size: 0.75rem;
+            color: #6B7280; /* Medium gray for author name */
+            margin-top: 0.1rem;
+            display: block;
+        }
+
+        /* Main Navigation Bar */
+        .main-nav-bar {
+            background-color: #FDFDFD;
+            padding: 0.8rem 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem; /* Spacing between main nav items */
+            width: 100%; /* Occupy full width within header */
+            border-top: 1px solid #E5E7EB; /* Separator from header-left */
+            padding-top: 1rem; /* Add padding above buttons */
+        }
+        .main-nav-item {
+            background-color: transparent;
+            color: #3E92CC; /* Bright Teal for default text */
+            padding: 0.4rem 1rem;
+            border: 1px solid #93C5FD; /* Lighter blue border for pill shape */
+            border-radius: 9999px; /* Pill shape */
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease-in-out;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer; /* Indicate it's clickable */
+        }
+        .main-nav-item:hover, .main-nav-item.active { /* 'active' for scroll spy */
+            background-color: #DBEAFE; /* Lighter blue background on hover/active */
+            color: #0A2463; /* Dark blue text on hover/active */
+            transform: translateY(-2px);
+            box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+        }
+        /* No Font Awesome icon styling as icons are removed from HTML */
+
+
+        /* Side TOC is removed */
+        .toc-container {
+            display: none !important;
+        }
+
+        /* Headings - No collapsible functionality here */
+        h2, h3, h4 {
+            cursor: default; /* No pointer cursor for non-collapsible */
+            display: block !important; /* Re-add for safety, though default is block */
+        }
+        h2:hover, h3:hover, h4:hover {
+            color: inherit; /* No color change on hover */
+        }
+
+        /* Title Styles - Enhanced to look like prominent titles */
+        h2 {
+            font-size: 2.5rem; /* Larger for main titles */
+            font-weight: 800; /* Extra bold */
+            color: #0A2463; /* Deep blue */
+            margin-top: 3.5rem; /* More space above */
+            margin-bottom: 1.5rem; /* More space below */
+            padding-bottom: 0.75rem; /* More padding below for border */
+            border-bottom: 3px solid #3E92CC; /* Thicker, brighter blue border */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05); /* Subtle shadow for depth */
+        }
+        h3 {
+            font-size: 2rem; /* Larger for sub-titles */
+            font-weight: 700; /* Bold */
+            color: #3E92CC; /* Bright Teal */
+            margin-top: 2.5rem; /* More space above */
+            margin-bottom: 1rem; /* More space below */
+        }
+        h4 {
+            font-size: 1.5rem; /* Larger for sub-sub-titles */
+            font-weight: 600; /* Semi-bold */
+            color: #0A2463; /* Dark blue */
+            margin-top: 2rem; /* More space above */
+            margin-bottom: 0.75rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+        ul, ol {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+        ol {
+            list-style-type: decimal;
+        }
+        strong {
+            font-weight: bold;
+            color: #1F2937;
+        }
+
+        /* Jupyter-style code blocks (static for examples) */
+        .jupyter-cell {
+            background-color: #F8FAFC;
+            border-radius: 0.5rem;
+            border: 1px solid #E2E8F0;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+            margin: 1.5rem 0;
+            overflow: hidden;
+        }
+        .jupyter-input-wrapper { /* For In[] block content */
+            background-color: #FFFFFF;
+            padding: 1rem;
+            border-bottom: 1px solid #E2E8F0;
+            position: relative;
+            padding-left: 3.5rem;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: #0A2463;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .jupyter-input-wrapper::before {
+            content: 'In [ ] :';
+            position: absolute;
+            left: 0.75rem;
+            top: 1rem;
+            font-size: 0.8rem;
+            color: #6B7280;
+            font-family: sans-serif;
+            font-weight: bold;
+        }
+        .jupyter-output { /* For Out[] block content */
+            background-color: #F0F9FF;
+            padding: 1rem;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: #3E92CC;
+            font-weight: normal; /* Normal weight for output */
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            position: relative;
+            padding-left: 3.5rem;
+            text-indent: -2.5rem; /* Negative indent for alignment */
+        }
+        .jupyter-output::before {
+            content: 'Out[ ] :';
+            position: absolute;
+            left: 0.75rem;
+            top: 1rem;
+            font-size: 0.8rem;
+            color: #6B7280;
+            font-family: sans-serif;
+            font-weight: bold;
+        }
+        .jupyter-input .keyword {
+            color: #0A2463;
+            font-weight: bold;
+        }
+        .jupyter-input .comment { color: #6B7280; font-style: italic; }
+
+        /* No interactive code elements, copy buttons */
+        .copy-button, .code-actions, #reveal-solutions-button {
+            display: none !important;
+        }
+        
+        footer {
+            background-color: #1F2937;
+            color: white; /* Ensure text is white for readability */
+            padding: 1.5rem 0;
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: 2rem;
+        }
+
+        /* Quiz Specific Styling - purely static questions */
+        .quiz-section .question-card {
+            background-color: #FFFFFF;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #93C5FD;
+        }
+        .quiz-section .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #0A2463;
+            margin-bottom: 1rem;
+        }
+        /* Hide entire code-setup-block from quiz section */
+        .quiz-section .code-setup-block {
+            display: none !important;
+        }
+
+        /* Remove all solution-related divs and their children */
+        .code-solution-box,
+        #reveal-solutions-button
+        {
+            display: none !important;
+        }
+
+        /* Table styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+            color: #374151;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-radius: 0.5rem;
+            overflow: hidden; /* Ensures rounded corners apply to content */
+        }
+        table thead th {
+            background-color: #0A2463; /* Dark blue */
+            color: #FFFFFF;
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #3E92CC;
+        }
+        table tbody td {
+            background-color: #FDFDFD;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #E5E7EB;
+        }
+        table tbody tr:nth-child(odd) td {
+            background-color: #F5F7FA; /* Slightly darker for odd rows */
+        }
+        table tbody tr:hover td {
+            background-color: #EBF8FF; /* Light blue on hover */
+        }
+        table code {
+            background-color: #E0F2FE; /* Light blue for inline code */
+            padding: 0.2em 0.4em;
+            border-radius: 0.25rem;
+            font-size: 0.8em;
+            color: #0A2463;
+        }
+
+
+        @media print {
+            body {
+                background-color: #FFFFFF !important;
+                color: #000000 !important;
+                margin: 0;
+                padding: 0;
+                font-size: 9pt;
+            }
+            .container {
+                box-shadow: none !important;
+                margin: 0;
+                padding: 1cm;
+                border-radius: 0;
+                width: 100%;
+            }
+            header, footer {
+                background-color: #FFFFFF !important;
+                color: #000000 !important;
+                box-shadow: none !important;
+                padding: 0.5cm 0;
+                text-align: center;
+                border-bottom: none !important;
+            }
+            header .header-left {
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                justify-content: center !important;
+                width: 100% !important;
+                gap: 0.5cm !important;
+            }
+            header img {
+                width: 50px !important;
+                height: 50px !important;
+                margin-bottom: 0 !important;
+            }
+            header .institute-name, header .course-lesson-title, header .author-name {
+                color: #000000 !important;
+                font-size: 10pt !important;
+                margin: 0 !important;
+            }
+            header .institute-name { font-weight: bold !important; letter-spacing: normal !important; }
+            header .course-lesson-title { font-size: 8pt !important; }
+            header .author-name { font-size: 8pt !important; }
+            .main-nav-bar { display: none !important; } /* Hide main nav in print */
+
+            h2, h3, h4 {
+                color: #000000 !important;
+                border-bottom-color: #AAAAAA !important;
+                cursor: auto !important;
+                page-break-after: avoid;
+                margin-top: 1.5cm;
+            }
+            h2:hover, h3:hover, h4:hover { color: #000000 !important; }
+            p, ul, ol, pre {
+                page-break-inside: avoid;
+                margin-bottom: 0.8rem;
+            }
+            .jupyter-cell {
+                border: 1px solid #DDDDDD !important;
+                box-shadow: none !important;
+                background-color: #F9F9F9 !important;
+                margin: 1rem 0;
+                page-break-inside: avoid;
+            }
+            .jupyter-input-wrapper {
+                background-color: #FDFDFD !important;
+                color: #000000 !important;
+                border-bottom-color: #E0E0E0 !important;
+            }
+            .jupyter-input-textarea { /* Should not exist */
+                display: none !important;
+            }
+            .jupyter-input .keyword {
+                color: #333333 !important;
+                font-weight: bold;
+            }
+            .jupyter-input::before, .jupyter-output::before {
+                color: #777777 !important;
+            }
+            .jupyter-output {
+                background-color: #F0F0F0 !important;
+                color: #444444 !important;
+                font-weight: normal;
+                display: block !important;
+            }
+            strong {
+                color: #000000 !important;
+            }
+            .copy-button, .code-actions { display: none !important; }
+            .collapsible-content > div {
+                 min-height: auto !important;
+                 overflow: visible !important;
+            }
+            .toggle-icon { display: none !important; }
+            .toc-container { display: none !important; }
+            .main-layout { flex-direction: column !important; }
+            .property-box { background-color: #F9F9F9 !important; border-color: #E0E0E0 !important; }
+            .property-title { color: #000000 !important; }
+            .property-example { background-color: #F0F0F0 !important; }
+
+            /* Quiz section specific print styles */
+            .quiz-section .question-card {
+                border-color: #E0E0E0 !important;
+            }
+            .quiz-section .expected-code-label, .quiz-section .expected-output-label, .quiz-section .explanation-label {
+                color: #000000 !important;
+            }
+            .quiz-section .expected-code-snippet {
+                background-color: #F9F9F9 !important;
+                border-color: #E0E0E0 !important;
+                color: #000000 !important;
+            }
+            .quiz-section .expected-output-content {
+                background-color: #F0F0F0 !important;
+                border-color: #E0E0E0 !important;
+                color: #000000 !important;
+            }
+            .quiz-section .explanation-text {
+                color: #333333 !important;
+            }
+            .quiz-section .code-solution-box .code-input-display {
+                border-bottom: none !important;
+                margin-bottom: 0 !important;
+                padding-bottom: 0.5rem !important;
+            }
+            .quiz-section .code-solution-box .code-output-display {
+                display: none !important; /* Explicitly hide outputs in print */
+            }
+            .quiz-section .solution-container {
+                display: none !important; /* Hide solution containers for print */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <img src="logotsi.jpeg" alt="Tech Savvy Institute Logo" onerror="this.onerror=null;this.src='https://placehold.co/48x48/0A2463/FFFFFF?text=TSI'; this.alt='Logo Placeholder';">
+            <div class="header-text-block">
+                <p class="institute-name">TECH SAVVY INSTITUTE</p>
+                <p class="course-lesson-title">Python Programming Fundamentals - Lesson 4: Strings</p>
+                <span class="author-name">by Maurice Otieno</span>
+            </div>
+        </div>
+    </header>
+
+    <nav class="main-nav-bar">
+        <a href="#introduction-strings" class="main-nav-item">Introduction</a>
+        <a href="#string-basics" class="main-nav-item">String Basics</a>
+        <a href="#string-indexing" class="main-nav-item">Indexing</a>
+        <a href="#string-slicing" class="main-nav-item">Slicing</a>
+        <a href="#string-operations" class="main-nav-item">Operations</a>
+        <a href="#string-formatting" class="main-nav-item">Formatting</a>
+        <a href="#essential-string-methods" class="main-nav-item">Methods Table</a>
+        <a href="#practice-questions" class="main-nav-item">Practice Questions</a>
+        <a href="#conclusion" class="main-nav-item">Conclusion</a>
+    </nav>
+
+    <div class="container">
+        <main class="main-content w-full">
+
+            <section id="introduction-strings">
+                <h2>Introduction: Strings in Python</h2>
+                <div>
+                    <p>Strings are fundamental data types in Python, used to represent sequences of characters. Mastering string operations is crucial for handling text data, which is ubiquitous in programming.</p>
+                    <p>This lesson explores how Python stores, accesses, and transforms textual information.</p>
+                </div>
+            </section>
+
+            <section id="string-basics">
+                <h2>1. String Basics</h2>
+                <div>
+                    <p>A string is an ordered sequence of characters. In Python, strings are <strong>immutable</strong>, meaning once created, their content cannot be changed.</p>
+                    
+                    <h3>Enclosing Strings</h3>
+                    <p>Strings can be enclosed using either single (<code>'...'</code>) or double (<code>"..."</code>) quotes. Both work identically.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+my_string_1 = 'Hello, World!'
+my_string_2 = "Python is great"
+
+print(my_string_1)
+print(my_string_2)
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Hello, World!
+Python is great</code></pre>
+                        </div>
+                    </div>
+                    
+                    <h3>Handling Quotes Within Strings</h3>
+                    <p>If your string contains a quote that matches its enclosure, use the <em>other</em> type of quote for enclosure, or use an <strong>escape character</strong> (<code>\</code>).</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Using different quotes for enclosure
+sentence_1 = "He said, 'Hello!'"
+sentence_2 = 'She replied, "Hi!"'
+print(sentence_1)
+print(sentence_2)
+
+# Using escape character '\'
+escaped_quote = 'It\'s a beautiful day.'
+escaped_double = "He said, \"Hello!\""
+print(escaped_quote)
+print(escaped_double)
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">He said, 'Hello!'
+She replied, "Hi!"
+It's a beautiful day.
+He said, "Hello!"</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="string-indexing">
+                <h2>2. String Indexing</h2>
+                <div>
+                    <p>String indexing allows you to access individual characters within a string using their position (index). Python uses zero-based indexing.</p>
+
+                    <h3>Positive Indexing</h3>
+                    <p>Characters are numbered starting from <code>0</code> for the first character, <code>1</code> for the second, and so on.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+Greet = "HELLO"
+# Indices: H E L L O
+#          0 1 2 3 4 (Positive Indices)
+
+print("First character: {}".format(Greet[0]))
+print("Last character: {}".format(Greet[4]))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">First character: H
+Last character: O</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Negative Indexing</h3>
+                    <p>Characters can also be accessed from the end of the string using negative indices. <code>-1</code> refers to the last character, <code>-2</code> to the second to last, and so on.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+word = "PYTHON"
+# Indices: P  Y  T  H  O  N
+#         -6 -5 -4 -3 -2 -1 (Negative Indices)
+
+print("Last character: {}".format(word[-1]))
+print("First character using negative index: {}".format(word[-6]))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Last character: N
+First character using negative index: P</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="string-slicing">
+                <h2>3. String Slicing</h2>
+                <div>
+                    <p>Slicing allows you to obtain a portion (substring) of a string by specifying a range of indices.</p>
+
+                    <h3>Slicing Syntax:</h3>
+                    <p><code>string[start:end:step]</code></p>
+                    <p>The slice operation takes three optional parameters:</p>
+                    <ul>
+                        <li><code>start</code>: The starting index (inclusive). If omitted, defaults to 0.</li>
+                        <li><code>end</code>: The ending index (exclusive). If omitted, defaults to the end of the string.</li>
+                        <li><code>step</code>: How many characters to jump. If omitted, defaults to 1.</li>
+                    </ul>
+
+                    <h3>Basic Slicing:</h3>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+message = "Python Programming"
+# Indices: P y t h o n   P r o g r a m m i n g
+#          0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7
+
+# From start to (but not including) index 6
+print("Slice [0:6]: {}".format(message[0:6]))
+
+# From index 7 to end
+print("Slice [7:]: {}".format(message[7:]))
+
+# From beginning to (but not including) index 6
+print("Slice [:6]: {}".format(message[:6]))
+
+# Full copy of the string
+print("Full Copy: {}".format(message[:]))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Slice [0:6]: Python
+Slice [7:]: Programming
+Slice [:6]: Python
+Full Copy: Python Programming</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Slicing with Negative Indices & Step:</h3>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+data = "ABCDEFGHIJ"
+
+# Every second character
+print("Every second character: {}".format(data[::2]))
+
+# Reverse the string
+print("Reversed string: {}".format(data[::-1]))
+
+# From index -5 (inclusive) to -2 (exclusive)
+print("Slice [-5:-2]: {}".format(data[-5:-2])) # GHIJ -> -4=G, -3=H, -2=I, -1=J => GHI
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Every second character: ACEGI
+Reversed string: JIHGFEDCBA
+Slice [-5:-2]: FGH</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="string-operations">
+                <h2>4. String Operations</h2>
+                <div>
+                    <p>Python provides intuitive operators to combine strings or create multiple copies of them.</p>
+
+                    <h3>Concatenation (+)</h3>
+                    <p>Used to combine two or more strings into a single, new string. You can only concatenate strings with other strings.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+first_name = "John"
+last_name = "Doe"
+full_name = first_name + " " + last_name
+print("Full Name: {}".format(full_name))
+
+greeting = "Hello, " + first_name + "!"
+print("Greeting: {}".format(greeting))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Full Name: John Doe
+Greeting: Hello, John!</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Repetition (*)</h3>
+                    <p>Creates multiple copies of a string by multiplying it with an integer. The integer must be non-negative.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+star_line = "*" * 10
+print("Star Line: {}".format(star_line))
+
+repeated_word = "Python" * 3
+print("Repeated Word: {}".format(repeated_word))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Star Line: **********
+Repeated Word: PythonPythonPython</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="string-formatting">
+                <h2>5. String Formatting</h2>
+                <div>
+                    <p>String formatting, or interpolation, is the process of embedding variables or expressions into string literals. Python offers several powerful ways to achieve this, making dynamic text generation easy.</p>
+
+                    <h3>1. The Old Style (% Operator)</h3>
+                    <p>This is an older method of string formatting. It uses placeholders like <code>%s</code> (for string), <code>%d</code> (for integer), and <code>%f</code> (for float).</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+name = "Maurice"
+city = "Nairobi"
+statement = "My name is %s and I live in %s." % (name, city)
+print("Statement: {}".format(statement))
+
+score = 95
+message = "You scored %d points." % score
+print("Message: {}".format(message))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Statement: My name is Maurice and I live in Nairobi.
+Message: You scored 95 points.</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>2. The `str.format()` Method</h3>
+                    <p>Introduced as an improvement over the <code>%</code> operator. It uses curly braces <code>{}</code> as placeholders, which are then filled by arguments passed to the <code>.format()</code> method.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+product = "Laptop"
+price = 1200.50
+description = "The {} costs ${:.2f}.".format(product, price)
+print("Description: {}".format(description))
+
+quantity = 3
+item = "books"
+order = "I want {} {}.".format(quantity, item)
+print("Order: {}".format(order))
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python">Description: The Laptop costs $1200.50.
+I want 3 books.</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>3. F-Strings (Formatted String Literals)</h3>
+                    <p>Introduced in Python 3.6, f-strings offer a concise and readable way to embed expressions inside string literals. Prefix the string with <code>'f'</code> or <code>'F'</code>. While powerful, for this lesson's code examples, we will stick to <code>.format()</code> for consistency with earlier lesson instructions.</p>
+                    <div class="jupyter-cell">
+                        <div class="jupyter-input-wrapper">
+                            <pre class="jupyter-code-content">
+# Example of f-string syntax (for reference only, code examples use .format())
+# user_name = "Alice"
+# age = 30
+# greeting = f"Hello, {user_name}! You are {age} years old."
+# print(greeting)
+                            </pre>
+                        </div>
+                        <div class="jupyter-output">
+                            <pre><code class="language-python"># Output if f-string were executed: Hello, Alice! You are 30 years old.</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="essential-string-methods">
+                <h2>6. Essential String Methods</h2>
+                <div>
+                    <p>The <code>str</code> class provides a rich set of methods for text manipulation. The following table summarizes some of the most frequently used methods.</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Method</th>
+                                <th>Description</th>
+                                <th>Example</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>.upper()</code> / <code>.lower()</code></td>
+                                <td>Returns a new string converted to uppercase or lowercase.</td>
+                                <td><code>"PyThOn".lower()</code> → <code>"python"</code><br><code>"python".upper()</code> → <code>"PYTHON"</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>.strip()</code> / <code>.lstrip()</code> / <code>.rstrip()</code></td>
+                                <td>Returns a new string with leading/trailing whitespace removed.</td>
+                                <td><code>"  hello  ".strip()</code> → <code>"hello"</code><br><code>"  hello".lstrip()</code> → <code>"hello"</code><br><code>"hello  ".rstrip()</code> → <code>"hello"</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>.replace(old, new)</code></td>
+                                <td>Returns a new string with all occurrences of old replaced by new.</td>
+                                <td><code>'apple'.replace('p', 'b')</code> → <code>'abble'</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>.split(sep)</code></td>
+                                <td>Returns a list of substrings, splitting the string at the separator sep.</td>
+                                <td><code>"a,b,c".split(',')</code> → <code>['a', 'b', 'c']</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>.join(iterable)</code></td>
+                                <td>Returns a string by concatenating elements of an iterable with the string as a separator.</td>
+                                <td><code>'-'.join(['x', 'y'])</code> → <code>'x-y'</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>.find(sub)</code></td>
+                                <td>Returns the lowest index of substring sub; returns -1 if not found.</td>
+                                <td><code>"hello".find('ll')</code> → <code>2</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>.startswith(prefix)</code> / <code>.endswith(suffix)</code></td>
+                                <td>Returns True if the string starts/ends with the specified prefix/suffix.</td>
+                                <td><code>'image.jpg'.endswith('.jpg')</code> → <code>True</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>.isdigit()</code> / <code>.isalpha()</code></td>
+                                <td>Returns True if all characters are digits or alphabetic, respectively.</td>
+                                <td><code>'123'.isdigit()</code> → <code>True</code><br><code>'abc'.isalpha()</code> → <code>True</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="practice-questions">
+                <h2>Practice Questions</h2>
+                <div>
+                    <p class="text-lg text-blue-800 mb-4">Test your understanding of Python Strings with these practice questions:</p>
+                    
+                    <div class="quiz-section">
+                        <div class="question-card">
+                            <p class="question-text">1. What is meant by the statement that Python strings are "immutable"? What happens when you try to change a character in a string?</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">2. Given the string <code>text = "Python is Fun"</code>, write Python code to:</p>
+                            <ol class="list-decimal ml-6 mt-2 text-gray-700">
+                                <li>Access and print the first character.</li>
+                                <li>Access and print the last character using negative indexing.</li>
+                                <li>Extract and print the substring "is Fun" using slicing.</li>
+                            </ol>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">3. How would you concatenate the strings <code>"Hello, "</code> and <code>"World!"</code> to form a single string <code>"Hello, World!"</code>? Show the code.</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">4. Explain the difference between `str.find()` and directly using the `in` operator for checking substring presence in Python.</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">5. Given the string <code>data = "  Python Programming  "</code>, write Python code to remove all leading and trailing whitespace, convert the result to uppercase, and then split it into a list of words. Print the final list.</p>
+                        </div>
+
+                        <div class="question-card">
+                            <p class="question-text">6. Describe a scenario where using triple quotes for a string literal would be beneficial compared to single or double quotes.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="conclusion">
+                <h2>Conclusion</h2>
+                <div>
+                    <p>You've completed this comprehensive lesson on Python Strings. You now have a solid foundation for handling and manipulating text data effectively in your Python programs. Keep practicing and exploring more string methods!</p>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <footer class="bg-blue-900 text-white py-6 text-center">
+        <p class="text-white">&copy; 2024 Tech Savvy Institute. All rights reserved. Content adapted from Lesson 4 notes by Maurice Otieno.</p>
+        <p class="text-white">Python is a trademark of the Python Software Foundation</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scrolling for main navigation
+            const navItems = document.querySelectorAll('.main-nav-bar .main-nav-item');
+            const headerElement = document.querySelector('header');
+            const mainNavBarElement = document.querySelector('.main-nav-bar');
+
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault(); // Prevent default anchor link behavior
+
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+
+                    if (targetElement) {
+                        // Calculate total offset from the top
+                        const headerHeight = headerElement ? headerElement.offsetHeight : 0;
+                        const navBarHeight = mainNavBarElement ? mainNavBarElement.offsetHeight : 0;
+                        const totalOffset = headerHeight + navBarHeight + 5; // Add a small buffer
+
+                        const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                        const offsetPosition = elementPosition - totalOffset;
+
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: "smooth"
+                        });
+                    }
+                });
+            });
+
+            // Scroll-spy functionality for active state
+            const sections = document.querySelectorAll('section[id]');
+            const observerOptions = {
+                root: null, // viewport
+                rootMargin: `-80px 0px -50% 0px`, /* Adjust top margin for fixed header/nav and bottom for earlier activation */
+                threshold: 0 /* Trigger as soon as target crosses rootMargin */
+            };
+
+            const observerCallback = (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const currentSectionId = '#' + entry.target.id;
+                        
+                        // Remove 'active' class from all nav items
+                        navItems.forEach(item => {
+                            item.classList.remove('active');
+                        });
+
+                        // Add 'active' class to the corresponding nav item
+                        const correspondingNavItem = document.querySelector(`.main-nav-item[href="${currentSectionId}"]`);
+                        if (correspondingNavItem) {
+                            correspondingNavItem.classList.add('active');
+                        }
+                    }
+                });
+            };
+
+            const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+            // Observe each section
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+
+            // Set initial active state on page load
+            const initialActiveSection = Array.from(sections).find(section => {
+                const rect = section.getBoundingClientRect();
+                return rect.top >= 0 && rect.top <= window.innerHeight / 2;
+            }) || sections[0]; // Fallback to first section if none are sufficiently in view
+
+            if (initialActiveSection) {
+                const initialActiveNavItem = document.querySelector(`.main-nav-item[href="#${initialActiveSection.id}"]`);
+                if (initialActiveNavItem) {
+                    initialActiveNavItem.classList.add('active');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
